@@ -28,6 +28,25 @@ works offline and needs no server. Basemap tiles come from Esri.
 7. **Calibration and products (F):** isotonic calibration, the two views of this page (favorable zone and block
    probability) and the page itself.
 
+## Final model and layer weights
+
+The final model is the **GAT** (graph attention network) on the 7 layers; it is the first and default model on the page,
+with GAT bagging and LogReg kept as benchmarks. The three capture practically the same known mines in spatial block
+validation (no difference is significant), so the choice rests on the targets each one delivers:
+
+- **Coherent targets.** The GAT scores each cell together with its neighbors (up to about 4.5 km). Its top 5 % forms
+  **47 patches with no stray cells** (mean 126 km²), against 128 patches for LogReg, 23 % of them single 1.5 km cells
+  (mean 46 km²): a third of the targets, each almost three times larger.
+- **Better ranking of exploration blocks.** Block AUC of 0.834 at 10.5 km and 0.818 at 15 km, against 0.816 and 0.796
+  for LogReg, in all 3 seeds.
+- **Top 5 %:** 69 % of the known mines and 85 % of the contained gold in 5 % of the area (13.8 times random).
+- **Against GAT bagging:** same results at a third of the cost and more stable across seeds.
+
+LogReg captures more gold at 5 % (one deposit, Pipeline, falls just outside the GAT top 5 %) and generalizes somewhat
+better to an unseen trend; both facts are stated in the decision note (MODELO_FINAL.md, in the project folder).
+
+![Final model and the weight of each of its 7 layers](img/flowchart_weights.svg)
+
 ## What the page shows
 
 The same model ranking is read in two ways:
@@ -51,7 +70,10 @@ and **LogReg** (logistic regression baseline), all calibrated with isotonic regr
 
 An optional **access and environment** layer (the project traffic-light map: green, yellow, red) can be switched on
 as a base layer under the favorable zone, with an adjustable zone opacity. The panel then reports how much of the
-marked zone falls on green, yellow and red ground.
+marked zone falls on green, yellow and red ground. The **Targets in** filter (All areas, Unrestricted, Conditional, Restricted: the green, yellow and red
+classes) keeps only the targets in one class, and the panels give their area, the number of targets (patches of marked
+cells joined through their 8 neighbors) and the size of the largest one. Links can open a view directly, for example
+`?tab=compare&ground=unrestricted`.
 
 On phones, one finger scrolls the page and two fingers move or zoom the map.
 

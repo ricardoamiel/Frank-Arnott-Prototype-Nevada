@@ -14,7 +14,9 @@ Rásteres (uint8, 255 = sin dato):
 La pestaña de comparación lee analisis/ablacion_ideas/web_ablacion.json (ablacion_ideas_v14.py).
 
 Semáforo de accesibilidad y ambiente (datos/03_MapaSemaforo_COLOR.tif, RGBA de 30 m en NAD83 UTM 11N): sus tres
-colores se leen como clases (1 verde, 2 amarillo, 3 rojo; 0 sin dato). Para el mapa se reproyecta por moda a una malla
+colores se leen como clases (1 verde, 2 amarillo, 3 rojo; 0 sin dato). El ráster semaforo_celda lleva la clase de cada
+celda de 1500 m (para filtrar la zona por color de suelo) y, por modelo y nivel, se cuentan los targets de cada color:
+manchas de celdas de la zona del k % sobre ese color, unidas por sus 8 vecinas, con su área total y la del mayor. Para el mapa se reproyecta por moda a una malla
 Mercator de unos 300 m en el terreno y se incrusta como PNG de paleta. Para las cifras, cada celda de 1500 m del modelo
 toma la clase más frecuente de sus píxeles, y se informa qué parte de cada zona del k % cae en cada clase.
 
@@ -37,7 +39,7 @@ from rasterio.warp import Resampling, reproject, transform_bounds
 
 AQUI = Path(__file__).resolve().parent
 RAIZ = AQUI.parent
-ORDEN_MODELOS = ["LogReg", "GAT", "GAT_bag"]
+ORDEN_MODELOS = ["GAT", "GAT_bag", "LogReg"]           # el primero es el modelo final
 SIN_DATO = 255
 
 
@@ -139,9 +141,22 @@ def main():
                   resampling=Resampling.mode, src_nodata=0, dst_nodata=0)
         c = celda[g["rows"], g["cols"]]
         reparto = lambda sel: [round(float(np.mean(c[sel] == k)) * 100, 1) for k in (1, 2, 3, 0)]
+        rasters["semaforo_celda"] = a_mercator(raster_celdas(c.astype(np.uint8)))
+        from scipy.ndimage import label
+        km2 = (tr_utm.a * -tr_utm.e) / 1e6
+        def targets(sel):        # [km², número de manchas, km² de la mayor] para cada color, en la malla del modelo
+            out = []
+            for k in (1, 2, 3):
+                mask = np.zeros((h, w), bool)
+                mask[g["rows"], g["cols"]] = sel & (c == k)
+                lab, n = label(mask, structure=np.ones((3, 3)))
+                tam = np.bincount(lab.ravel())[1:] if n else np.array([0])
+                out.append([round(float(mask.sum() * km2)), int(n), round(float(tam.max() * km2))])
+            return out
         for m, wj in modelos.items():
             pct = np.array(json.loads((RAIZ / a.productos / m / "web.json").read_text(encoding="utf8"))["pct_final"])
             wj["semaforo"] = {str(k): reparto(pct > 1 - k / 100) for k in (5, 10, 15, 20)}
+            wj["semaforo_targets"] = {str(k): targets(pct > 1 - k / 100) for k in (5, 10, 15, 20)}
         # mapa: malla Mercator de unos 300 m en el terreno, mismas esquinas que la del modelo
         f = 5
         Ws, Hs = W3 * f, H3 * f

@@ -133,6 +133,9 @@
   .envrow { font-size: 12px; color: var(--ink-2); display: flex; gap: 12px; flex-wrap: wrap; }
   .envrow i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
   #env-card[hidden] { display: none; }
+  .seg .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+  #env-tbl td:first-child i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+  #env-tbl tr.active td { font-weight: 650; color: var(--maroon); }
 </style>
 </head>
 <body>
@@ -164,6 +167,11 @@
     <span id="env-ops-l" hidden>Zone opacity</span>
     <div class="seg" id="env-ops" hidden aria-label="Opacity of the favorable zone over the traffic light">
       <button data-o="0.45">Soft</button><button data-o="0.65">Medium</button><button data-o="0.85">Strong</button></div></div>
+  <div class="group" id="ctl-ground" hidden><span>Targets in</span><div class="seg" id="grounds"
+    aria-label="Show only the targets on one class of the traffic light">
+    <button data-g="0">All areas</button><button data-g="1"><i class="dot" style="background:#5fbf7f"></i>Unrestricted</button>
+    <button data-g="2"><i class="dot" style="background:#f6cf55"></i>Conditional</button>
+    <button data-g="3"><i class="dot" style="background:#e8705f"></i>Restricted</button></div></div>
   <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
     <button data-b="satellite" aria-pressed="true">Satellite</button>
     <button data-b="light" aria-pressed="false">Map</button></div></div>
@@ -222,7 +230,7 @@
 <footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
   and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
   groups several inventory mines, its gold is split among them by their MRDS size class (an estimate; no per-mine
-  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Access and environment layer: project traffic-light map (green, yellow, red),
+  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Access and environment layer: project traffic-light map (Unrestricted in green, Conditional in yellow, Restricted in red),
   read at 300 m on the map and as the most frequent class of each 1.5 km cell in the figures. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
 
@@ -245,8 +253,10 @@ const name = m => m === "GAT_bag" ? "GAT bagging" : m;
 const SIDES = {"3": "4.5 km", "7": "10.5 km", "10": "15 km"};
 const thrOf = k => 250 * (1 - k / 100);      // umbral del k % en la escala 0 a 250 de los rásteres de percentil
 
-const state = {tab: "explore", model: Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
-               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.45};
+// modelo final del proyecto (ver MODELO_FINAL.md): primero en los botones y elegido por defecto
+const FINAL = "GAT";
+const state = {tab: "explore", model: D.modelos[FINAL] ? FINAL : Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
+               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.85, ground: 0};
 { const q = new URLSearchParams(location.search);   // e.g. ?tab=compare&left=5&right=20&view=block&side=10
   if (D.modelos[q.get("model")]) state.model = q.get("model");
   if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
@@ -254,6 +264,9 @@ const state = {tab: "explore", model: Object.keys(D.modelos)[0], view: "zone", l
   if (SIDES[q.get("side")]) state.side = q.get("side");
   if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
   if (q.get("env") === "1" && D.semaforo) state.env = true;
+  const gv = (q.get("ground") || "").toLowerCase();        // ?ground=unrestricted|conditional|restricted (o green|yellow|red)
+  const gq = Math.max(["all", "unrestricted", "conditional", "restricted"].indexOf(gv), ["all", "green", "yellow", "red"].indexOf(gv));
+  if (gq > 0 && D.semaforo) { state.env = true; state.ground = gq; }
   const n = LEVELS.indexOf(+q.get("level")); if (n >= 0) state.level = n;
   const a = LEVELS.indexOf(+q.get("left")), b = LEVELS.indexOf(+q.get("right"));
   if (a >= 0 && b >= 0 && a !== b) { state.left = a; state.right = b; }
@@ -261,8 +274,8 @@ const state = {tab: "explore", model: Object.keys(D.modelos)[0], view: "zone", l
 const comparing = () => state.tab === "compare";
 
 // ---------- controls
-for (const m of ["LogReg", "GAT", "GAT_bag"])
-  d3.select("#models").append("button").text(name(m)).attr("data-m", m).property("disabled", !D.modelos[m])
+for (const m of ["GAT", "GAT_bag", "LogReg"])
+  d3.select("#models").append("button").text(name(m) + (m === FINAL ? " (final)" : "")).attr("data-m", m).property("disabled", !D.modelos[m])
     .attr("title", D.modelos[m] ? null : "Pending: results from the GPU cluster")
     .on("click", () => { state.model = m; update(); });
 d3.selectAll(".tabs button").on("click", function () { setTab(this.dataset.tab); });
@@ -277,6 +290,7 @@ d3.select("#level").on("input", function () { state.level = +this.value; update(
 d3.select("#ctl-env").attr("hidden", D.semaforo ? null : true);
 d3.selectAll("#envs button").on("click", function () { state.env = this.dataset.e === "1"; update(); });
 d3.selectAll("#env-ops button").on("click", function () { state.envOp = +this.dataset.o; update(); });
+d3.selectAll("#grounds button").on("click", function () { state.ground = +this.dataset.g; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
 // izquierda y derecha nunca muestran el mismo nivel: el botón del nivel del otro lado queda desactivado
@@ -285,9 +299,9 @@ for (const lado of ["left", "right"])
     .on("click", () => { state[lado] = i; update(); }));
 
 // ---------- access and environment (traffic light): classes 1 green, 2 yellow, 3 red on a grid 5 times finer
-const ENV = [null, {c: "#5fbf7f", t: "green", d: "easier access, fewer environmental constraints"},
-             {c: "#f6cf55", t: "yellow", d: "moderate access or constraints"},
-             {c: "#e8705f", t: "red", d: "difficult access or environmental restrictions"}];
+const ENV = [null, {c: "#5fbf7f", t: "Unrestricted", d: "green: easy access, few environmental constraints"},
+             {c: "#f6cf55", t: "Conditional", d: "yellow: access or environmental conditions apply"},
+             {c: "#e8705f", t: "Restricted", d: "red: difficult access or environmental restrictions"}];
 const envLayer = {ok: false, cls: null, canvas: document.createElement("canvas")};
 const semaforoOn = () => state.env && envLayer.ok;
 const ENV_OP = 0.7;            // opacidad fija del semáforo (capa base)
@@ -306,6 +320,13 @@ if (D.semaforo) {
       else d[i * 4 + 3] = 0;
     }
     cx.putImageData(px, 0, 0);
+    // un lienzo por color, para mostrar solo el suelo verde, amarillo o rojo
+    envLayer.porClase = [cv].concat([1, 2, 3].map(k => {
+      const c2 = document.createElement("canvas"); c2.width = S.w; c2.height = S.h;
+      const x2 = c2.getContext("2d"), im2 = x2.createImageData(S.w, S.h);
+      for (let i = 0; i < cls.length; i++) if (cls[i] === k) for (let b = 0; b < 4; b++) im2.data[i * 4 + b] = d[i * 4 + b];
+      x2.putImageData(im2, 0, 0); return c2;
+    }));
     envLayer.cls = cls; envLayer.ok = true; if (state.env) update();
   };
   im.src = "data:image/png;base64," + S.png;
@@ -452,7 +473,10 @@ function paint(M) {
   // se pinta encima con la opacidad elegida, para que se vea a la vez qué tan favorable es y de qué color es el suelo
   const sem = semaforoOn(), op = sem ? state.envOp : 0.88;
   const rest = sem ? [0, 0, 0, 0] : rgba(css("--rest"), BASEMAPS[state.basemap].rest), lv = LEVEL_COLOR.map(c => rgba(c, op));
-  const put = (j, c) => { data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; };
+  // con un color de suelo elegido, solo quedan las celdas de ese color (los targets sobre ese suelo)
+  const sc = sem && state.ground ? layers.semaforo_celda : null, g0 = state.ground;
+  const put = (j, c) => { if (sc && sc[j / 4] !== g0) { data[j + 3] = 0; return; }
+    data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; };
   if (state.view === "block") {
     const b = layers[`bloque_${state.model}_${state.side}`], pal = d3.range(251).map(v => rgba(blockScale(v / 500), sem ? state.envOp : 0.82));
     // en la comparación solo se pintan los bloques del k % superior; el resto queda como área de estudio
@@ -479,7 +503,7 @@ function draw(M) {
   ctx.imageSmoothingEnabled = false;
   // capas, de abajo arriba: mapa base, semáforo, modelo (zona o bloques), etiquetas del mapa base
   const ox = t.x + rx0 * t.k, oy = t.y + ry0 * t.k;
-  if (semaforoOn()) { ctx.globalAlpha = ENV_OP; ctx.drawImage(envLayer.canvas, ox, oy, rw * t.k, rh * t.k); ctx.globalAlpha = 1; }
+  if (semaforoOn()) { ctx.globalAlpha = ENV_OP; ctx.drawImage(envLayer.porClase[state.ground], ox, oy, rw * t.k, rh * t.k); ctx.globalAlpha = 1; }
   ctx.drawImage(M.off, ox, oy, rw * t.k, rh * t.k);
   cb.labels.forEach(s => drawTiles(M, tiles, s));
   M.proj.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
@@ -519,12 +543,16 @@ function dentro(d, lvl) {
   const v = valorEn(`bloquepct_${state.model}_${state.side}`, d.lon, d.lat);
   return v !== NODATA && v > thrOf(k);
 }
+// clase del semáforo en la posición de una mina (0 sin dato)
+const claseMina = d => { const [wx, wy] = proj([d.lon, d.lat]); return envEn(wx, wy); };
 function markCaptured(M) {
-  const lvl = M.nivel();
+  const lvl = M.nivel(), filtro = semaforoOn() && state.ground;
   M.layer.selectAll(".mine").each(function (d) {
     const inside = dentro(d, lvl);
-    d3.select(this).attr("fill", inside ? css("--mine") : "#ffffff").attr("fill-opacity", 0.88)
-      .attr("stroke", inside ? "#ffffff" : css("--mine"));
+    // con un filtro de acceso, las minas fuera de esas áreas quedan tenues para que resalten las de adentro
+    const fuera = filtro && claseMina(d) !== state.ground;
+    d3.select(this).attr("fill", inside ? css("--mine") : "#ffffff").attr("fill-opacity", fuera ? 0.18 : 0.88)
+      .attr("stroke", inside ? "#ffffff" : css("--mine")).attr("stroke-opacity", fuera ? 0.25 : 1);
   });
 }
 
@@ -578,6 +606,7 @@ function mineText(d, M) {
     if (d.prod_moz > 0) s += `<br>Deposit past production: ${f2(d.prod_moz)} Moz` + (d.anios_produccion ? ` (${d.anios_produccion})` : "");
   } else s += `<br><span class="sub">No gold figure in USGS</span>`;
   if (p != null) s += `<br>In the top ${f0(Math.max(1, Math.ceil(100 - p)))}% of the area (${name(state.model)})`;
+  if (semaforoOn()) { const k = claseMina(d); if (k) s += `<br>Access &amp; environment: <b>${ENV[k].t}</b>`; }
   if (comparing()) s += `<br>Captured in the top ${LEVELS[M.nivel()]}% ${state.view === "zone" ? "zone" : "blocks"}: <b>${dentro(d, M.nivel()) ? "yes" : "no"}</b>`;
   return s + fmtCoord(d.lon, d.lat);
 }
@@ -664,6 +693,7 @@ const INFO = {
   hit: "Share of the marked blocks that really hold at least one known mine (precision).",
   pmean: "Mean calibrated probability of the marked blocks. If it is close to the hit rate, the probability can be trusted.",
   env: "Share of the marked zone in each class of the project traffic-light map of access and environmental constraints (each 1.5 km cell takes its most frequent class).",
+  targets: "Patches of marked cells in the same traffic-light class (Unrestricted, Conditional or Restricted), joined through their 8 neighbors, on the final map of the model. Each patch is a candidate target for a field program.",
   marg: "Lift of the extra area only: mines added divided by area added, compared with random. It shows whether widening the zone still pays off.",
 };
 const info = k => `<span class="info" data-info="${k}">i</span>`;
@@ -727,11 +757,17 @@ function panelEnv() {
   const card = d3.select("#env-card"), mostrar = state.env && state.view === "zone" && D.modelos[state.model].semaforo;
   card.attr("hidden", mostrar ? null : true);
   if (!mostrar) return;
-  const k = LEVELS[state.level], v = D.modelos[state.model].semaforo[k], A = D.semaforo.area;
-  d3.select("#env-title").text(`Access and environment in the top ${k}% zone`);
-  d3.select("#env-body").html(envBar(v) + envTxt(v) +
-    `<p class="note">Whole study area: ${pc(A[0])} green, ${pc(A[1])} yellow, ${pc(A[2])} red. ` +
-    `${f0(D.modelos[state.model].idea2.find(d => d.nivel_pct === k).km2 * v[0] / 100)} km² of the zone is green ground.</p>`);
+  const m = D.modelos[state.model], k = LEVELS[state.level], v = m.semaforo[k], A = D.semaforo.area, T = m.semaforo_targets[k];
+  const g = state.ground;
+  d3.select("#env-title").text(g ? `Top ${k}% zone in ${ENV[g].t} areas (${name(state.model)})` : `Access and environment in the top ${k}% zone`);
+  const filas = [1, 2, 3].map(c => `<tr class="${c === g ? "active" : ""}"><td><i style="background:${ENV[c].c}"></i>${ENV[c].t}</td>` +
+    `<td>${f0(T[c - 1][0])} km²</td><td>${pc(v[c - 1])}</td><td>${f0(T[c - 1][1])}</td><td>${f0(T[c - 1][2])} km²</td></tr>`).join("");
+  const cab = g ? `<div class="kpis">${kpi(f0(T[g - 1][0]) + " km²", `of the zone in ${ENV[g].t} areas (${pc(v[g - 1])})`, "env")}` +
+    `${kpi(f0(T[g - 1][1]), `targets in ${ENV[g].t} areas; largest ${f0(T[g - 1][2])} km²`, "targets")}</div>` : envBar(v);
+  d3.select("#env-body").html(cab +
+    `<table id="env-tbl" style="margin-top:10px"><tr><th>Areas</th><th>Area</th><th>Share</th><th>Targets</th><th>Largest</th></tr>${filas}</table>` +
+    `<p class="note">Targets: patches of top ${k}% cells in the same class of area, joined through their 8 neighbors (final map). ` +
+    `Whole study area: ${pc(A[0])} unrestricted, ${pc(A[1])} conditional, ${pc(A[2])} restricted.</p>`);
 }
 
 function table() {
@@ -789,9 +825,10 @@ function panelCompare() {
   else fila("Blocks marked", f0(r1.bloques * kA / 100), f0(r1.bloques * kB / 100), "", null);
   const signo = v => v > 0 ? "+" : v < 0 ? "−" : "";
   if (zone && state.env && m.semaforo) {
-    const gA = area(kA) * m.semaforo[kA][0] / 100, gB = area(kB) * m.semaforo[kB][0] / 100;
-    fila("Green ground (access)", f0(gA) + " km²", f0(gB) + " km²", "+" + f0(gB - gA) + " km²", "env");
-    fila("Share green / red", `${pc(m.semaforo[kA][0])} / ${pc(m.semaforo[kA][2])}`, `${pc(m.semaforo[kB][0])} / ${pc(m.semaforo[kB][2])}`, "", "env");
+    const g = state.ground || 1, TA = m.semaforo_targets[kA][g - 1], TB = m.semaforo_targets[kB][g - 1];
+    fila(`In ${ENV[g].t} areas`, f0(TA[0]) + " km²", f0(TB[0]) + " km²", "+" + f0(TB[0] - TA[0]) + " km²", "env");
+    fila(`Targets in ${ENV[g].t} areas`, f0(TA[1]), f0(TB[1]), (TB[1] >= TA[1] ? "+" : "−") + f0(Math.abs(TB[1] - TA[1])), "targets");
+    if (!state.ground) fila("Share unrestricted / restricted", `${pc(m.semaforo[kA][0])} / ${pc(m.semaforo[kA][2])}`, `${pc(m.semaforo[kB][0])} / ${pc(m.semaforo[kB][2])}`, "", "env");
   }
   for (const me of MET[state.view]) {
     const d = B[me.k][0] - A[me.k][0];
@@ -870,9 +907,9 @@ function legend() {
   }
   if (semaforoOn()) {
     const ge = L.append("div");
-    ge.append("h4").style("margin-top", comparing() ? null : "8px").text("Access & environment (base layer)");
-    [1, 2, 3].forEach(k => ge.append("div").attr("class", "row")
-      .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span>${ENV[k].t}: ${ENV[k].d}`));
+    ge.append("h4").style("margin-top", comparing() ? null : "8px").text(state.ground ? `Only targets in ${ENV[state.ground].t} areas` : "Access & environment (base layer)");
+    (state.ground ? [state.ground] : [1, 2, 3]).forEach(k => ge.append("div").attr("class", "row")
+      .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span><span><b style="white-space:nowrap">${ENV[k].t}</b> (${ENV[k].d})</span>`));
   }
   const g2 = L.append("div");
   g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Mines (size = contained gold, USGS, split among the mines of a deposit)");
@@ -884,6 +921,8 @@ function legend() {
   g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><circle cx="7" cy="7" r="2.5" fill="${css("--mine")}" stroke="#fff" stroke-width=".9"/></svg>no USGS figure, or repeated record`);
   if (state.view === "zone" || comparing()) g2.append("div").attr("class", "row")
     .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${css("--mine")}" stroke-width="1.5"/></svg>mine outside the marked ${state.view === "zone" ? "zone" : "blocks"}`);
+  if (semaforoOn() && state.ground) g2.append("div").attr("class", "row")
+    .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="${css("--mine")}" fill-opacity=".18" stroke="${css("--mine")}" stroke-opacity=".25"/></svg>mine outside ${ENV[state.ground].t.toLowerCase()} areas (faded)`);
   g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><path d="M1,7 h12" stroke="${css("--ink-2")}" stroke-dasharray="3 2"/></svg>trends`);
 }
 
@@ -910,6 +949,8 @@ function update() {
   d3.select("#env-ops").attr("hidden", state.env ? null : true);
   d3.select("#env-ops-l").attr("hidden", state.env ? null : true);
   d3.selectAll("#env-ops button").attr("aria-pressed", function () { return +this.dataset.o === state.envOp; });
+  d3.select("#ctl-ground").attr("hidden", state.env ? null : true);
+  d3.selectAll("#grounds button").attr("aria-pressed", function () { return +this.dataset.g === state.ground; });
   d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
   const bm = BASEMAPS[state.basemap], que = state.view === "zone" ? "of the area" : "of blocks";
   d3.select(mapA.box).select(".badge").attr("hidden", cmp ? null : true).text(`Top ${LEVELS[state.left]}% ${que}`);
