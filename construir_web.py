@@ -13,7 +13,16 @@ Rásteres (uint8, 255 = sin dato):
 
 La pestaña de comparación lee analisis/ablacion_ideas/web_ablacion.json (ablacion_ideas_v14.py).
 
+Semáforo de accesibilidad y ambiente (datos/03_MapaSemaforo_COLOR.tif, RGBA de 30 m en NAD83 UTM 11N): sus tres
+colores se leen como clases (1 verde, 2 amarillo, 3 rojo; 0 sin dato). Para el mapa se reproyecta por moda a una malla
+Mercator de unos 300 m en el terreno y se incrusta como PNG de paleta. Para las cifras, cada celda de 1500 m del modelo
+toma la clase más frecuente de sus píxeles, y se informa qué parte de cada zona del k % cae en cada clase.
+
 Uso: python web/construir_web.py
+     python web/construir_web.py --productos analisis/productos --ablacion analisis/ablacion_ideas --salida index_6capas.html
+
+Por defecto usa la versión con LITO GEOQ v4 como séptima capa (adoptada el 19 de octubre de 2026: mejora el 5 % superior
+y deja igual el 10 al 20 %); la versión de 6 capas del 13.º intento sigue disponible con los argumentos de arriba.
 """
 import base64
 import json
@@ -32,12 +41,33 @@ ORDEN_MODELOS = ["LogReg", "GAT", "GAT_bag"]
 SIN_DATO = 255
 
 
+def leer_semaforo(ruta, paso=5):
+    """Clases del semáforo a partir de sus colores, leído cada `paso` píxeles (150 m): verde 1, amarillo 2, rojo 3."""
+    import rasterio
+    from rasterio.enums import Resampling as Rs
+    with rasterio.open(ruta) as s:
+        a = s.read(out_shape=(s.count, s.height // paso, s.width // paso), resampling=Rs.nearest)
+        tr, crs = s.transform * s.transform.scale(s.width / a.shape[2], s.height / a.shape[1]), s.crs
+    r, v, al = a[0].astype(int), a[1].astype(int), a[3] > 0
+    cls = np.zeros(r.shape, np.uint8)
+    cls[al & (v > 150) & (r < 100)] = 1
+    cls[al & (r > 240) & (v > 150)] = 2
+    cls[al & (r > 200) & (v < 100)] = 3
+    return cls, tr, crs
+
+
 def b64(arr):
     return base64.b64encode(np.ascontiguousarray(arr, dtype=np.uint8).tobytes()).decode()
 
 
 def main():
+    import argparse
     import sys
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--productos", default="analisis/productos_lito")
+    ap.add_argument("--ablacion", default="analisis/ablacion_lito")
+    ap.add_argument("--salida", default="index.html")
+    a = ap.parse_args()
     sys.path.insert(0, str(RAIZ))
     import optimizar_v13 as o
     g = o.cargar("cpu")
@@ -65,7 +95,7 @@ def main():
     rasters, modelos = {}, {}
     minas = pd.read_csv(AQUI / "datos" / "minas_produccion.csv")
     for m in ORDEN_MODELOS:
-        f = RAIZ / "analisis" / "productos" / m / "web.json"
+        f = RAIZ / a.productos / m / "web.json"
         if not f.exists():
             continue
         wj = json.loads(f.read_text(encoding="utf8"))
@@ -97,19 +127,47 @@ def main():
     trends["Name"] = trends.Name.replace({"Gretchell Trend": "Getchell Trend"})   # errata en el shapefile
     simpl = lambda gdf: json.loads(gdf.assign(geometry=gdf.geometry.force_2d().simplify(0.004)).to_json())
 
-    fa = RAIZ / "analisis" / "ablacion_ideas" / "web_ablacion.json"
+    semaforo = None
+    fs = RAIZ / "datos" / "03_MapaSemaforo_COLOR.tif"
+    if fs.exists():
+        import io
+        from PIL import Image
+        cls, tr_s, crs_s = leer_semaforo(fs)
+        # celdas del modelo: clase más frecuente de sus píxeles
+        celda = np.zeros((h, w), np.uint8)
+        reproject(cls, celda, src_transform=tr_s, src_crs=crs_s, dst_transform=tr_utm, dst_crs=crs,
+                  resampling=Resampling.mode, src_nodata=0, dst_nodata=0)
+        c = celda[g["rows"], g["cols"]]
+        reparto = lambda sel: [round(float(np.mean(c[sel] == k)) * 100, 1) for k in (1, 2, 3, 0)]
+        for m, wj in modelos.items():
+            pct = np.array(json.loads((RAIZ / a.productos / m / "web.json").read_text(encoding="utf8"))["pct_final"])
+            wj["semaforo"] = {str(k): reparto(pct > 1 - k / 100) for k in (5, 10, 15, 20)}
+        # mapa: malla Mercator de unos 300 m en el terreno, mismas esquinas que la del modelo
+        f = 5
+        Ws, Hs = W3 * f, H3 * f
+        mapa = np.zeros((Hs, Ws), np.uint8)
+        reproject(cls, mapa, src_transform=tr_s, src_crs=crs_s, dst_transform=from_origin(izq, arriba, res / f, res / f),
+                  dst_crs="EPSG:3857", resampling=Resampling.mode, src_nodata=0, dst_nodata=0)
+        im = Image.fromarray(mapa, "P")
+        im.putpalette([0, 0, 0, 65, 171, 93, 255, 200, 0, 215, 48, 39] + [0] * 756)
+        buf = io.BytesIO(); im.save(buf, "PNG", optimize=True)
+        semaforo = dict(png=base64.b64encode(buf.getvalue()).decode(), w=Ws, h=Hs, area=reparto(slice(None)),
+                        minas=[int(np.sum(c[g["y"] == 1] == k)) for k in (1, 2, 3, 0)])
+        print(f"semáforo: {Ws} x {Hs} px, PNG {len(buf.getvalue()) / 1e3:.0f} kB | área verde/amarillo/rojo/sin dato % {semaforo['area']}")
+
+    fa = RAIZ / a.ablacion / "web_ablacion.json"
     ablacion = json.loads(fa.read_text(encoding="utf8")) if fa.exists() else {}
     datos = dict(
         raster=dict(w=W3, h=H3, x0=izq, y0=arriba, res=res),
         capas={k: b64(v) for k, v in rasters.items()},
         area=simpl(area[["geometry"]]), trends=simpl(trends[["Name", "geometry"]]),
         minas=json.loads(minas.drop(columns=["x", "y"], errors="ignore").to_json(orient="records")),
-        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos},
+        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos}, semaforo=semaforo,
     )
     html = (AQUI / "plantilla.html").read_text(encoding="utf8")
     html = html.replace("/*__DATA__*/null", json.dumps(datos, ensure_ascii=False, separators=(",", ":")))
-    (AQUI / "index.html").write_text(html, encoding="utf8")
-    print(f"index.html: {len(html) / 1e6:.2f} MB | Mercator {W3} x {H3} px de {res:.0f} m | modelos: {', '.join(modelos)}")
+    (AQUI / a.salida).write_text(html, encoding="utf8")
+    print(f"{a.salida}: {len(html) / 1e6:.2f} MB | Mercator {W3} x {H3} px de {res:.0f} m | modelos: {', '.join(modelos)}")
 
 
 if __name__ == "__main__":

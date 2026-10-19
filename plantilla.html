@@ -33,7 +33,7 @@
                                        border-bottom: 1px solid var(--paper); }
   .controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 12px 24px 14px;
               border-bottom: 1px solid var(--line); }
-  .group { display: flex; align-items: center; gap: 8px; }
+  .group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
   .group > span { color: var(--ink-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
   .seg { display: inline-flex; border: 1px solid var(--maroon); border-radius: 8px; overflow: hidden; }
   .seg button { border: 0; background: var(--input); color: var(--maroon); padding: 6px 12px; font: inherit; cursor: pointer; }
@@ -117,7 +117,18 @@
     .map-col { order: 1; } aside { order: 2; } #below-compare { order: 3; }
     .mini { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 640px) { .compare .maps { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .compare .maps { grid-template-columns: 1fr; } .attribution { font-size: 9px; } }
+  /* celular: un dedo desplaza la página y dos dedos mueven o acercan el mapa */
+  @media (pointer: coarse) { .map { touch-action: pan-x pan-y; cursor: default; } .zoom-help { display: none; } }
+  .hint2 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none;
+           background: rgba(20, 12, 10, .45); color: #fff; font-weight: 600; font-size: 15px; opacity: 0;
+           transition: opacity .2s; text-align: center; padding: 0 20px; }
+  .hint2.on { opacity: 1; }
+  .envbar { display: flex; height: 12px; border-radius: 4px; overflow: hidden; margin: 6px 0 4px; }
+  .envbar span { display: block; height: 100%; }
+  .envrow { font-size: 12px; color: var(--ink-2); display: flex; gap: 12px; flex-wrap: wrap; }
+  .envrow i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+  #env-card[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -144,6 +155,11 @@
   <div class="group" id="ctl-left" hidden><span>Left map</span><div class="seg" id="lefts"></div></div>
   <div class="group" id="ctl-right" hidden><span>Right map</span><div class="seg" id="rights"></div></div>
   <div class="group" id="ctl-block" hidden><span>Block</span><div class="seg" id="sides"></div></div>
+  <div class="group" id="ctl-env"><span>Access &amp; environment</span><div class="seg" id="envs">
+    <button data-e="0" aria-pressed="true">Off</button><button data-e="1" aria-pressed="false">On</button></div>
+    <span id="env-ops-l" hidden>Zone opacity</span>
+    <div class="seg" id="env-ops" hidden aria-label="Opacity of the favorable zone over the traffic light">
+      <button data-o="0.45">Soft</button><button data-o="0.65">Medium</button><button data-o="0.85">Strong</button></div></div>
   <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
     <button data-b="satellite" aria-pressed="true">Satellite</button>
     <button data-b="light" aria-pressed="false">Map</button></div></div>
@@ -160,11 +176,11 @@
       <div class="card map" id="mapA">
         <canvas></canvas><svg></svg><div class="badge" hidden></div>
         <div class="zoom-help">Scroll or pinch to zoom; drag to pan</div>
-        <div class="attribution"></div>
+        <div class="attribution"></div><div class="hint2">Use two fingers to move the map</div>
       </div>
       <div class="card map" id="mapB" hidden>
         <canvas></canvas><svg></svg><div class="badge"></div>
-        <div class="attribution"></div>
+        <div class="attribution"></div><div class="hint2">Use two fingers to move the map</div>
       </div>
     </div>
     <div class="legend" id="legend"></div>
@@ -174,6 +190,7 @@
   </div>
   <aside id="aside-explore">
     <div class="card"><h3 id="kpi-title"></h3><div class="kpis" id="kpis"></div><p class="note" id="kpi-note"></p></div>
+    <div class="card" id="env-card" hidden><h3 id="env-title"></h3><div id="env-body"></div></div>
     <div class="card"><h3 id="chart-title"></h3><svg class="chart" id="chart" width="100%" height="200"></svg>
       <p class="note" id="chart-note"></p></div>
     <div class="card"><h3>Model comparison</h3><table id="table"></table><p class="note" id="table-note"></p></div>
@@ -201,7 +218,8 @@
 <footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
   and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
   groups several inventory mines, its gold is drawn once, at its main mine, and the other mines are shown as small
-  points. Model cells are 1.5 km. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
+  points. Model cells are 1.5 km. Access and environment layer: project traffic-light map (green, yellow, red),
+  read at 300 m on the map and as the most frequent class of each 1.5 km cell in the figures. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -224,13 +242,14 @@ const SIDES = {"3": "4.5 km", "7": "10.5 km", "10": "15 km"};
 const thrOf = k => 250 * (1 - k / 100);      // umbral del k % en la escala 0 a 250 de los rásteres de percentil
 
 const state = {tab: "explore", model: Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
-               basemap: "satellite", left: 0, right: 3};
+               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.45};
 { const q = new URLSearchParams(location.search);   // e.g. ?tab=compare&left=5&right=20&view=block&side=10
   if (D.modelos[q.get("model")]) state.model = q.get("model");
   if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
   if (["explore", "compare"].includes(q.get("tab"))) state.tab = q.get("tab");
   if (SIDES[q.get("side")]) state.side = q.get("side");
   if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
+  if (q.get("env") === "1" && D.semaforo) state.env = true;
   const n = LEVELS.indexOf(+q.get("level")); if (n >= 0) state.level = n;
   const a = LEVELS.indexOf(+q.get("left")), b = LEVELS.indexOf(+q.get("right"));
   if (a >= 0 && b >= 0 && a !== b) { state.left = a; state.right = b; }
@@ -251,6 +270,9 @@ d3.selectAll("#themes button").on("click", function () {
   update();
 });
 d3.select("#level").on("input", function () { state.level = +this.value; update(); });
+d3.select("#ctl-env").attr("hidden", D.semaforo ? null : true);
+d3.selectAll("#envs button").on("click", function () { state.env = this.dataset.e === "1"; update(); });
+d3.selectAll("#env-ops button").on("click", function () { state.envOp = +this.dataset.o; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
 // izquierda y derecha nunca muestran el mismo nivel: el botón del nivel del otro lado queda desactivado
@@ -258,11 +280,69 @@ for (const lado of ["left", "right"])
   LEVELS.forEach((k, i) => d3.select(`#${lado}s`).append("button").text(k + "%").attr("data-i", i)
     .on("click", () => { state[lado] = i; update(); }));
 
+// ---------- access and environment (traffic light): classes 1 green, 2 yellow, 3 red on a grid 5 times finer
+const ENV = [null, {c: "#5fbf7f", t: "green", d: "easier access, fewer environmental constraints"},
+             {c: "#f6cf55", t: "yellow", d: "moderate access or constraints"},
+             {c: "#e8705f", t: "red", d: "difficult access or environmental restrictions"}];
+const envLayer = {ok: false, cls: null, canvas: document.createElement("canvas")};
+const semaforoOn = () => state.env && envLayer.ok;
+const ENV_OP = 0.7;            // opacidad fija del semáforo (capa base)
+if (D.semaforo) {
+  const S = D.semaforo, im = new Image();
+  im.onload = () => {
+    const cv = envLayer.canvas; cv.width = S.w; cv.height = S.h;
+    const cx = cv.getContext("2d"); cx.drawImage(im, 0, 0);
+    const px = cx.getImageData(0, 0, S.w, S.h), d = px.data, cls = new Uint8Array(S.w * S.h);
+    const pal = ENV.map(e => e && rgba(e.c, 1));
+    for (let i = 0; i < cls.length; i++) {      // el PNG trae los colores originales: se vuelven clase y tono pastel
+      const r = d[i * 4], g = d[i * 4 + 1], a = d[i * 4 + 3];
+      const k = a === 0 ? 0 : g > 150 && r < 100 ? 1 : r > 240 && g > 150 ? 2 : r > 200 && g < 100 ? 3 : 0;
+      cls[i] = k;
+      if (k) { const c = pal[k]; d[i * 4] = c[0]; d[i * 4 + 1] = c[1]; d[i * 4 + 2] = c[2]; d[i * 4 + 3] = 255; }
+      else d[i * 4 + 3] = 0;
+    }
+    cx.putImageData(px, 0, 0);
+    envLayer.cls = cls; envLayer.ok = true; if (state.env) update();
+  };
+  im.src = "data:image/png;base64," + S.png;
+}
+function envEn(wx, wy) {        // clase del semáforo en un punto (unidades de mundo), 0 sin dato
+  if (!envLayer.ok) return 0;
+  const S = D.semaforo, res = R.res * R.w / S.w;
+  const c = Math.floor((wx * C - R.x0) / res), r = Math.floor((R.y0 + wy * C) / res);
+  return r < 0 || r >= S.h || c < 0 || c >= S.w ? 0 : envLayer.cls[r * S.w + c];
+}
+
 // ---------- maps: Web Mercator in world units (the whole world spans 1 x 1), d3.zoom scales it to pixels
 const proj = d3.geoMercator().scale(1 / (2 * Math.PI)).translate([0, 0]);
 const path = d3.geoPath(proj).digits(12);   // el redondeo por defecto (3 decimales) desplaza el contorno ~30 px a esta escala
 const rx0 = R.x0 / C, ry0 = -R.y0 / C, rw = R.w * R.res / C, rh = R.h * R.res / C;   // raster in world units
 let movido = false;                         // pasa a true cuando el usuario acerca o arrastra
+
+function dosDedos(M) {
+  let g = null, aviso = null, uno = null;
+  const hint = M.box.querySelector(".hint2");
+  const pts = e => { const r = M.box.getBoundingClientRect(), [a, b] = e.touches;
+    return {m: [(a.clientX + b.clientX) / 2 - r.left, (a.clientY + b.clientY) / 2 - r.top],
+            d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1}; };
+  M.box.addEventListener("touchstart", e => {
+    if (e.touches.length === 2) { e.preventDefault(); const p = pts(e); g = {t0: M.t, w: M.t.invert(p.m), d0: p.d}; uno = null; hint.classList.remove("on"); }
+    else if (e.touches.length === 1) uno = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+  }, {passive: false});
+  M.box.addEventListener("touchmove", e => {
+    if (g && e.touches.length === 2) {
+      e.preventDefault();
+      const p = pts(e), [k0, k1] = M.zoom.scaleExtent(), k = Math.max(k0, Math.min(k1, g.t0.k * p.d / g.d0));
+      const tr = d3.zoomIdentity.translate(p.m[0] - g.w[0] * k, p.m[1] - g.w[1] * k).scale(k);
+      d3.select(M.box).call(M.zoom.transform, tr);
+      movido = true; hide(); espejo(M);
+    } else if (uno && e.touches.length === 1 &&
+               Math.hypot(e.touches[0].clientX - uno.x, e.touches[0].clientY - uno.y) > 12) {
+      hint.classList.add("on"); clearTimeout(aviso); aviso = setTimeout(() => hint.classList.remove("on"), 1200); uno = null;
+    }
+  }, {passive: false});
+  M.box.addEventListener("touchend", e => { if (e.touches.length < 2) g = null; }, {passive: true});
+}
 
 function crearMapa(id, nivel) {
   const box = document.getElementById(id);
@@ -285,7 +365,11 @@ function crearMapa(id, nivel) {
     M.requestDraw();
   });
   M.requestDraw = () => { if (!M.pending) { M.pending = true; requestAnimationFrame(() => { M.pending = false; draw(M); }); } };
+  // en pantallas táctiles d3.zoom no toma los dedos: un dedo desplaza la página y dos dedos mueven y acercan el
+  // mapa (gestos propios más abajo). Ratón, rueda y trackpad siguen igual.
+  M.zoom.filter(e => e.type !== "touchstart" && (!e.ctrlKey || e.type === "wheel") && !e.button);
   d3.select(box).call(M.zoom);
+  dosDedos(M);
   return M;
 }
 const mapA = crearMapa("mapA", () => comparing() ? state.left : state.level);
@@ -310,8 +394,9 @@ function size(M) {
   const H = comparing() && anchoEscritorio() && altoCompare ? altoCompare
           : !comparing() && anchoEscritorio() && altoExplore ? altoExplore
           : comparing() && innerWidth > 640 ? Math.min(innerHeight - 230, M.W * 1.3)
-                                            : Math.min(innerHeight - 190, M.W * 1.05);
-  M.box.style.height = Math.max(comparing() ? 320 : 420, H) + "px";
+          : comparing() ? Math.min((innerHeight - 110) / 2, M.W * 0.95)
+                        : Math.min(innerHeight - 190, M.W * 1.05);
+  M.box.style.height = Math.max(comparing() ? (innerWidth > 640 ? 320 : 240) : 360, H) + "px";
   M.H = M.box.clientHeight;
   const dpr = window.devicePixelRatio || 1;
   M.canvas.width = M.W * dpr; M.canvas.height = M.H * dpr; M.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -359,10 +444,13 @@ const blockScale = d3.scaleSequentialSqrt([0, 0.45], d3.interpolateLab("#f3e7dc"
 
 function paint(M) {
   const data = M.img.data, n = R.w * R.h, lvl = M.nivel();
-  const rest = rgba(css("--rest"), BASEMAPS[state.basemap].rest), lv = LEVEL_COLOR.map(c => rgba(c, 0.88));
+  // con el semáforo encendido es la capa de abajo: el resto del área queda transparente y la zona (o los bloques)
+  // se pinta encima con la opacidad elegida, para que se vea a la vez qué tan favorable es y de qué color es el suelo
+  const sem = semaforoOn(), op = sem ? state.envOp : 0.88;
+  const rest = sem ? [0, 0, 0, 0] : rgba(css("--rest"), BASEMAPS[state.basemap].rest), lv = LEVEL_COLOR.map(c => rgba(c, op));
   const put = (j, c) => { data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; };
   if (state.view === "block") {
-    const b = layers[`bloque_${state.model}_${state.side}`], pal = d3.range(251).map(v => rgba(blockScale(v / 500), 0.82));
+    const b = layers[`bloque_${state.model}_${state.side}`], pal = d3.range(251).map(v => rgba(blockScale(v / 500), sem ? state.envOp : 0.82));
     // en la comparación solo se pintan los bloques del k % superior; el resto queda como área de estudio
     const q = comparing() ? layers[`bloquepct_${state.model}_${state.side}`] : null, thr = thrOf(LEVELS[lvl]);
     for (let i = 0; i < n; i++) { const v = b[i], j = i * 4;
@@ -385,7 +473,10 @@ function draw(M) {
   cb.base.forEach(s => drawTiles(M, tiles, s));
   // el rectángulo del ráster se calcula en píxeles: Safari no dibuja imágenes con escalas de canvas tan grandes
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(M.off, t.x + rx0 * t.k, t.y + ry0 * t.k, rw * t.k, rh * t.k);
+  // capas, de abajo arriba: mapa base, semáforo, modelo (zona o bloques), etiquetas del mapa base
+  const ox = t.x + rx0 * t.k, oy = t.y + ry0 * t.k;
+  if (semaforoOn()) { ctx.globalAlpha = ENV_OP; ctx.drawImage(envLayer.canvas, ox, oy, rw * t.k, rh * t.k); ctx.globalAlpha = 1; }
+  ctx.drawImage(M.off, ox, oy, rw * t.k, rh * t.k);
   cb.labels.forEach(s => drawTiles(M, tiles, s));
   M.proj.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
   M.layer.selectAll(".outline, .trend").attr("d", M.path);
@@ -506,6 +597,8 @@ function cellTip(e, M) {
     const n = LEVELS.findIndex(k => v / 2.5 > 100 - k);
     s += n >= 0 ? `<br>Inside the top ${LEVELS[n]}% zone` : "<br>Outside the marked zone";
   }
+  if (state.env) { const k = envEn(wx, wy);
+    if (k) s += `<br>Access &amp; environment: <b>${ENV[k].t}</b> <span class="sub">(${ENV[k].d})</span>`; }
   const [lon, lat] = proj.invert([wx, wy]);
   show(e, s + fmtCoord(lon, lat));
 }
@@ -562,6 +655,7 @@ const INFO = {
   bmines: "Share of the blocks that hold a known mine which fall inside the top k% of blocks.",
   hit: "Share of the marked blocks that really hold at least one known mine (precision).",
   pmean: "Mean calibrated probability of the marked blocks. If it is close to the hit rate, the probability can be trusted.",
+  env: "Share of the marked zone in each class of the project traffic-light map of access and environmental constraints (each 1.5 km cell takes its most frequent class).",
   marg: "Lift of the extra area only: mines added divided by area added, compared with random. It shows whether widening the zone still pays off.",
 };
 const info = k => `<span class="info" data-info="${k}">i</span>`;
@@ -619,6 +713,19 @@ function panel() {
   table();
 }
 
+const envBar = v => `<div class="envbar">${[1, 2, 3].map(k => `<span style="width:${v[k - 1]}%;background:${ENV[k].c}"></span>`).join("")}</div>`;
+const envTxt = v => `<div class="envrow">${[1, 2, 3].map(k => `<span><i style="background:${ENV[k].c}"></i>${pc(v[k - 1])} ${ENV[k].t}</span>`).join("")}</div>`;
+function panelEnv() {
+  const card = d3.select("#env-card"), mostrar = state.env && state.view === "zone" && D.modelos[state.model].semaforo;
+  card.attr("hidden", mostrar ? null : true);
+  if (!mostrar) return;
+  const k = LEVELS[state.level], v = D.modelos[state.model].semaforo[k], A = D.semaforo.area;
+  d3.select("#env-title").text(`Access and environment in the top ${k}% zone`);
+  d3.select("#env-body").html(envBar(v) + envTxt(v) +
+    `<p class="note">Whole study area: ${pc(A[0])} green, ${pc(A[1])} yellow, ${pc(A[2])} red. ` +
+    `${f0(D.modelos[state.model].idea2.find(d => d.nivel_pct === k).km2 * v[0] / 100)} km² of the zone is green ground.</p>`);
+}
+
 function table() {
   const k = LEVELS[state.level], tb = d3.select("#table").html("");
   const pend = ["GAT", "GAT_bag"].filter(m => !D.modelos[m]).map(name);
@@ -673,6 +780,11 @@ function panelCompare() {
   if (zone) fila("Area marked", f0(area(kA)) + " km²", f0(area(kB)) + " km²", "+" + f0(area(kB) - area(kA)) + " km²", "area");
   else fila("Blocks marked", f0(r1.bloques * kA / 100), f0(r1.bloques * kB / 100), "", null);
   const signo = v => v > 0 ? "+" : v < 0 ? "−" : "";
+  if (zone && state.env && m.semaforo) {
+    const gA = area(kA) * m.semaforo[kA][0] / 100, gB = area(kB) * m.semaforo[kB][0] / 100;
+    fila("Green ground (access)", f0(gA) + " km²", f0(gB) + " km²", "+" + f0(gB - gA) + " km²", "env");
+    fila("Share green / red", `${pc(m.semaforo[kA][0])} / ${pc(m.semaforo[kA][2])}`, `${pc(m.semaforo[kB][0])} / ${pc(m.semaforo[kB][2])}`, "", "env");
+  }
   for (const me of MET[state.view]) {
     const d = B[me.k][0] - A[me.k][0];
     fila(me.t, me.f(A[me.k][0]), me.f(B[me.k][0]), signo(d) + me.d(Math.abs(d)), me.info);
@@ -732,11 +844,12 @@ function legend() {
   const L = d3.select("#legend").html("");
   const top = comparing() ? Math.max(state.left, state.right) : state.level;
   const g1 = L.append("div");
+  const opz = semaforoOn() ? `;opacity:${state.envOp}` : "";
   if (state.view === "zone") {
     g1.append("h4").text("Most favorable zone");
     LEVELS.slice(0, top + 1).forEach((k, i) => g1.append("div").attr("class", "row")
-      .html(`<span class="swatch" style="background:${LEVEL_COLOR[i]}"></span>top ${i ? LEVELS[i - 1] + " to " + k : "0 to " + k}%`));
-    g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>rest of the study area`);
+      .html(`<span class="swatch" style="background:${LEVEL_COLOR[i]}${opz}"></span>top ${i ? LEVELS[i - 1] + " to " + k : "0 to " + k}%`));
+    if (!semaforoOn()) g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>rest of the study area`);
   } else {
     g1.append("h4").text(comparing() ? "Chance of a known mine (marked blocks only)" : "Chance of a known mine in the block");
     const sv = g1.append("svg").attr("width", 220).attr("height", 30), gid = "g" + Math.random().toString(36).slice(2);
@@ -745,7 +858,13 @@ function legend() {
     sv.append("rect").attr("x", 6).attr("width", 194).attr("height", 10).attr("rx", 3).attr("fill", `url(#${gid})`);
     [0, 0.1, 0.2, 0.3, 0.45].forEach(v => sv.append("text").attr("x", 6 + 194 * Math.sqrt(v / 0.45)).attr("y", 24)
       .attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(f0(v * 100) + (v === 0.45 ? "%+" : "")));
-    if (comparing()) g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>blocks outside the top k%`);
+    if (comparing() && !semaforoOn()) g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>blocks outside the top k%`);
+  }
+  if (semaforoOn()) {
+    const ge = L.append("div");
+    ge.append("h4").style("margin-top", comparing() ? null : "8px").text("Access & environment (base layer)");
+    [1, 2, 3].forEach(k => ge.append("div").attr("class", "row")
+      .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span>${ENV[k].t}: ${ENV[k].d}`));
   }
   const g2 = L.append("div");
   g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Deposits (size = contained gold, USGS)");
@@ -779,6 +898,10 @@ function update() {
   d3.select("#below-compare").attr("hidden", cmp ? null : true);
   d3.select("#level-v").text(LEVELS[state.level] + "%");
   d3.selectAll("#basemaps button").attr("aria-pressed", function () { return this.dataset.b === state.basemap; });
+  d3.selectAll("#envs button").attr("aria-pressed", function () { return (this.dataset.e === "1") === state.env; });
+  d3.select("#env-ops").attr("hidden", state.env ? null : true);
+  d3.select("#env-ops-l").attr("hidden", state.env ? null : true);
+  d3.selectAll("#env-ops button").attr("aria-pressed", function () { return +this.dataset.o === state.envOp; });
   d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
   const bm = BASEMAPS[state.basemap], que = state.view === "zone" ? "of the area" : "of blocks";
   d3.select(mapA.box).select(".badge").attr("hidden", cmp ? null : true).text(`Top ${LEVELS[state.left]}% ${que}`);
@@ -790,7 +913,7 @@ function update() {
     M.ghost.select("circle:last-child").attr("stroke", css("--maroon"));
   }
   for (const M of visibles()) { paint(M); markCaptured(M); M.requestDraw(); }
-  if (cmp) panelCompare(); else panel();
+  if (cmp) panelCompare(); else { panelEnv(); panel(); }
   bindInfo();
   legend();
   igualar();          // al cambiar vista o bloque cambia el alto de la columna derecha
