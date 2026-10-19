@@ -9,6 +9,8 @@
     color-scheme: light;
     --bg: #f7f2ea; --paper: #fffdf9; --paper-a: rgba(255,253,249,.95); --ink: #2a1f1d; --ink-2: #6b5d58; --line: #e3d8ca;
     --maroon: #7b1e2b; --maroon-3: #cc7a80; --on-maroon: #ffffff; --disabled: #b9aaa3; --input: #fffdf9;
+    /* botones: granate y piel en claro */
+    --btn-bg: #fffdf9; --btn-ink: #7b1e2b; --btn-line: #7b1e2b; --btn-on: #7b1e2b; --btn-on-ink: #ffffff;
     --rest: #e9dfd1; --mine: #1f7a4d; --shadow: rgba(60,20,20,.12); --hl: #f6ebe4;
     /* colores del mapa: fijos en los dos temas para que la lectura no cambie */
     --zone-1: #7b1e2b; --zone-2: #a8424f; --zone-3: #cc7a80; --zone-4: #e6b3b0;
@@ -16,7 +18,9 @@
   :root[data-theme="dark"] {
     color-scheme: dark;
     --bg: #15100f; --paper: #1f1917; --paper-a: rgba(31,25,23,.94); --ink: #f2ebe7; --ink-2: #b8aaa4; --line: #3b302c;
-    --maroon: #e0808d; --maroon-3: #9c4b56; --on-maroon: #1a1210; --disabled: #6b5d58; --input: #2a2220;
+    --maroon: #c98b8f; --maroon-3: #9c4b56; --on-maroon: #1a1210; --disabled: #6b5d58; --input: #2a2220;
+    /* botones: granate y negro en oscuro (borde algo más claro para que se vea sobre el fondo) */
+    --btn-bg: #0f0b0a; --btn-ink: #e9dcd6; --btn-line: #b04452; --btn-on: #8e2a38; --btn-on-ink: #ffffff;
     --rest: #4a3f3a; --mine: #3fae76; --shadow: rgba(0,0,0,.45); --hl: #2c2220;
   }
   * { box-sizing: border-box; }
@@ -35,12 +39,12 @@
               border-bottom: 1px solid var(--line); }
   .group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
   .group > span { color: var(--ink-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
-  .seg { display: inline-flex; border: 1px solid var(--maroon); border-radius: 8px; overflow: hidden; }
-  .seg button { border: 0; background: var(--input); color: var(--maroon); padding: 6px 12px; font: inherit; cursor: pointer; }
-  .seg button + button { border-left: 1px solid var(--maroon); }
-  .seg button[aria-pressed="true"] { background: var(--maroon); color: var(--on-maroon); }
+  .seg { display: inline-flex; border: 1px solid var(--btn-line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: var(--btn-bg); color: var(--btn-ink); padding: 6px 12px; font: inherit; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--btn-line); }
+  .seg button[aria-pressed="true"] { background: var(--btn-on); color: var(--btn-on-ink); }
   .seg button:disabled { color: var(--disabled); cursor: not-allowed; }
-  input[type=range] { accent-color: var(--maroon); width: 170px; }
+  input[type=range] { accent-color: var(--btn-on); width: 170px; }
   .value { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 42px; }
   select, .btn { font: inherit; border: 1px solid var(--line); background: var(--input); border-radius: 8px;
                  padding: 5px 9px; color: var(--ink); }
@@ -217,8 +221,8 @@
 </main>
 <footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
   and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
-  groups several inventory mines, its gold is drawn once, at its main mine, and the other mines are shown as small
-  points. Model cells are 1.5 km. Access and environment layer: project traffic-light map (green, yellow, red),
+  groups several inventory mines, its gold is split among them by their MRDS size class (an estimate; no per-mine
+  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Access and environment layer: project traffic-light map (green, yellow, red),
   read at 300 m on the map and as the most frequent class of each 1.5 km cell in the figures. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
 
@@ -489,14 +493,17 @@ function vectors(M) {
   M.layer.append("path").attr("class", "outline").datum(D.area).attr("fill", "none").attr("stroke-width", 1.3);
   M.layer.append("g").selectAll("path").data(D.trends.features).join("path").attr("class", "trend")
     .attr("fill", "none").attr("stroke-dasharray", "4 3");
-  const mines = D.minas.slice().sort((a, b) => (b.moz_mapa || 0) - (a.moz_mapa || 0));
+  // de mayor a menor (las chicas encima); los registros repetidos van al fondo para no tapar a su mina
+  const orden = d => d.registro_duplicado ? Infinity : d.moz_mapa || 0;
+  const mines = D.minas.slice().sort((a, b) => orden(b) - orden(a));
   M.layer.append("g").selectAll("circle").data(mines).join("circle").attr("class", "mine")
     .on("pointermove pointerdown", (e, d) => { e.stopPropagation(); show(e, mineText(d, M)); })
     .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
 }
-// el oro de un depósito se dibuja una sola vez, en su mina principal; las demás minas del depósito van pequeñas
-const mozRadius = d3.scaleSqrt([0, 40], [2.5, 17]);
-const radius = d => d.moz_mapa > 0 ? mozRadius(d.moz_mapa) : d.mina_principal ? 3.2 : 2.5;
+// el oro de cada depósito se reparte entre sus minas (por clase de tamaño de MRDS, ver datos/ORO_MINAS.md);
+// el círculo es la parte de cada mina, en raíz para que el área sea proporcional al oro
+const mozRadius = d3.scaleSqrt([0, 27], [2.5, 11]);
+const radius = d => d.moz_mapa > 0 ? mozRadius(d.moz_mapa) : 2.5;
 
 // valor de un ráster en la posición de una mina (o -1 fuera del ráster)
 function valorEn(key, lon, lat) {
@@ -561,13 +568,14 @@ const STATUS = {"Producer": "producer", "Past Producer": "past producer", "Prosp
 function mineText(d, M) {
   const p = d[`pct_${state.model}`];
   let s = `<b>${d.deposito}</b><br>${d.trend}<br>Status: ${STATUS[d.estado] || d.estado}`;
-  if (d.moz_mapa > 0) {
+  if (d.usgs) {
     s += `<br>USGS deposit: ${d.usgs}` + (d.usgs_incluye ? ` <span class="sub">(includes ${d.usgs_incluye.replace(/,\s*$/, "")})</span>` : "");
-    s += `<br>Contained gold: <b>${f2(d.moz_mapa)} Moz</b> <span class="sub">(production + reserves + resources)</span>`;
-    if (d.prod_moz > 0) s += `<br>Past production: ${f2(d.prod_moz)} Moz` + (d.anios_produccion ? ` (${d.anios_produccion})` : "");
-  } else if (d.mina_principal) {
-    s += `<br>Part of the USGS <b>${d.usgs}</b> deposit (${f1(d.moz)} Moz contained), drawn at ${d.mina_principal}.` +
-         ` <span class="sub">USGS gives no figure per mine.</span>`;
+    s += `<br>Deposit contained gold: ${f1(d.moz)} Moz <span class="sub">(production + reserves + resources)</span>`;
+    if (d.registro_duplicado) s += `<br><span class="sub">Repeated inventory record of this mine: its gold is drawn on the other record.</span>`;
+    else if (d.minas_en_deposito > 1) s += `<br>This mine: <b>${f2(d.moz_mapa)} Moz</b> (${f0(d.pct_deposito)}% of the deposit, ` +
+      `estimated from its MRDS size class; ${d.minas_en_deposito} mines share the deposit)`;
+    else s += `<br>This mine: <b>${f2(d.moz_mapa)} Moz</b> (the only mine of the deposit)`;
+    if (d.prod_moz > 0) s += `<br>Deposit past production: ${f2(d.prod_moz)} Moz` + (d.anios_produccion ? ` (${d.anios_produccion})` : "");
   } else s += `<br><span class="sub">No gold figure in USGS</span>`;
   if (p != null) s += `<br>In the top ${f0(Math.max(1, Math.ceil(100 - p)))}% of the area (${name(state.model)})`;
   if (comparing()) s += `<br>Captured in the top ${LEVELS[M.nivel()]}% ${state.view === "zone" ? "zone" : "blocks"}: <b>${dentro(d, M.nivel()) ? "yes" : "no"}</b>`;
@@ -867,13 +875,13 @@ function legend() {
       .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span>${ENV[k].t}: ${ENV[k].d}`));
   }
   const g2 = L.append("div");
-  g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Deposits (size = contained gold, USGS)");
-  const sv = g2.append("svg").attr("width", 230).attr("height", 44);
-  [[1, 20], [5, 62], [15, 112], [40, 172]].forEach(([v, x]) => {
+  g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Mines (size = contained gold, USGS, split among the mines of a deposit)");
+  const sv = g2.append("svg").attr("width", 230).attr("height", 36);
+  [[1, 20], [5, 62], [10, 108], [25, 162]].forEach(([v, x]) => {
     sv.append("circle").attr("cx", x).attr("cy", 20).attr("r", mozRadius(v)).attr("fill", css("--mine")).attr("fill-opacity", .88).attr("stroke", "#fff");
-    sv.append("text").attr("x", x).attr("y", 42).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(v + " Moz");
+    sv.append("text").attr("x", x).attr("y", 34).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(v + " Moz");
   });
-  g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><circle cx="7" cy="7" r="3.2" fill="${css("--mine")}" stroke="#fff" stroke-width=".9"/></svg>other mine of a deposit, or no USGS figure`);
+  g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><circle cx="7" cy="7" r="2.5" fill="${css("--mine")}" stroke="#fff" stroke-width=".9"/></svg>no USGS figure, or repeated record`);
   if (state.view === "zone" || comparing()) g2.append("div").attr("class", "row")
     .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${css("--mine")}" stroke-width="1.5"/></svg>mine outside the marked ${state.view === "zone" ? "zone" : "blocks"}`);
   g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><path d="M1,7 h12" stroke="${css("--ink-2")}" stroke-dasharray="3 2"/></svg>trends`);

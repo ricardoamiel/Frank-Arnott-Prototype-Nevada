@@ -8,9 +8,16 @@ troy (1 t = 32.150,7 oz). No es solo la producción; es la medida estándar del 
 La correspondencia se hizo a mano (nombre, campo Includes y distancia), porque la más cercana falla en los complejos
 grandes: Post y Goldstrike quedan más cerca de Deep Star que de Betze Post. USGS da una sola cifra por depósito, y un
 depósito puede agrupar varias minas del inventario (Betze-Post incluye Screamer, Bazza, Deep Post, Long Lac y el tajo
-Goldstrike). No hay cifra por mina: el oro del depósito se asigna una sola vez, a la mina principal (la más cercana a
-la coordenada de USGS), y las demás quedan como parte de ese depósito (moz_mapa vacío). Así no se repite el valor en
-el mapa ni en las sumas. Se agrega la producción histórica (ProductionTonnage por AuPrGrade, años en ProductionYear),
+Goldstrike).
+
+Reparto entre las minas de un depósito (moz_mapa, el tamaño del círculo): no hay cifra pública de producción
+acumulada por mina (ver datos/ORO_MINAS.md), así que el oro del depósito se reparte según la clase de tamaño de MRDS de
+cada mina. El peso de cada clase es la mediana del oro contenido de los depósitos que tienen al menos una mina de esa
+clase, de modo que sale de los mismos datos y no se fija a mano; las minas sin clase (N, U, Y o vacío) pesan como las
+pequeñas. Los registros repetidos (mismo nombre dentro del depósito) se cuentan una vez: el más cercano a la
+coordenada de USGS recibe la parte y el otro queda como registro duplicado. La suma de las partes es el oro del
+depósito. Las cifras de los productos (oro capturado) siguen contando cada depósito una vez, en su mina principal
+(la más cercana a la coordenada de USGS). Se agrega la producción histórica (ProductionTonnage por AuPrGrade, años en ProductionYear),
 que es menor que el oro contenido: Betze-Post tiene 39,5 Moz contenidos y 30,0 Moz producidos entre 1974 y 2011.
 
 Uso: python preparar_minas.py   (escribe datos/minas_produccion.csv y datos/minas.geojson)
@@ -51,6 +58,10 @@ USGS = {
     124: "Meikle", 125: "Bluestar/Genesis", 126: None, 127: "Pete", 128: "Piñon", 129: "Betze-Post", 130: "REN",
     131: "Storm", 132: "Betze-Post", 133: "Wright Window", 134: "Emigrant Springs", 135: "Rain",
 }
+# producción conocida por mina (índice de la mina -> Moz). Si todas las minas de un depósito tienen cifra, el reparto usa
+# estas cifras en lugar de la clase de MRDS. Hoy está vacío: no se encontró una fuente pública con la producción
+# acumulada de cada mina de un mismo depósito (ver datos/ORO_MINAS.md).
+PRODUCCION_MINA = {}
 # clases de tamaño (Moz) para color y leyenda
 CLASES = [(0, 0.1, "menos de 0,1 Moz"), (0.1, 1, "0,1 a 1 Moz"), (1, 5, "1 a 5 Moz"), (5, 15, "5 a 15 Moz"),
           (15, 1e9, "más de 15 Moz")]
@@ -85,11 +96,41 @@ def main():
         t.loc[g.km_a_usgs.idxmin(), "principal"] = True
     princ = t[t.principal].set_index("usgs").deposito
     t["mina_principal"] = t.usgs.map(princ).where(t.usgs.notna() & ~t.principal)
-    t["moz_mapa"] = t.moz.where(t.principal)          # el oro del depósito, una sola vez
+    # registros repetidos dentro de un depósito: cuenta el más cercano a USGS
+    t["registro_duplicado"] = False
+    clave = t.deposito.str.lower().str.strip()
+    for _, g in t[t.usgs.notna()].groupby([t.usgs, clave]):
+        if len(g) > 1:
+            t.loc[g.index.drop(g.km_a_usgs.idxmin()), "registro_duplicado"] = True
+    # peso por clase de tamaño de MRDS: mediana del oro contenido de los depósitos que tienen al menos una mina de esa
+    # clase (cada depósito cuenta una vez por clase)
+    t["clase_mrds"] = t.tamano_mrds.where(t.tamano_mrds.isin(["L", "M", "S"]), "sin clase")
+    vivos = t[t.usgs.notna() & ~t.registro_duplicado]
+    n_por_dep = vivos.groupby("usgs").size()
+    por_clase = vivos.drop_duplicates(["usgs", "clase_mrds"]).groupby("clase_mrds").moz
+    pesos = por_clase.median().to_dict()
+    pesos["sin clase"] = pesos["S"]
+    assert pesos["L"] > pesos["M"] > pesos["S"], pesos
+    print("Pesos por clase MRDS (mediana de Moz de los depósitos con una mina de la clase):",
+          {k: round(v, 3) for k, v in pesos.items()}, "| depósitos:", por_clase.size().to_dict())
+    t["peso_mrds"] = t.clase_mrds.map(pesos).where(t.usgs.notna() & ~t.registro_duplicado, 0.0)
+    t["produccion_conocida"] = t.id.map(PRODUCCION_MINA)
+    t["reparto_con_produccion"] = False
+    for _, g in t[t.usgs.notna() & ~t.registro_duplicado].groupby("usgs"):
+        if len(g) > 1 and g.produccion_conocida.notna().all():
+            t.loc[g.index, "peso_mrds"] = g.produccion_conocida
+            t.loc[g.index, "reparto_con_produccion"] = True
+    suma = t.groupby("usgs").peso_mrds.transform("sum")
+    t["pct_deposito"] = (100 * t.peso_mrds / suma).round(1).where(t.usgs.notna())
+    t["moz_mapa"] = (t.moz * t.peso_mrds / suma).round(3).where(t.usgs.notna() & ~t.registro_duplicado)
+    t["minas_en_deposito"] = t.usgs.map(n_por_dep)
+    t["metodo_reparto"] = np.select(
+        [t.usgs.isna(), t.registro_duplicado, t.minas_en_deposito == 1, t.reparto_con_produccion],
+        ["sin dato de USGS", "registro duplicado", "única mina del depósito", "reparto por producción conocida"],
+        "reparto por tamaño MRDS (estimado)")
     t["clase_moz"] = None
     for lo, hi, et in CLASES:
         t.loc[(t.moz_mapa >= lo) & (t.moz_mapa < hi), "clase_moz"] = et
-    t.loc[t.mina_principal.notna(), "clase_moz"] = "parte de un depósito"
     t["clase_moz"] = t.clase_moz.fillna("sin dato")
     t["productor"] = t.estado.isin(["Producer", "Past Producer"])
     lejos = t[t.km_a_usgs > 5]
@@ -102,7 +143,7 @@ def main():
     gpd.GeoDataFrame(t, geometry=gpd.points_from_xy(t.lon, t.lat), crs=4326).to_file(
         AQUI / "datos" / "minas.geojson", driver="GeoJSON")
     print(f"{t.usgs.notna().sum()} de {len(t)} minas con dato de USGS; {t[t.principal].moz.sum():.1f} Moz en "
-          f"{t.principal.sum()} depósitos")
+          f"{t.principal.sum()} depósitos; suma de las partes {t.moz_mapa.sum():.1f} Moz")
     print(t.clase_moz.value_counts().to_string())
 
 
