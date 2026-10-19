@@ -6,9 +6,18 @@
 <title>Carlin Gold Prospectivity</title>
 <style>
   :root {
-    --bg: #f7f2ea; --paper: #fffdf9; --ink: #2a1f1d; --ink-2: #6b5d58; --line: #e3d8ca;
-    --maroon: #7b1e2b; --maroon-2: #a8424f; --maroon-3: #cc7a80; --maroon-4: #e6b3b0;
-    --rest: #e9dfd1; --mine: #1f7a4d;
+    color-scheme: light;
+    --bg: #f7f2ea; --paper: #fffdf9; --paper-a: rgba(255,253,249,.95); --ink: #2a1f1d; --ink-2: #6b5d58; --line: #e3d8ca;
+    --maroon: #7b1e2b; --maroon-3: #cc7a80; --on-maroon: #ffffff; --disabled: #b9aaa3; --input: #fffdf9;
+    --rest: #e9dfd1; --mine: #1f7a4d; --shadow: rgba(60,20,20,.12);
+    /* colores del mapa: fijos en los dos temas para que la lectura no cambie */
+    --zone-1: #7b1e2b; --zone-2: #a8424f; --zone-3: #cc7a80; --zone-4: #e6b3b0;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #15100f; --paper: #1f1917; --paper-a: rgba(31,25,23,.94); --ink: #f2ebe7; --ink-2: #b8aaa4; --line: #3b302c;
+    --maroon: #e0808d; --maroon-3: #9c4b56; --on-maroon: #1a1210; --disabled: #6b5d58; --input: #2a2220;
+    --rest: #4a3f3a; --mine: #3fae76; --shadow: rgba(0,0,0,.45);
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
@@ -22,13 +31,13 @@
   .group { display: flex; align-items: center; gap: 8px; }
   .group > span { color: var(--ink-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
   .seg { display: inline-flex; border: 1px solid var(--maroon); border-radius: 8px; overflow: hidden; }
-  .seg button { border: 0; background: var(--paper); color: var(--maroon); padding: 6px 12px; font: inherit; cursor: pointer; }
+  .seg button { border: 0; background: var(--input); color: var(--maroon); padding: 6px 12px; font: inherit; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--maroon); }
-  .seg button[aria-pressed="true"] { background: var(--maroon); color: #fff; }
-  .seg button:disabled { color: #b9aaa3; cursor: not-allowed; }
+  .seg button[aria-pressed="true"] { background: var(--maroon); color: var(--on-maroon); }
+  .seg button:disabled { color: var(--disabled); cursor: not-allowed; }
   input[type=range] { accent-color: var(--maroon); width: 170px; }
   .value { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 42px; }
-  select, .btn { font: inherit; border: 1px solid var(--line); background: var(--paper); border-radius: 8px;
+  select, .btn { font: inherit; border: 1px solid var(--line); background: var(--input); border-radius: 8px;
                  padding: 5px 9px; color: var(--ink); }
   .btn { cursor: pointer; }
   main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 16px 24px 24px; }
@@ -39,12 +48,12 @@
   #map > canvas, #map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   #map > svg { pointer-events: none; }
   #map > svg .mine { pointer-events: all; cursor: pointer; }
-  .attribution { position: absolute; right: 6px; bottom: 4px; font-size: 10.5px; color: #555;
-                 background: rgba(255,255,255,.8); padding: 1px 5px; border-radius: 4px; }
+  .attribution { position: absolute; right: 6px; bottom: 4px; font-size: 10.5px; color: var(--ink-2);
+                 background: var(--paper-a); padding: 1px 5px; border-radius: 4px; }
   .attribution a { color: inherit; }
   .zoom-help { position: absolute; right: 12px; top: 10px; font-size: 12px; color: var(--ink-2);
-               background: rgba(255,253,249,.9); padding: 3px 8px; border-radius: 6px; }
-  .legend { position: absolute; left: 12px; bottom: 12px; background: rgba(255,253,249,.95);
+               background: var(--paper-a); padding: 3px 8px; border-radius: 6px; }
+  .legend { position: absolute; left: 12px; bottom: 12px; background: var(--paper-a);
             border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12px; max-width: 260px; }
   .legend h4 { margin: 0 0 6px; font-size: 12px; }
   .row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
@@ -66,9 +75,10 @@
   th { color: var(--ink-2); font-weight: 600; }
   tr.active td { font-weight: 650; color: var(--maroon); }
   #tip { position: fixed; pointer-events: none; background: var(--paper); border: 1px solid var(--maroon);
-         border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(60,20,20,.12);
+         border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px var(--shadow);
          max-width: min(290px, calc(100vw - 16px)); opacity: 0; transition: opacity .08s; z-index: 10; }
   #tip b { color: var(--maroon); }
+  @media (pointer: coarse) { #tip { font-size: 13.5px; padding: 10px 12px; } }
   #tip .coord { margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
   .chart text { font-size: 11px; fill: var(--ink-2); }
   .chart .axis path, .chart .axis line { stroke: var(--line); }
@@ -100,7 +110,9 @@
   <div class="group" id="ctl-block" hidden><span>Block</span><div class="seg" id="sides"></div></div>
   <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
     <button data-b="satellite" aria-pressed="true">Satellite</button>
-    <button data-b="light" aria-pressed="false">Light</button></div></div>
+    <button data-b="light" aria-pressed="false">Map</button></div></div>
+  <div class="group"><span>Theme</span><div class="seg" id="themes">
+    <button data-t="light">Light</button><button data-t="dark">Dark</button></div></div>
   <div class="group"><span>Go to</span><select id="goto"><option value="">Study area</option></select>
     <button class="btn" id="reset">Reset view</button></div>
 </div>
@@ -132,7 +144,10 @@
 const D = /*__DATA__*/null;
 const LEVELS = [5, 10, 15, 20];
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const LEVEL_COLOR = ["--maroon", "--maroon-2", "--maroon-3", "--maroon-4"].map(css);
+const LEVEL_COLOR = ["--zone-1", "--zone-2", "--zone-3", "--zone-4"].map(css);
+// tema: claro por defecto en todos los navegadores; si el usuario elige otro, se recuerda en este navegador
+function guardado() { try { return localStorage.getItem("theme"); } catch (e) { return null; } }
+document.documentElement.dataset.theme = guardado() === "dark" ? "dark" : "light";   // claro por defecto; oscuro solo si el usuario lo eligió
 const f0 = d3.format(",.0f"), f1 = d3.format(",.1f"), f2 = d3.format(",.2f"), f3 = d3.format(",.3f");
 const pc = v => f0(v) + "%", pc1 = v => f1(v) + "%";
 const decode = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -157,6 +172,11 @@ for (const m of ["LogReg", "GAT", "GAT_bag"])
     .on("click", () => { state.model = m; update(); });
 d3.selectAll("#views button").on("click", function () { state.view = this.dataset.v; update(); });
 d3.selectAll("#basemaps button").on("click", function () { state.basemap = this.dataset.b; update(); });
+d3.selectAll("#themes button").on("click", function () {
+  document.documentElement.dataset.theme = this.dataset.t;
+  try { localStorage.setItem("theme", this.dataset.t); } catch (e) {}
+  update();
+});
 d3.select("#level").on("input", function () { state.level = +this.value; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
@@ -191,6 +211,7 @@ function size() {
 const ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/";
 const BASEMAPS = {
   light: {base: ["Canvas/World_Light_Gray_Base"], labels: ["Canvas/World_Light_Gray_Reference"], maxZ: 16,
+          dark: {base: ["Canvas/World_Dark_Gray_Base"], labels: ["Canvas/World_Dark_Gray_Reference"]},
           attribution: "Basemap: Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS user community",
           outline: "--ink", trend: "--ink-2", rest: 0.45},
   satellite: {base: ["World_Imagery"], labels: ["Reference/World_Transportation", "Reference/World_Boundaries_and_Places"],
@@ -206,6 +227,11 @@ function tileImage(service, x, y, z) {
     im.onload = () => requestDraw(); cache.set(key, im);
   }
   return cache.get(key);
+}
+const oscuro = () => document.documentElement.dataset.theme === "dark";
+function capasBase() {          // servicios de teselas según mapa base y tema
+  const bm = BASEMAPS[state.basemap];
+  return oscuro() && bm.dark ? bm.dark : bm;
 }
 function drawTiles(tiles, service) {
   const [tx, ty] = tiles.translate, k = tiles.scale;
@@ -242,12 +268,12 @@ const requestDraw = () => { if (!pending) { pending = true; requestAnimationFram
 function draw() {
   ctx.clearRect(0, 0, W, H);
   const tiles = tiler(t);
-  const bm = BASEMAPS[state.basemap];
-  bm.base.forEach(s => drawTiles(tiles, s));
+  const cb = capasBase();
+  cb.base.forEach(s => drawTiles(tiles, s));
   // el rectángulo del ráster se calcula en píxeles: Safari no dibuja imágenes con escalas de canvas tan grandes
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(off, t.x + rx0 * t.k, t.y + ry0 * t.k, rw * t.k, rh * t.k);
-  bm.labels.forEach(s => drawTiles(tiles, s));
+  cb.labels.forEach(s => drawTiles(tiles, s));
   projPantalla.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
   layer.selectAll(".outline, .trend").attr("d", pathPantalla);
   layer.selectAll(".mine").attr("cx", d => projPantalla([d.lon, d.lat])[0]).attr("cy", d => projPantalla([d.lon, d.lat])[1])
@@ -294,12 +320,17 @@ const fmtCoord = (lon, lat) => { const [e, n] = utm11(lon, lat);
 
 // ---------- tooltip
 const tip = d3.select("#tip");
+let ultimoShow = 0;
 function show(e, html) {
+  ultimoShow = Date.now();
   tip.html(html).style("opacity", 1);
   const r = tip.node().getBoundingClientRect();
-  let x = e.clientX + 14, y = e.clientY + 14;
+  const dedo = e.pointerType === "touch" || e.touch;
+  let x = e.clientX + 14, y = dedo ? e.clientY - r.height - 24 : e.clientY + 14;   // con el dedo, encima del punto
   if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
-  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  if (!dedo && y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  if (dedo && y < 8) y = e.clientY + 28;                                          // si no cabe arriba, debajo
+  if (dedo) x = e.clientX - r.width / 2;
   x = Math.max(8, Math.min(x, innerWidth - r.width - 8));          // siempre dentro de la pantalla (celulares)
   y = Math.max(8, Math.min(y, innerHeight - r.height - 8));
   tip.style("left", x + "px").style("top", y + "px");
@@ -352,13 +383,17 @@ colMapa.addEventListener("touchend", e => {
   if (!toque || !c || Date.now() - toque.t > 500 || Math.hypot(c.clientX - toque.x, c.clientY - toque.y) > 10) return;
   const ev = {clientX: c.clientX, clientY: c.clientY, target: document.elementFromPoint(c.clientX, c.clientY)};
   const d = ev.target && ev.target.classList.contains("mine") ? d3.select(ev.target).datum() : null;
-  if (d) show(ev, mineText(d)); else if (box.contains(ev.target)) cellTip({...ev, target: box});
+  if (d) show({...ev, touch: true}, mineText(d)); else if (box.contains(ev.target)) cellTip({...ev, target: box, touch: true});
 }, {capture: true, passive: true});
 box.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
 
 // ---------- zoom (from the whole world to street level)
 let movido = false;                                 // pasa a true cuando el usuario acerca o arrastra
-const zoom = d3.zoom().scaleExtent([256, 2 ** 24]).on("zoom", e => { t = e.transform; if (e.sourceEvent) movido = true; requestDraw(); });
+const zoom = d3.zoom().scaleExtent([256, 2 ** 24]).on("zoom", e => {
+  t = e.transform; if (e.sourceEvent) { movido = true; if (e.sourceEvent.type !== "pointerdown") hide(); } requestDraw(); });
+window.addEventListener("scroll", () => { if (Date.now() - ultimoShow > 500) hide(); }, {passive: true});
+document.addEventListener("pointerdown", e => {
+  if (!e.target.closest("#map, .info, .chart rect, #tip")) hide(); }, true);
 d3.select(box).call(zoom);
 function fit(geo, pad = 0.9) {
   const [[x0, y0], [x1, y1]] = path.bounds(geo);
@@ -405,7 +440,7 @@ function panel() {
     gr.append("path").datum([[0, 0], ...m.curva]).attr("fill", "none").attr("stroke", css("--maroon")).attr("stroke-width", 2)
       .attr("d", d3.line(d => x(d[0]), d => y(d[1])));
     const c = m.curva.find(d => d[0] === k);
-    gr.append("circle").attr("cx", x(k)).attr("cy", y(c[1])).attr("r", 5).attr("fill", css("--maroon")).attr("stroke", "#fff").attr("stroke-width", 2);
+    gr.append("circle").attr("cx", x(k)).attr("cy", y(c[1])).attr("r", 5).attr("fill", css("--maroon")).attr("stroke", css("--paper")).attr("stroke-width", 2);
     gr.append("text").attr("x", x(k) + 8).attr("y", y(c[1]) + 14).attr("fill", css("--ink")).text(`${k}% of the area: ${pc(c[1])} of mines`);
     d3.select("#chart-note").text("Out-of-fold predictions (spatial cross-validation with 22.5 km blocks).");
   } else {
@@ -423,10 +458,10 @@ function panel() {
     const bw = xb.bandwidth() / 2;
     gr.selectAll(".p").data(fb).join("rect").attr("x", (_, i) => xb(i)).attr("width", bw - 1).attr("y", d => yb(d.prob_predicha))
       .attr("height", d => yb(0) - yb(d.prob_predicha)).attr("rx", 2).attr("fill", css("--maroon-3"))
-      .on("mousemove", (e, d) => show(e, `Predicted: <b>${pc1(d.prob_predicha * 100)}</b><br>${d.bloques} blocks`)).on("mouseleave", hide);
+      .on("pointermove pointerdown", (e, d) => show(e, `Predicted: <b>${pc1(d.prob_predicha * 100)}</b><br>${d.bloques} blocks`)).on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
     gr.selectAll(".o").data(fb).join("rect").attr("x", (_, i) => xb(i) + bw + 1).attr("width", bw - 1).attr("y", d => yb(d.frecuencia))
       .attr("height", d => yb(0) - yb(d.frecuencia)).attr("rx", 2).attr("fill", css("--maroon"))
-      .on("mousemove", (e, d) => show(e, `Observed: <b>${pc1(d.frecuencia * 100)}</b><br>${d.bloques} blocks`)).on("mouseleave", hide);
+      .on("pointermove pointerdown", (e, d) => show(e, `Observed: <b>${pc1(d.frecuencia * 100)}</b><br>${d.bloques} blocks`)).on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
     const lg = gr.append("g").attr("transform", `translate(${mg.l + 6},${mg.t + 4})`);
     [["predicted", "--maroon-3"], ["observed", "--maroon"]].forEach(([n, c], i) => {
       lg.append("rect").attr("x", i * 90).attr("width", 10).attr("height", 10).attr("rx", 2).attr("fill", css(c));
@@ -434,7 +469,8 @@ function panel() {
     });
     d3.select("#chart-note").text("Blocks grouped into fifths by calibrated probability (cross-fitted by fold). When the bars match, the probability tells the truth.");
   }
-  d3.selectAll(".info").on("mousemove", function (e) { show(e, INFO[this.dataset.info]); }).on("mouseleave", hide);
+  d3.selectAll(".info").on("pointermove pointerdown", function (e) { show(e, INFO[this.dataset.info]); })
+    .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
   table(); legend();
 }
 
@@ -490,6 +526,8 @@ function update() {
   d3.select("#ctl-block").attr("hidden", state.view === "block" ? null : true);
   d3.select("#level-v").text(LEVELS[state.level] + "%");
   d3.selectAll("#basemaps button").attr("aria-pressed", function () { return this.dataset.b === state.basemap; });
+  d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
+  d3.select(box).style("background", oscuro() ? "#1b1b1b" : "#eef0f0");
   const bm = BASEMAPS[state.basemap];
   d3.select("#attribution").text(bm.attribution);
   layer.select(".outline").attr("stroke", bm.outline.startsWith("--") ? css(bm.outline) : bm.outline);
