@@ -47,6 +47,28 @@ better to an unseen trend; both facts are stated in the decision note (MODELO_FI
 
 ![Final model and the weight of each of its 7 layers](img/flowchart_weights.svg)
 
+**Two kinds of weight.** The weights in the flowchart are what the GAT learned from the known mines: how much it
+relies on each layer. They are different from the 0 to 1 values used inside each layer, which the team set by expert
+judgment when building the rasters:
+
+| Layer | How its 0 to 1 value was assigned |
+|---|---|
+| ROCAS | Highly favorable host rock = 1.00, moderately favorable = 0.75, 2 km halo around them = 0.50 |
+| SILICE | Share of each 1 km cell covered by silicification mapped from remote sensing (0 to 1) |
+| STREAM, SUELOS, HIDRO and LITO GEOQ | Each tracer element is scored piecewise by percentile (up to P50: 0 to 0.2; P50 to P85: 0.2 to 0.6; P85 to P95: 0.6 to 1; above P95: 1), then combined into a Carlin index = 0.35 As + 0.30 Sb + 0.20 Hg + 0.15 Tl |
+| GEOFISICA | Reference values: residual gravity high 0.7 to 1.0, local magnetic low 0.6 to 0.8, and 0.9 to 0.1 by depth to the favorable contact |
+
+The team's layer document suggested starting weights by theme, to be tuned against the known deposits. The model's
+learned weights are that tuning:
+
+| Theme | Suggested expert weight | Weight learned by the GAT |
+|---|---|---|
+| Lithology (ROCAS) | 20 % | 37 % |
+| Geochemistry (the four GEOQ layers) | 15 % | 39 % |
+| Alteration (SILICE) | 10 % | 1.5 % |
+| Geophysics (GEOFISICA) | multiplier | 22 % |
+| Structure, windows and magmatism | 50 % | no layer in the model (lineaments were dropped in the 13th attempt) |
+
 ## What the page shows
 
 The same model ranking is read in two ways:
