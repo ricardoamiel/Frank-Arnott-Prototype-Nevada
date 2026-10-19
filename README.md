@@ -114,7 +114,7 @@ On phones, one finger scrolls the page and two fingers move or zoom the map.
   2014-1074. USGS gives one figure per deposit, not per mine, and no public source gives the cumulative production of
   each mine of a complex. When a deposit groups several inventory mines, its gold is split among them by their MRDS
   size class (large, medium, small), so the circles of a deposit add up to its total. The tooltip marks the split as
-  an estimate. Sources, steps and the split of every deposit are in [datos/ORO_MINAS.md](datos/ORO_MINAS.md).
+  an estimate. Sources, steps and the split of every deposit are in [datos/GOLD_PER_MINE_en.md](datos/GOLD_PER_MINE_en.md) (Spanish: [datos/ORO_MINAS.md](datos/ORO_MINAS.md)).
 
 ## Files
 
@@ -124,7 +124,7 @@ On phones, one finger scrolls the page and two fingers move or zoom the map.
 | `plantilla.html` | Page template: layout, styles and d3 v7 code. Data are injected in place of `/*__DATA__*/null`. |
 | `construir_web.py` | Builds `index.html`: reprojects the model rasters to Web Mercator and embeds rasters, mines, trends and ablation results into the template. |
 | `preparar_minas.py` | Joins the mine inventory with the USGS deposit table (contained and produced gold per deposit). |
-| `datos/` | Mines with their USGS gold figures (`minas_produccion.csv`, `minas.geojson`) and how they were built (`ORO_MINAS.md`). |
+| `datos/` | Mines with their USGS gold figures (`minas_produccion.csv`, `minas.geojson`) and how they were built (`GOLD_PER_MINE_en.md`, `ORO_MINAS.md`). |
 | `fuentes/` | USGS OFR 2014-1074 deposit table. |
 | `img/` | Screenshots and flowchart used in this README. |
 
