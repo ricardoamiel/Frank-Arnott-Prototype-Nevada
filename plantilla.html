@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carlin Gold Prospectivity</title>
+<style>
+  :root {
+    --bg: #f7f2ea; --paper: #fffdf9; --ink: #2a1f1d; --ink-2: #6b5d58; --line: #e3d8ca;
+    --maroon: #7b1e2b; --maroon-2: #a8424f; --maroon-3: #cc7a80; --maroon-4: #e6b3b0;
+    --rest: #e9dfd1; --mine: #1f7a4d;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 14px/1.45 "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; }
+  header { padding: 20px 24px 8px; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
+  header p { margin: 4px 0 0; color: var(--ink-2); }
+  .controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 10px 24px 14px;
+              border-bottom: 1px solid var(--line); }
+  .group { display: flex; align-items: center; gap: 8px; }
+  .group > span { color: var(--ink-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+  .seg { display: inline-flex; border: 1px solid var(--maroon); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: var(--paper); color: var(--maroon); padding: 6px 12px; font: inherit; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--maroon); }
+  .seg button[aria-pressed="true"] { background: var(--maroon); color: #fff; }
+  .seg button:disabled { color: #b9aaa3; cursor: not-allowed; }
+  input[type=range] { accent-color: var(--maroon); width: 170px; }
+  .value { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 42px; }
+  select, .btn { font: inherit; border: 1px solid var(--line); background: var(--paper); border-radius: 8px;
+                 padding: 5px 9px; color: var(--ink); }
+  .btn { cursor: pointer; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 16px 24px 24px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+  .map-col { position: relative; min-width: 0; align-self: start; }
+  #map { position: relative; overflow: hidden; touch-action: none; background: #eef0f0; cursor: grab; }
+  #map:active { cursor: grabbing; }
+  #map > canvas, #map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #map > svg { pointer-events: none; }
+  #map > svg .mine { pointer-events: all; cursor: pointer; }
+  .attribution { position: absolute; right: 6px; bottom: 4px; font-size: 10.5px; color: #555;
+                 background: rgba(255,255,255,.8); padding: 1px 5px; border-radius: 4px; }
+  .attribution a { color: inherit; }
+  .zoom-help { position: absolute; right: 12px; top: 10px; font-size: 12px; color: var(--ink-2);
+               background: rgba(255,253,249,.9); padding: 3px 8px; border-radius: 6px; }
+  .legend { position: absolute; left: 12px; bottom: 12px; background: rgba(255,253,249,.95);
+            border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12px; max-width: 260px; }
+  .legend h4 { margin: 0 0 6px; font-size: 12px; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
+  .swatch { width: 14px; height: 14px; border-radius: 3px; flex: none; }
+  aside { display: flex; flex-direction: column; gap: 14px; }
+  aside .card { padding: 14px 16px; }
+  aside h3 { margin: 0 0 10px; font-size: 14px; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .kpi .n { font-size: 24px; font-weight: 650; font-variant-numeric: tabular-nums; color: var(--maroon); }
+  .kpi .t { font-size: 12px; color: var(--ink-2); }
+  .info { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--ink-2);
+          color: var(--ink-2); font-size: 10px; align-items: center; justify-content: center; cursor: help;
+          margin-left: 4px; vertical-align: 1px; }
+  .note { font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 5px 6px; text-align: right; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink-2); font-weight: 600; }
+  tr.active td { font-weight: 650; color: var(--maroon); }
+  #tip { position: fixed; pointer-events: none; background: var(--paper); border: 1px solid var(--maroon);
+         border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(60,20,20,.12);
+         max-width: min(290px, calc(100vw - 16px)); opacity: 0; transition: opacity .08s; z-index: 10; }
+  #tip b { color: var(--maroon); }
+  #tip .coord { margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .chart text { font-size: 11px; fill: var(--ink-2); }
+  .chart .axis path, .chart .axis line { stroke: var(--line); }
+  footer { padding: 0 24px 24px; color: var(--ink-2); font-size: 12px; }
+  @media (max-width: 980px) {
+    main { grid-template-columns: 1fr; padding: 12px 16px; }
+    .controls, header, footer { padding-left: 16px; padding-right: 16px; }
+    .legend { position: static; margin-top: 10px; max-width: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Carlin-type gold prospectivity, Nevada</h1>
+  <p>Two ways to read the same model. <b>Favorable zone</b>: the top k% of the area by model score, and how many known
+    mines and how much gold it holds. <b>Block probability</b>: the calibrated frequency (isotonic regression) of blocks
+    that contain at least one known mine. All figures come from spatial block cross-validation: each zone was scored by
+    a model that never saw it.</p>
+</header>
+
+<div class="controls">
+  <div class="group"><span>Model</span><div class="seg" id="models"></div></div>
+  <div class="group"><span>View</span><div class="seg" id="views">
+    <button data-v="zone" aria-pressed="true">Favorable zone</button>
+    <button data-v="block" aria-pressed="false">Block probability</button></div></div>
+  <div class="group" id="ctl-zone"><span>Area marked</span>
+    <input id="level" type="range" min="0" max="3" step="1" value="1" aria-label="Share of the area marked">
+    <span class="value" id="level-v">10%</span></div>
+  <div class="group" id="ctl-block" hidden><span>Block</span><div class="seg" id="sides"></div></div>
+  <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
+    <button data-b="satellite" aria-pressed="true">Satellite</button>
+    <button data-b="light" aria-pressed="false">Light</button></div></div>
+  <div class="group"><span>Go to</span><select id="goto"><option value="">Study area</option></select>
+    <button class="btn" id="reset">Reset view</button></div>
+</div>
+
+<main>
+  <div class="map-col">
+    <div class="card" id="map">
+      <canvas></canvas><svg></svg>
+      <div class="zoom-help">Scroll or pinch to zoom; drag to pan</div>
+      <div class="attribution" id="attribution"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <aside>
+    <div class="card"><h3 id="kpi-title"></h3><div class="kpis" id="kpis"></div><p class="note" id="kpi-note"></p></div>
+    <div class="card"><h3 id="chart-title"></h3><svg class="chart" id="chart" width="100%" height="200"></svg>
+      <p class="note" id="chart-note"></p></div>
+    <div class="card"><h3>Model comparison</h3><table id="table"></table><p class="note" id="table-note"></p></div>
+  </aside>
+</main>
+<footer>Mines: project inventory (136 points). Circle size: contained gold of the deposit (past production, reserves and
+  resources) from USGS Open-File Report 2014-1074; mines that belong to the same complex share its value. Model cells are
+  1.5 km. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
+<div id="tip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-tile@1.0.0/dist/d3-tile.min.js"></script>
+<script>
+const D = /*__DATA__*/null;
+const LEVELS = [5, 10, 15, 20];
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const LEVEL_COLOR = ["--maroon", "--maroon-2", "--maroon-3", "--maroon-4"].map(css);
+const f0 = d3.format(",.0f"), f1 = d3.format(",.1f"), f2 = d3.format(",.2f"), f3 = d3.format(",.3f");
+const pc = v => f0(v) + "%", pc1 = v => f1(v) + "%";
+const decode = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const R = D.raster, C = 2 * Math.PI * 6378137, NODATA = 255;
+const layers = Object.fromEntries(Object.entries(D.capas).map(([k, v]) => [k, decode(v)]));
+const name = m => m === "GAT_bag" ? "GAT bagging" : m;
+const SIDES = {"3": "4.5 km", "7": "10.5 km", "10": "15 km"};
+
+const state = {model: Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7", basemap: "satellite"};
+{ const q = new URLSearchParams(location.search);       // e.g. ?model=GAT&view=block&side=10&level=5
+  if (D.modelos[q.get("model")]) state.model = q.get("model");
+  if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
+  if (SIDES[q.get("side")]) state.side = q.get("side");
+  if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
+  const n = LEVELS.indexOf(+q.get("level")); if (n >= 0) state.level = n;
+  document.getElementById("level").value = state.level; }
+
+// ---------- controls
+for (const m of ["LogReg", "GAT", "GAT_bag"])
+  d3.select("#models").append("button").text(name(m)).attr("data-m", m).property("disabled", !D.modelos[m])
+    .attr("title", D.modelos[m] ? null : "Pending: results from the GPU cluster")
+    .on("click", () => { state.model = m; update(); });
+d3.selectAll("#views button").on("click", function () { state.view = this.dataset.v; update(); });
+d3.selectAll("#basemaps button").on("click", function () { state.basemap = this.dataset.b; update(); });
+d3.select("#level").on("input", function () { state.level = +this.value; update(); });
+for (const [k, t] of Object.entries(SIDES))
+  d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
+
+// ---------- map: Web Mercator in world units (the whole world spans 1 x 1), d3.zoom scales it to pixels
+const box = document.getElementById("map");
+const canvas = box.querySelector("canvas"), ctx = canvas.getContext("2d");
+const svg = d3.select(box).select("svg"), layer = svg.append("g");
+const proj = d3.geoMercator().scale(1 / (2 * Math.PI)).translate([0, 0]);
+// los vectores se proyectan directo a píxeles en cada redibujado (Safari pierde precisión con transformaciones SVG
+// de escala tan grande); proj, en unidades de mundo, se usa para el zoom y para leer coordenadas
+const projPantalla = d3.geoMercator(), pathPantalla = d3.geoPath(projPantalla);
+const path = d3.geoPath(proj).digits(12);   // el redondeo por defecto (3 decimales) desplaza el contorno ~30 px a esta escala
+const off = document.createElement("canvas"); off.width = R.w; off.height = R.h;
+const offCtx = off.getContext("2d"), img = offCtx.createImageData(R.w, R.h);
+const rx0 = R.x0 / C, ry0 = -R.y0 / C, rw = R.w * R.res / C, rh = R.h * R.res / C;   // raster in world units
+const tiler = d3.tile().tileSize(256).clampX(false);
+let t = d3.zoomIdentity, W = 0, H = 0;
+
+function size() {
+  W = box.clientWidth;
+  H = Math.max(420, Math.min(window.innerHeight - 190, W * 1.05));
+  box.style.height = H + "px";
+  H = box.clientHeight;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  svg.attr("viewBox", `0 0 ${W} ${H}`);
+  tiler.extent([[0, 0], [W, H]]);
+}
+
+// basemap tiles from Esri (no API key): base below the model layer, reference labels above it
+const ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/";
+const BASEMAPS = {
+  light: {base: ["Canvas/World_Light_Gray_Base"], labels: ["Canvas/World_Light_Gray_Reference"], maxZ: 16,
+          attribution: "Basemap: Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS user community",
+          outline: "--ink", trend: "--ink-2", rest: 0.45},
+  satellite: {base: ["World_Imagery"], labels: ["Reference/World_Transportation", "Reference/World_Boundaries_and_Places"],
+          maxZ: 19, attribution: "Imagery: Esri, Maxar, Earthstar Geographics, and the GIS user community",
+          outline: "#ffffff", trend: "#ffffff", rest: 0.18},
+};
+const cache = new Map();
+function tileImage(service, x, y, z) {
+  const n = 2 ** z, xx = ((x % n) + n) % n, key = `${service}/${z}/${y}/${xx}`;
+  if (!cache.has(key)) {
+    const im = new Image(); im.crossOrigin = "anonymous";
+    im.src = `${ESRI}${service}/MapServer/tile/${z}/${y}/${xx}`;
+    im.onload = () => requestDraw(); cache.set(key, im);
+  }
+  return cache.get(key);
+}
+function drawTiles(tiles, service) {
+  const [tx, ty] = tiles.translate, k = tiles.scale;
+  for (const [x, y, z] of tiles) {
+    if (z > BASEMAPS[state.basemap].maxZ) continue;
+    const im = tileImage(service, x, y, z);
+    if (im.complete && im.naturalWidth) ctx.drawImage(im, (x + tx) * k, (y + ty) * k, k + 0.5, k + 0.5);
+  }
+}
+
+const rgba = (c, a) => { const x = d3.color(c); return [x.r, x.g, x.b, Math.round(a * 255)]; };
+const blockScale = d3.scaleSequentialSqrt([0, 0.45], d3.interpolateLab("#f3e7dc", "#4d0f1a")).clamp(true);
+
+function paint() {
+  const data = img.data, n = R.w * R.h;
+  const rest = rgba(css("--rest"), BASEMAPS[state.basemap].rest), lv = LEVEL_COLOR.map(c => rgba(c, 0.88));
+  if (state.view === "block") {
+    const b = layers[`bloque_${state.model}_${state.side}`], pal = d3.range(251).map(v => rgba(blockScale(v / 500), 0.82));
+    for (let i = 0; i < n; i++) { const v = b[i], j = i * 4;
+      if (v === NODATA) { data[j + 3] = 0; continue; } const c = pal[v];
+      data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; }
+  } else {
+    const p = layers[`pct_${state.model}`], thr = LEVELS.map(k => 250 * (1 - k / 100));
+    for (let i = 0; i < n; i++) { const v = p[i], j = i * 4;
+      if (v === NODATA) { data[j + 3] = 0; continue; }
+      let c = rest; for (let k = 0; k <= state.level; k++) if (v > thr[k]) { c = lv[k]; break; }
+      data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; }
+  }
+  offCtx.putImageData(img, 0, 0);
+}
+
+let pending = false;
+const requestDraw = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; draw(); }); } };
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  const tiles = tiler(t);
+  const bm = BASEMAPS[state.basemap];
+  bm.base.forEach(s => drawTiles(tiles, s));
+  // el rectángulo del ráster se calcula en píxeles: Safari no dibuja imágenes con escalas de canvas tan grandes
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, t.x + rx0 * t.k, t.y + ry0 * t.k, rw * t.k, rh * t.k);
+  bm.labels.forEach(s => drawTiles(tiles, s));
+  projPantalla.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
+  layer.selectAll(".outline, .trend").attr("d", pathPantalla);
+  layer.selectAll(".mine").attr("cx", d => projPantalla([d.lon, d.lat])[0]).attr("cy", d => projPantalla([d.lon, d.lat])[1])
+    .attr("r", radius).attr("stroke-width", 1.2);
+}
+
+function vectors() {
+  layer.selectAll("*").remove();
+  layer.append("path").attr("class", "outline").datum(D.area).attr("fill", "none").attr("stroke-width", 1.3);
+  layer.append("g").selectAll("path").data(D.trends.features).join("path").attr("class", "trend")
+    .attr("fill", "none").attr("stroke-dasharray", "4 3");
+  const mines = D.minas.slice().sort((a, b) => (b.moz || 0) - (a.moz || 0));
+  layer.append("g").selectAll("circle").data(mines).join("circle").attr("class", "mine")
+    .on("pointermove pointerdown", (e, d) => { e.stopPropagation(); show(e, mineText(d)); }).on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+}
+const mozRadius = d3.scaleSqrt([0, 40], [2.5, 17]);
+const radius = d => d.moz > 0 ? mozRadius(d.moz) : 2.5;
+
+function markCaptured() {
+  const k = LEVELS[state.level], key = `pct_${state.model}`;
+  layer.selectAll(".mine").each(function (d) {
+    const inside = state.view === "block" || (d[key] != null && d[key] > 100 - k);
+    d3.select(this).attr("fill", inside ? css("--mine") : "#ffffff").attr("fill-opacity", 0.88)
+      .attr("stroke", inside ? "#ffffff" : css("--mine"));
+  });
+}
+
+// ---------- coordinates: WGS84 longitude/latitude and UTM zone 11N (EPSG:32611), transverse Mercator (Snyder 1987)
+function utm11(lon, lat) {
+  const a = 6378137, f = 1 / 298.257223563, k0 = 0.9996, e2 = f * (2 - f), ep2 = e2 / (1 - e2), rad = Math.PI / 180;
+  const phi = lat * rad, dl = (lon + 117) * rad, s = Math.sin(phi), c = Math.cos(phi), tn = Math.tan(phi);
+  const N = a / Math.sqrt(1 - e2 * s * s), T = tn * tn, Cc = ep2 * c * c, A = c * dl;
+  const e4 = e2 * e2, e6 = e4 * e2;
+  const M = a * ((1 - e2 / 4 - 3 * e4 / 64 - 5 * e6 / 256) * phi - (3 * e2 / 8 + 3 * e4 / 32 + 45 * e6 / 1024) * Math.sin(2 * phi)
+          + (15 * e4 / 256 + 45 * e6 / 1024) * Math.sin(4 * phi) - (35 * e6 / 3072) * Math.sin(6 * phi));
+  const E = 500000 + k0 * N * (A + (1 - T + Cc) * A ** 3 / 6 + (5 - 18 * T + T * T + 72 * Cc - 58 * ep2) * A ** 5 / 120);
+  const Nn = k0 * (M + N * tn * (A * A / 2 + (5 - T + 9 * Cc + 4 * Cc * Cc) * A ** 4 / 24
+            + (61 - 58 * T + T * T + 600 * Cc - 330 * ep2) * A ** 6 / 720));
+  return [E, Nn];
+}
+const fmtCoord = (lon, lat) => { const [e, n] = utm11(lon, lat);
+  return `<div class="coord">UTM 11N: E ${d3.format(",.0f")(e)} m, N ${d3.format(",.0f")(n)} m<br>` +
+         `WGS84: ${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? "E" : "W"}</div>`; };
+
+// ---------- tooltip
+const tip = d3.select("#tip");
+function show(e, html) {
+  tip.html(html).style("opacity", 1);
+  const r = tip.node().getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  x = Math.max(8, Math.min(x, innerWidth - r.width - 8));          // siempre dentro de la pantalla (celulares)
+  y = Math.max(8, Math.min(y, innerHeight - r.height - 8));
+  tip.style("left", x + "px").style("top", y + "px");
+}
+const hide = () => tip.style("opacity", 0);
+const STATUS = {"Producer": "producer", "Past Producer": "past producer", "Prospect": "prospect",
+                "Occurrence": "occurrence", "Plant": "plant", "Unknown": "unknown"};
+function mineText(d) {
+  const p = d[`pct_${state.model}`];
+  let s = `<b>${d.deposito}</b><br>${d.trend}<br>Status: ${STATUS[d.estado] || d.estado}`;
+  s += d.moz > 0 ? `<br>Contained gold: <b>${f2(d.moz)} Moz</b>` +
+       (d.principal ? "" : ` <span style="color:var(--ink-2)">(${d.usgs} complex)</span>`)
+     : `<br><span style="color:var(--ink-2)">No gold figure in USGS</span>`;
+  if (p != null) s += `<br>In the top ${f0(Math.max(1, Math.ceil(100 - p)))}% of the area (${name(state.model)})`;
+  return s + fmtCoord(d.lon, d.lat);
+}
+// pointer events: igual con ratón, dedo (iOS y Android) y lápiz; con un toque se muestra el dato de esa celda
+function cellTip(e) {
+  if (e.target.classList && e.target.classList.contains("mine")) return;
+  const rr = canvas.getBoundingClientRect();
+  const [wx, wy] = t.invert([e.clientX - rr.left, e.clientY - rr.top]);
+  const c = Math.floor((wx * C - R.x0) / R.res), r = Math.floor((R.y0 + wy * C) / R.res);
+  if (r < 0 || r >= R.h || c < 0 || c >= R.w) return hide();
+  const i = r * R.w + c, v = layers[`pct_${state.model}`][i];
+  if (v === NODATA) return hide();
+  const top = Math.max(1, Math.ceil(100 - v / 2.5));
+  let s = `1.5 km cell: <b>top ${f0(top)}% of the area</b>`;
+  if (state.view === "block") {
+    const b = layers[`bloque_${state.model}_${state.side}`][i];
+    if (b !== NODATA) s += `<br>${SIDES[state.side]} block: <b>${pc1(b / 5)}</b> chance of holding at least one known mine` +
+      (layers[`conmina_${state.side}`][i] ? "<br>This block contains inventory mines" : "");
+  } else {
+    const n = LEVELS.findIndex(k => v / 2.5 > 100 - k);
+    s += n >= 0 ? `<br>Inside the top ${LEVELS[n]}% zone` : "<br>Outside the marked zone";
+  }
+  const [lon, lat] = proj.invert([wx, wy]);
+  show(e, s + fmtCoord(lon, lat));
+}
+box.addEventListener("pointermove", e => { if (e.pointerType === "mouse") cellTip(e); });
+box.addEventListener("pointerdown", cellTip);
+// respaldo táctil: d3.zoom detiene la propagación de los touch events en el mapa, así que se escucha en captura
+// desde el contenedor; un toque corto y sin arrastre muestra el dato de la mina o de la celda
+let toque = null;
+const colMapa = box.parentElement;
+colMapa.addEventListener("touchstart", e => {
+  toque = e.touches.length === 1 ? {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now()} : null;
+}, {capture: true, passive: true});
+colMapa.addEventListener("touchend", e => {
+  const c = e.changedTouches[0];
+  if (!toque || !c || Date.now() - toque.t > 500 || Math.hypot(c.clientX - toque.x, c.clientY - toque.y) > 10) return;
+  const ev = {clientX: c.clientX, clientY: c.clientY, target: document.elementFromPoint(c.clientX, c.clientY)};
+  const d = ev.target && ev.target.classList.contains("mine") ? d3.select(ev.target).datum() : null;
+  if (d) show(ev, mineText(d)); else if (box.contains(ev.target)) cellTip({...ev, target: box});
+}, {capture: true, passive: true});
+box.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+
+// ---------- zoom (from the whole world to street level)
+let movido = false;                                 // pasa a true cuando el usuario acerca o arrastra
+const zoom = d3.zoom().scaleExtent([256, 2 ** 24]).on("zoom", e => { t = e.transform; if (e.sourceEvent) movido = true; requestDraw(); });
+d3.select(box).call(zoom);
+function fit(geo, pad = 0.9) {
+  const [[x0, y0], [x1, y1]] = path.bounds(geo);
+  const k = pad * Math.min(W / (x1 - x0), H / (y1 - y0));
+  return d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+}
+d3.select("#reset").on("click", () => { d3.select("#goto").property("value", ""); d3.select(box).transition().duration(800).call(zoom.transform, fit(D.area)); });
+D.trends.features.forEach((f, i) => d3.select("#goto").append("option").attr("value", i).text(f.properties.Name));
+d3.select("#goto").on("change", function () {
+  const tr = this.value === "" ? fit(D.area) : fit(D.trends.features[+this.value], 0.8);
+  d3.select(box).transition().duration(800).call(zoom.transform, tr);
+});
+
+// ---------- side panel
+const INFO = {
+  area: "Area of the top k% of cells by model score. Each cell is 1.5 x 1.5 km.",
+  mines: "Share of the 93 mine cells that fall inside the marked zone, using out-of-fold predictions (spatial cross-validation).",
+  lift: "How many times more mines the marked zone holds than randomly chosen cells would. 1 = random.",
+  gold: "Share of the contained gold (Moz, USGS) of deposits whose main mine falls inside the marked zone.",
+  auc: "Probability that a block with a mine gets a higher probability than a block without one. 0.5 = random.",
+  skill: "Brier score improvement over always predicting the average share of blocks with mines. 0 = no gain; 1 = perfect.",
+  prev: "Share of blocks that contain at least one inventory mine.",
+  pmax: "Highest calibrated probability reached by a block on the map.",
+};
+const info = k => `<span class="info" data-info="${k}">i</span>`;
+const kpi = (n, t, k) => `<div class="kpi"><div class="n">${n}</div><div class="t">${t}${info(k)}</div></div>`;
+
+function panel() {
+  const m = D.modelos[state.model], k = LEVELS[state.level];
+  const gr = d3.select("#chart"); gr.selectAll("*").remove();
+  const wG = gr.node().clientWidth || 340, hG = 200, mg = {l: 38, r: 10, t: 10, b: 30};
+  if (state.view === "zone") {
+    const r = m.idea2.find(d => d.nivel_pct === k);
+    d3.select("#kpi-title").text(`Top ${k}% favorable zone (${name(state.model)})`);
+    d3.select("#kpis").html(kpi(f0(r.km2) + " km²", "area marked", "area") + kpi(pc(r.pct_minas), "of the mines", "mines") +
+      kpi(f1(r.lift) + "×", "more mines than random", "lift") + kpi(pc(r.pct_oro), "of the gold (Moz)", "gold"));
+    d3.select("#kpi-note").text(`${r.celdas_con_mina} of 93 mine cells and ${f0(r.moz_capturados)} Moz of contained gold in ${k}% of the area.`);
+    d3.select("#chart-title").text("Success-rate curve: mines captured vs. area marked");
+    const x = d3.scaleLinear([0, 50], [mg.l, wG - mg.r]), y = d3.scaleLinear([0, 100], [hG - mg.b, mg.t]);
+    gr.append("g").attr("class", "axis").attr("transform", `translate(0,${hG - mg.b})`).call(d3.axisBottom(x).ticks(5).tickFormat(v => v + "%"));
+    gr.append("g").attr("class", "axis").attr("transform", `translate(${mg.l},0)`).call(d3.axisLeft(y).ticks(5).tickFormat(v => v + "%"));
+    gr.append("line").attr("x1", x(0)).attr("y1", y(0)).attr("x2", x(50)).attr("y2", y(50)).attr("stroke", css("--line")).attr("stroke-dasharray", "4 3");
+    gr.append("text").attr("x", x(40)).attr("y", y(45)).text("random");
+    gr.append("path").datum([[0, 0], ...m.curva]).attr("fill", "none").attr("stroke", css("--maroon")).attr("stroke-width", 2)
+      .attr("d", d3.line(d => x(d[0]), d => y(d[1])));
+    const c = m.curva.find(d => d[0] === k);
+    gr.append("circle").attr("cx", x(k)).attr("cy", y(c[1])).attr("r", 5).attr("fill", css("--maroon")).attr("stroke", "#fff").attr("stroke-width", 2);
+    gr.append("text").attr("x", x(k) + 8).attr("y", y(c[1]) + 14).attr("fill", css("--ink")).text(`${k}% of the area: ${pc(c[1])} of mines`);
+    d3.select("#chart-note").text("Out-of-fold predictions (spatial cross-validation with 22.5 km blocks).");
+  } else {
+    const r = m.idea1.find(d => String(d.lado_celdas) === state.side);
+    const pmax = d3.max(layers[`bloque_${state.model}_${state.side}`], v => v === NODATA ? 0 : v) / 500;
+    d3.select("#kpi-title").text(`${SIDES[state.side]} blocks (${name(state.model)})`);
+    d3.select("#kpis").html(kpi(pc1(pmax * 100), "highest probability on the map", "pmax") + kpi(pc1(r.prevalencia * 100), "blocks with mines (average)", "prev") +
+      kpi(f2(r.AUC), "block AUC", "auc") + kpi(f2(r.Brier_skill), "Brier skill", "skill"));
+    d3.select("#kpi-note").text(`${r.bloques} blocks, ${r.bloques_con_mina} with mines. Block score: ${r.puntaje === "max" ? "maximum" : "mean"} percentile of its cells.`);
+    d3.select("#chart-title").text("Reliability: predicted probability vs. observed frequency");
+    const fb = m.fiabilidad[state.side], top = Math.max(0.3, d3.max(fb, d => Math.max(d.prob_predicha, d.frecuencia)) * 1.15);
+    const xb = d3.scaleBand(fb.map((_, i) => i), [mg.l, wG - mg.r]).padding(0.3), yb = d3.scaleLinear([0, top], [hG - mg.b, mg.t]);
+    gr.append("g").attr("class", "axis").attr("transform", `translate(0,${hG - mg.b})`).call(d3.axisBottom(xb).tickFormat(i => ["very low", "low", "medium", "high", "very high"][i]));
+    gr.append("g").attr("class", "axis").attr("transform", `translate(${mg.l},0)`).call(d3.axisLeft(yb).ticks(4).tickFormat(v => f0(v * 100) + "%"));
+    const bw = xb.bandwidth() / 2;
+    gr.selectAll(".p").data(fb).join("rect").attr("x", (_, i) => xb(i)).attr("width", bw - 1).attr("y", d => yb(d.prob_predicha))
+      .attr("height", d => yb(0) - yb(d.prob_predicha)).attr("rx", 2).attr("fill", css("--maroon-3"))
+      .on("mousemove", (e, d) => show(e, `Predicted: <b>${pc1(d.prob_predicha * 100)}</b><br>${d.bloques} blocks`)).on("mouseleave", hide);
+    gr.selectAll(".o").data(fb).join("rect").attr("x", (_, i) => xb(i) + bw + 1).attr("width", bw - 1).attr("y", d => yb(d.frecuencia))
+      .attr("height", d => yb(0) - yb(d.frecuencia)).attr("rx", 2).attr("fill", css("--maroon"))
+      .on("mousemove", (e, d) => show(e, `Observed: <b>${pc1(d.frecuencia * 100)}</b><br>${d.bloques} blocks`)).on("mouseleave", hide);
+    const lg = gr.append("g").attr("transform", `translate(${mg.l + 6},${mg.t + 4})`);
+    [["predicted", "--maroon-3"], ["observed", "--maroon"]].forEach(([n, c], i) => {
+      lg.append("rect").attr("x", i * 90).attr("width", 10).attr("height", 10).attr("rx", 2).attr("fill", css(c));
+      lg.append("text").attr("x", i * 90 + 14).attr("y", 9).text(n);
+    });
+    d3.select("#chart-note").text("Blocks grouped into fifths by calibrated probability (cross-fitted by fold). When the bars match, the probability tells the truth.");
+  }
+  d3.selectAll(".info").on("mousemove", function (e) { show(e, INFO[this.dataset.info]); }).on("mouseleave", hide);
+  table(); legend();
+}
+
+function table() {
+  const k = LEVELS[state.level], tb = d3.select("#table").html("");
+  const pend = ["GAT", "GAT_bag"].filter(m => !D.modelos[m]).map(name);
+  if (state.view === "zone") {
+    tb.append("tr").html(`<th>Model</th><th>Mines</th><th>Lift</th><th>Gold</th>`);
+    for (const [n, m] of Object.entries(D.modelos)) { const r = m.idea2.find(d => d.nivel_pct === k);
+      tb.append("tr").classed("active", n === state.model).html(`<td>${name(n)}</td><td>${pc(r.pct_minas)}</td><td>${f1(r.lift)}×</td><td>${pc(r.pct_oro)}</td>`); }
+    d3.select("#table-note").text(`Top ${k}% zone.` + (pend.length ? ` Pending from the GPU cluster: ${pend.join(" and ")}.` : ""));
+  } else {
+    tb.append("tr").html(`<th>Model</th><th>AUC</th><th>Brier skill</th><th>Max.</th>`);
+    for (const [n, m] of Object.entries(D.modelos)) { const r = m.idea1.find(d => String(d.lado_celdas) === state.side);
+      const mx = d3.max(layers[`bloque_${n}_${state.side}`], v => v === NODATA ? 0 : v) / 5;
+      tb.append("tr").classed("active", n === state.model).html(`<td>${name(n)}</td><td>${f3(r.AUC)}</td><td>${f3(r.Brier_skill)}</td><td>${pc1(mx)}</td>`); }
+    d3.select("#table-note").text(`${SIDES[state.side]} blocks.`);
+  }
+}
+
+function legend() {
+  const L = d3.select("#legend").html("");
+  if (state.view === "zone") {
+    L.append("h4").text("Most favorable zone");
+    LEVELS.slice(0, state.level + 1).forEach((k, i) => L.append("div").attr("class", "row")
+      .html(`<span class="swatch" style="background:${LEVEL_COLOR[i]}"></span>top ${i ? LEVELS[i - 1] + " to " + k : "0 to " + k}%`));
+    L.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>rest of the study area`);
+  } else {
+    L.append("h4").text("Chance of a known mine in the block");
+    const sv = L.append("svg").attr("width", 220).attr("height", 30), gid = "g" + Math.random().toString(36).slice(2);
+    const gd = sv.append("defs").append("linearGradient").attr("id", gid);
+    d3.range(0, 1.01, 0.1).forEach(s => gd.append("stop").attr("offset", s).attr("stop-color", blockScale(s * s * 0.45)));
+    sv.append("rect").attr("x", 6).attr("width", 194).attr("height", 10).attr("rx", 3).attr("fill", `url(#${gid})`);
+    [0, 0.1, 0.2, 0.3, 0.45].forEach(v => sv.append("text").attr("x", 6 + 194 * Math.sqrt(v / 0.45)).attr("y", 24)
+      .attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(f0(v * 100) + (v === 0.45 ? "%+" : "")));
+  }
+  L.append("h4").style("margin-top", "8px").text("Mines (size = contained gold)");
+  const sv = L.append("svg").attr("width", 230).attr("height", 44);
+  [[1, 20], [5, 62], [15, 112], [40, 172]].forEach(([v, x]) => {
+    sv.append("circle").attr("cx", x).attr("cy", 20).attr("r", mozRadius(v)).attr("fill", css("--mine")).attr("fill-opacity", .88).attr("stroke", "#fff");
+    sv.append("text").attr("x", x).attr("y", 42).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(v + " Moz");
+  });
+  if (state.view === "zone") L.append("div").attr("class", "row")
+    .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${css("--mine")}" stroke-width="1.5"/></svg>mine outside the marked zone`);
+  L.append("div").attr("class", "row").html(`<svg width="14" height="14"><path d="M1,7 h12" stroke="${css("--ink-2")}" stroke-dasharray="3 2"/></svg>trends`);
+}
+
+function update() {
+  d3.selectAll("#models button").attr("aria-pressed", function () { return this.dataset.m === state.model; });
+  d3.selectAll("#views button").attr("aria-pressed", function () { return this.dataset.v === state.view; });
+  d3.selectAll("#sides button").attr("aria-pressed", function () { return this.dataset.s === state.side; });
+  d3.select("#ctl-zone").attr("hidden", state.view === "zone" ? null : true);
+  d3.select("#ctl-block").attr("hidden", state.view === "block" ? null : true);
+  d3.select("#level-v").text(LEVELS[state.level] + "%");
+  d3.selectAll("#basemaps button").attr("aria-pressed", function () { return this.dataset.b === state.basemap; });
+  const bm = BASEMAPS[state.basemap];
+  d3.select("#attribution").text(bm.attribution);
+  layer.select(".outline").attr("stroke", bm.outline.startsWith("--") ? css(bm.outline) : bm.outline);
+  layer.selectAll(".trend").attr("stroke", bm.trend.startsWith("--") ? css(bm.trend) : bm.trend);
+  paint(); markCaptured(); requestDraw(); panel();
+}
+
+size(); vectors();
+d3.select(box).call(zoom.transform, fit(D.area));
+update();
+// remedir cuando cambia el tamaño real del mapa (barra de desplazamiento, giro del teléfono, ventana)
+let lastW = W;
+new ResizeObserver(() => {
+  if (box.clientWidth === lastW) return;
+  const center = t.invert([W / 2, H / 2]);
+  size(); lastW = W;
+  d3.select(box).call(zoom.transform, movido ? d3.zoomIdentity.translate(W / 2, H / 2).scale(t.k).translate(-center[0], -center[1])
+                                             : fit(D.area));
+  panel();
+}).observe(box);
+</script>
+</body>
+</html>

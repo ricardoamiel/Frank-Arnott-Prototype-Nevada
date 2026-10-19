@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Entornos y configuración local
+.env
+.venv/
+venv/
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# Temporales y capturas de prueba
+*.tmp
+*.log
+capturas/
+borradores/
+
+# Archivos grandes de SIG que no hacen falta para la página (los rásteres y shapefiles
+# del proyecto viven fuera de esta carpeta; si alguno se copia aquí por error, no se sube)
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.qmd
+*.npy
+*.npz
