@@ -15,13 +15,15 @@ works offline and needs no server. Basemap tiles come from Esri.
 
 ![Flowchart from the evidence layers to the prospectivity maps](img/flowchart.svg)
 
-1. **Inputs:** 6 evidence rasters, the study area and the known mines.
+1. **Inputs:** 7 evidence rasters (geophysics, geochemistry of streams, soils, hydrology and lithology, rocks and
+   silica), the study area and the known mines.
 2. **Data preparation (A):** rasters aligned and aggregated to 1.5 km cells; mine cells are positives, cells within
    2.5 km of a mine cannot be negatives.
 3. **Graph (B):** each cell is a node linked to its 8 neighbors.
-4. **Models (C):** GAT, GAT bagging and tabular baselines (LogReg among them).
+4. **Models (C):** GAT, GAT bagging and tabular baselines (LogReg among them), on 12 features per cell (7 layers plus
+   5 coverage flags for layers with gaps).
 5. **Spatial validation (D):** 5 folds of 22.5 km blocks; each block is scored by a model that never saw it, and layer
-   importance is measured by permutation.
+   importance is measured by permutation in every fold (ROCAS and GEOFISICA rank first).
 6. **Results (E):** final maps trained on all mines, metrics and layer importance.
 7. **Calibration and products (F):** isotonic calibration, the two views of this page (favorable zone and block
    probability) and the page itself.
@@ -47,10 +49,19 @@ Two tabs:
 Models: **GAT** (graph attention network, configuration of the team notebook), **GAT bagging** (4 GATs with bootstrap)
 and **LogReg** (logistic regression baseline), all calibrated with isotonic regression.
 
+An optional **access and environment** layer (the project traffic-light map: green, yellow, red) can be switched on
+as a base layer under the favorable zone, with an adjustable zone opacity. The panel then reports how much of the
+marked zone falls on green, yellow and red ground.
+
+On phones, one finger scrolls the page and two fingers move or zoom the map.
+
 ## How the figures were obtained
 
-- **Input layers (6):** GEOFISICA, HIDRO GEOQ, ROCAS, SILICE, STREAM GEOQ and SUELOS GEOQ, on a 1.5 km grid
-  (UTM 11N) inside the study area. Each cell is a node of an 8-connected graph.
+- **Input layers (7):** GEOFISICA, HIDRO GEOQ, LITO GEOQ, ROCAS, SILICE, STREAM GEOQ and SUELOS GEOQ, on a 1.5 km
+  grid (UTM 11N) inside the study area. Each cell is a node of an 8-connected graph. Adding LITO GEOQ to the 6 layers
+  of the 13th attempt raised the share of known mines in the top 5 % of the area from about 62 % to
+  69 to 71 % and the gold captured there from 70 to 80 % to 85 to 97 % (same folds and seeds); the 10 to 20 % levels
+  stay the same.
 - **Known mines:** the project inventory (136 points, 93 mine cells).
 - **Validation:** every figure on the page comes from spatial cross-validation with 22.5 km blocks (5 folds,
   3 seeds). Each cell was scored by a model that never saw its block. The maps themselves are painted with the final
