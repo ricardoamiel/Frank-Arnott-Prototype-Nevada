@@ -6,8 +6,12 @@ depósito (producción histórica + reservas + recursos, a la fecha de la compil
 troy (1 t = 32.150,7 oz). No es solo la producción; es la medida estándar del tamaño de un depósito.
 
 La correspondencia se hizo a mano (nombre, campo Includes y distancia), porque la más cercana falla en los complejos
-grandes: Post y Goldstrike quedan más cerca de Deep Star que de Betze Post. Cuando un depósito de USGS agrupa varias
-minas del inventario, todas llevan el tamaño del complejo y se marca como principal la más cercana a su coordenada.
+grandes: Post y Goldstrike quedan más cerca de Deep Star que de Betze Post. USGS da una sola cifra por depósito, y un
+depósito puede agrupar varias minas del inventario (Betze-Post incluye Screamer, Bazza, Deep Post, Long Lac y el tajo
+Goldstrike). No hay cifra por mina: el oro del depósito se asigna una sola vez, a la mina principal (la más cercana a
+la coordenada de USGS), y las demás quedan como parte de ese depósito (moz_mapa vacío). Así no se repite el valor en
+el mapa ni en las sumas. Se agrega la producción histórica (ProductionTonnage por AuPrGrade, años en ProductionYear),
+que es menor que el oro contenido: Betze-Post tiene 39,5 Moz contenidos y 30,0 Moz producidos entre 1974 y 2011.
 
 Uso: python preparar_minas.py   (escribe datos/minas_produccion.csv y datos/minas.geojson)
 """
@@ -65,11 +69,12 @@ def main():
         f = dict(id=i, deposito=r["Depósito"], trend=r["Trend___Di"], estado=r["Estado_de_"],
                  tamano_mrds=r["Tamaño__M"], lon=round(r["Longitud"], 5), lat=round(r["Latitud"], 5),
                  usgs=nombre, usgs_incluye=None, moz=np.nan, toneladas_mt=np.nan, ley_g_t=np.nan,
-                 anios_produccion=None, km_a_usgs=np.nan)
+                 prod_moz=np.nan, anios_produccion=None, km_a_usgs=np.nan)
         if nombre:
             d = u.loc[nombre]
             f.update(moz=round(d.ContainedAuTonne * OZ_POR_T / 1e6, 3), toneladas_mt=d.TotalTonnage,
                      ley_g_t=d.AuToGrade, anios_produccion=d.ProductionYear,
+                     prod_moz=round(d.ProductionTonnage * d.AuPrGrade * OZ_POR_T / 1e6, 3),
                      usgs_incluye=d.Includes if isinstance(d.Includes, str) else None,
                      km_a_usgs=round(r.geometry.distance(ug.loc[nombre].geometry) / 1000, 2))
         filas.append(f)
@@ -78,9 +83,13 @@ def main():
     t["principal"] = False
     for nombre, g in t[t.usgs.notna()].groupby("usgs"):
         t.loc[g.km_a_usgs.idxmin(), "principal"] = True
+    princ = t[t.principal].set_index("usgs").deposito
+    t["mina_principal"] = t.usgs.map(princ).where(t.usgs.notna() & ~t.principal)
+    t["moz_mapa"] = t.moz.where(t.principal)          # el oro del depósito, una sola vez
     t["clase_moz"] = None
     for lo, hi, et in CLASES:
-        t.loc[(t.moz >= lo) & (t.moz < hi), "clase_moz"] = et
+        t.loc[(t.moz_mapa >= lo) & (t.moz_mapa < hi), "clase_moz"] = et
+    t.loc[t.mina_principal.notna(), "clase_moz"] = "parte de un depósito"
     t["clase_moz"] = t.clase_moz.fillna("sin dato")
     t["productor"] = t.estado.isin(["Producer", "Past Producer"])
     lejos = t[t.km_a_usgs > 5]

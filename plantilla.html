@@ -9,7 +9,7 @@
     color-scheme: light;
     --bg: #f7f2ea; --paper: #fffdf9; --paper-a: rgba(255,253,249,.95); --ink: #2a1f1d; --ink-2: #6b5d58; --line: #e3d8ca;
     --maroon: #7b1e2b; --maroon-3: #cc7a80; --on-maroon: #ffffff; --disabled: #b9aaa3; --input: #fffdf9;
-    --rest: #e9dfd1; --mine: #1f7a4d; --shadow: rgba(60,20,20,.12);
+    --rest: #e9dfd1; --mine: #1f7a4d; --shadow: rgba(60,20,20,.12); --hl: #f6ebe4;
     /* colores del mapa: fijos en los dos temas para que la lectura no cambie */
     --zone-1: #7b1e2b; --zone-2: #a8424f; --zone-3: #cc7a80; --zone-4: #e6b3b0;
   }
@@ -17,7 +17,7 @@
     color-scheme: dark;
     --bg: #15100f; --paper: #1f1917; --paper-a: rgba(31,25,23,.94); --ink: #f2ebe7; --ink-2: #b8aaa4; --line: #3b302c;
     --maroon: #e0808d; --maroon-3: #9c4b56; --on-maroon: #1a1210; --disabled: #6b5d58; --input: #2a2220;
-    --rest: #4a3f3a; --mine: #3fae76; --shadow: rgba(0,0,0,.45);
+    --rest: #4a3f3a; --mine: #3fae76; --shadow: rgba(0,0,0,.45); --hl: #2c2220;
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
@@ -26,7 +26,12 @@
   header { padding: 20px 24px 8px; }
   h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
   header p { margin: 4px 0 0; color: var(--ink-2); }
-  .controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 10px 24px 14px;
+  .tabs { display: flex; gap: 4px; padding: 10px 24px 0; border-bottom: 1px solid var(--line); }
+  .tabs button { border: 1px solid transparent; border-bottom: 0; background: none; color: var(--ink-2); font: inherit;
+                 font-weight: 600; padding: 8px 14px; border-radius: 8px 8px 0 0; cursor: pointer; margin-bottom: -1px; }
+  .tabs button[aria-selected="true"] { background: var(--paper); color: var(--maroon); border-color: var(--line);
+                                       border-bottom: 1px solid var(--paper); }
+  .controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 12px 24px 14px;
               border-bottom: 1px solid var(--line); }
   .group { display: flex; align-items: center; gap: 8px; }
   .group > span { color: var(--ink-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
@@ -43,41 +48,61 @@
   main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 16px 24px 24px; }
   .card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
   .map-col { position: relative; min-width: 0; align-self: start; }
-  #map { position: relative; overflow: hidden; touch-action: none; background: #eef0f0; cursor: grab; }
-  #map:active { cursor: grabbing; }
-  #map > canvas, #map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #map > svg { pointer-events: none; }
-  #map > svg .mine { pointer-events: all; cursor: pointer; }
+  .maps { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .compare .maps { grid-template-columns: 1fr 1fr; }
+  .map { position: relative; overflow: hidden; touch-action: none; background: #eef0f0; cursor: grab; }
+  .map:active { cursor: grabbing; }
+  .map > canvas, .map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .map > svg { pointer-events: none; }
+  .map > svg .mine { pointer-events: all; cursor: pointer; }
+  .badge { position: absolute; left: 10px; top: 10px; background: var(--paper-a); border: 1px solid var(--maroon);
+           color: var(--maroon); font-weight: 650; border-radius: 8px; padding: 3px 9px; font-size: 13px; }
   .attribution { position: absolute; right: 6px; bottom: 4px; font-size: 10.5px; color: var(--ink-2);
-                 background: var(--paper-a); padding: 1px 5px; border-radius: 4px; }
+                 background: var(--paper-a); padding: 1px 5px; border-radius: 4px; max-width: calc(100% - 12px); }
   .attribution a { color: inherit; }
   .zoom-help { position: absolute; right: 12px; top: 10px; font-size: 12px; color: var(--ink-2);
                background: var(--paper-a); padding: 3px 8px; border-radius: 6px; }
   .legend { position: absolute; left: 12px; bottom: 12px; background: var(--paper-a);
             border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12px; max-width: 260px; }
+  .compare .legend { position: static; margin-top: 10px; max-width: none; display: flex; flex-wrap: wrap; gap: 4px 28px; }
+  .compare .legend > div { min-width: 200px; }
   .legend h4 { margin: 0 0 6px; font-size: 12px; }
   .row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
   .swatch { width: 14px; height: 14px; border-radius: 3px; flex: none; }
-  aside { display: flex; flex-direction: column; gap: 14px; }
+  aside { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
   aside .card { padding: 14px 16px; }
   aside h3 { margin: 0 0 10px; font-size: 14px; }
   .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
   .kpi .n { font-size: 24px; font-weight: 650; font-variant-numeric: tabular-nums; color: var(--maroon); }
+  .kpi .n small { font-size: 13px; font-weight: 500; color: var(--ink-2); }
   .kpi .t { font-size: 12px; color: var(--ink-2); }
   .info { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--ink-2);
           color: var(--ink-2); font-size: 10px; align-items: center; justify-content: center; cursor: help;
           margin-left: 4px; vertical-align: 1px; }
   .note { font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
+  .insight { background: var(--hl); border-left: 3px solid var(--maroon); border-radius: 6px; padding: 8px 10px;
+             font-size: 13px; margin-top: 10px; }
   table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
   th, td { padding: 5px 6px; text-align: right; border-bottom: 1px solid var(--line); }
   th:first-child, td:first-child { text-align: left; }
   th { color: var(--ink-2); font-weight: 600; }
   tr.active td { font-weight: 650; color: var(--maroon); }
+  .left-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; align-self: start; }
+  .left-col > .map-col { align-self: stretch; }
+  .compare .zoom-help { display: none; }
+  #cmp-table th, #cmp-table td:not(:first-child) { white-space: nowrap; }
+  #below-compare { padding: 14px 16px; }
+  #below-compare h3 { margin: 0 0 10px; font-size: 14px; }
+  .mini { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 18px; }
+  .mini h5 { margin: 0; font-size: 12px; font-weight: 600; }
+  details summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  details p { font-size: 12.5px; margin: 8px 0 0; }
   #tip { position: fixed; pointer-events: none; background: var(--paper); border: 1px solid var(--maroon);
          border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px var(--shadow);
-         max-width: min(290px, calc(100vw - 16px)); opacity: 0; transition: opacity .08s; z-index: 10; }
+         max-width: min(300px, calc(100vw - 16px)); opacity: 0; transition: opacity .08s; z-index: 10; }
   #tip b { color: var(--maroon); }
+  #tip .sub { color: var(--ink-2); }
   @media (pointer: coarse) { #tip { font-size: 13.5px; padding: 10px 12px; } }
   #tip .coord { margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
   .chart text { font-size: 11px; fill: var(--ink-2); }
@@ -85,9 +110,14 @@
   footer { padding: 0 24px 24px; color: var(--ink-2); font-size: 12px; }
   @media (max-width: 980px) {
     main { grid-template-columns: 1fr; padding: 12px 16px; }
-    .controls, header, footer { padding-left: 16px; padding-right: 16px; }
+    .controls, header, footer, .tabs { padding-left: 16px; padding-right: 16px; }
     .legend { position: static; margin-top: 10px; max-width: none; }
+    /* en una sola columna: mapas, tabla de comparación y después los gráficos de ablación */
+    .left-col { display: contents; }
+    .map-col { order: 1; } aside { order: 2; } #below-compare { order: 3; }
+    .mini { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
+  @media (max-width: 640px) { .compare .maps { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -99,6 +129,10 @@
     a model that never saw it.</p>
 </header>
 
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="explore" aria-selected="true">Explore</button>
+  <button role="tab" data-tab="compare" aria-selected="false">Compare levels</button>
+</nav>
 <div class="controls">
   <div class="group"><span>Model</span><div class="seg" id="models"></div></div>
   <div class="group"><span>View</span><div class="seg" id="views">
@@ -107,6 +141,8 @@
   <div class="group" id="ctl-zone"><span>Area marked</span>
     <input id="level" type="range" min="0" max="3" step="1" value="1" aria-label="Share of the area marked">
     <span class="value" id="level-v">10%</span></div>
+  <div class="group" id="ctl-left" hidden><span>Left map</span><div class="seg" id="lefts"></div></div>
+  <div class="group" id="ctl-right" hidden><span>Right map</span><div class="seg" id="rights"></div></div>
   <div class="group" id="ctl-block" hidden><span>Block</span><div class="seg" id="sides"></div></div>
   <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
     <button data-b="satellite" aria-pressed="true">Satellite</button>
@@ -117,25 +153,55 @@
     <button class="btn" id="reset">Reset view</button></div>
 </div>
 
-<main>
+<main id="main">
+  <div class="left-col">
   <div class="map-col">
-    <div class="card" id="map">
-      <canvas></canvas><svg></svg>
-      <div class="zoom-help">Scroll or pinch to zoom; drag to pan</div>
-      <div class="attribution" id="attribution"></div>
+    <div class="maps">
+      <div class="card map" id="mapA">
+        <canvas></canvas><svg></svg><div class="badge" hidden></div>
+        <div class="zoom-help">Scroll or pinch to zoom; drag to pan</div>
+        <div class="attribution"></div>
+      </div>
+      <div class="card map" id="mapB" hidden>
+        <canvas></canvas><svg></svg><div class="badge"></div>
+        <div class="attribution"></div>
+      </div>
     </div>
     <div class="legend" id="legend"></div>
   </div>
-  <aside>
+  <div class="card" id="below-compare" hidden><h3 id="abl-title"></h3><div class="mini" id="abl"></div>
+    <p class="note" id="abl-note"></p></div>
+  </div>
+  <aside id="aside-explore">
     <div class="card"><h3 id="kpi-title"></h3><div class="kpis" id="kpis"></div><p class="note" id="kpi-note"></p></div>
     <div class="card"><h3 id="chart-title"></h3><svg class="chart" id="chart" width="100%" height="200"></svg>
       <p class="note" id="chart-note"></p></div>
     <div class="card"><h3>Model comparison</h3><table id="table"></table><p class="note" id="table-note"></p></div>
   </aside>
+  <aside id="aside-compare" hidden>
+    <div class="card"><h3 id="cmp-title"></h3><table id="cmp-table"></table><div class="insight" id="cmp-insight"></div>
+      <p class="note">Out-of-fold predictions (spatial cross-validation, 22.5 km blocks), mean over 5 folds × 3 seeds.
+        Changes in percentages are in points (pts).</p></div>
+    <div class="card"><h3>Threshold-free reference</h3><div class="kpis" id="ref"></div>
+      <p class="note">These do not change with k: they score the whole ranking. k only decides how much ground you act
+        on, which is the trade-off this tab compares.</p></div>
+    <div class="card"><details id="views-help" open><summary>Favorable zone vs. block probability</summary>
+      <p><b>Favorable zone</b> ranks every 1.5 km cell by model score and marks the best k% of the area. It answers
+        “where should we look first?”. Its numbers are relative: share of known mines and gold that fall in the marked
+        area, and how many times better than random (lift). It makes no claim about the chance of a discovery in a
+        given cell.</p>
+      <p><b>Block probability</b> groups cells into blocks (4.5, 10.5 or 15 km) and turns the block score into a
+        probability with isotonic regression, fitted on other folds: “what fraction of blocks like this one hold at
+        least one known mine?”. Its numbers are absolute and can be checked: among the blocks marked here, the share
+        that really holds a mine (hit rate) should match the mean calibrated probability.</p>
+      <p>Same model, same ranking: the block view does not reorder the map, it adds a calibrated, checkable chance at
+        a scale where a cell-level probability would be meaninglessly small.</p></details></div>
+  </aside>
 </main>
-<footer>Mines: project inventory (136 points). Circle size: contained gold of the deposit (past production, reserves and
-  resources) from USGS Open-File Report 2014-1074; mines that belong to the same complex share its value. Model cells are
-  1.5 km. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
+<footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
+  and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
+  groups several inventory mines, its gold is drawn once, at its main mine, and the other mines are shown as small
+  points. Model cells are 1.5 km. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -147,7 +213,7 @@ const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).
 const LEVEL_COLOR = ["--zone-1", "--zone-2", "--zone-3", "--zone-4"].map(css);
 // tema: claro por defecto en todos los navegadores; si el usuario elige otro, se recuerda en este navegador
 function guardado() { try { return localStorage.getItem("theme"); } catch (e) { return null; } }
-document.documentElement.dataset.theme = guardado() === "dark" ? "dark" : "light";   // claro por defecto; oscuro solo si el usuario lo eligió
+document.documentElement.dataset.theme = guardado() === "dark" ? "dark" : "light";
 const f0 = d3.format(",.0f"), f1 = d3.format(",.1f"), f2 = d3.format(",.2f"), f3 = d3.format(",.3f");
 const pc = v => f0(v) + "%", pc1 = v => f1(v) + "%";
 const decode = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -155,21 +221,28 @@ const R = D.raster, C = 2 * Math.PI * 6378137, NODATA = 255;
 const layers = Object.fromEntries(Object.entries(D.capas).map(([k, v]) => [k, decode(v)]));
 const name = m => m === "GAT_bag" ? "GAT bagging" : m;
 const SIDES = {"3": "4.5 km", "7": "10.5 km", "10": "15 km"};
+const thrOf = k => 250 * (1 - k / 100);      // umbral del k % en la escala 0 a 250 de los rásteres de percentil
 
-const state = {model: Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7", basemap: "satellite"};
-{ const q = new URLSearchParams(location.search);       // e.g. ?model=GAT&view=block&side=10&level=5
+const state = {tab: "explore", model: Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
+               basemap: "satellite", left: 0, right: 3};
+{ const q = new URLSearchParams(location.search);   // e.g. ?tab=compare&left=5&right=20&view=block&side=10
   if (D.modelos[q.get("model")]) state.model = q.get("model");
   if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
+  if (["explore", "compare"].includes(q.get("tab"))) state.tab = q.get("tab");
   if (SIDES[q.get("side")]) state.side = q.get("side");
   if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
   const n = LEVELS.indexOf(+q.get("level")); if (n >= 0) state.level = n;
+  const a = LEVELS.indexOf(+q.get("left")), b = LEVELS.indexOf(+q.get("right"));
+  if (a >= 0 && b >= 0 && a !== b) { state.left = a; state.right = b; }
   document.getElementById("level").value = state.level; }
+const comparing = () => state.tab === "compare";
 
 // ---------- controls
 for (const m of ["LogReg", "GAT", "GAT_bag"])
   d3.select("#models").append("button").text(name(m)).attr("data-m", m).property("disabled", !D.modelos[m])
     .attr("title", D.modelos[m] ? null : "Pending: results from the GPU cluster")
     .on("click", () => { state.model = m; update(); });
+d3.selectAll(".tabs button").on("click", function () { setTab(this.dataset.tab); });
 d3.selectAll("#views button").on("click", function () { state.view = this.dataset.v; update(); });
 d3.selectAll("#basemaps button").on("click", function () { state.basemap = this.dataset.b; update(); });
 d3.selectAll("#themes button").on("click", function () {
@@ -180,31 +253,70 @@ d3.selectAll("#themes button").on("click", function () {
 d3.select("#level").on("input", function () { state.level = +this.value; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
+// izquierda y derecha nunca muestran el mismo nivel: el botón del nivel del otro lado queda desactivado
+for (const lado of ["left", "right"])
+  LEVELS.forEach((k, i) => d3.select(`#${lado}s`).append("button").text(k + "%").attr("data-i", i)
+    .on("click", () => { state[lado] = i; update(); }));
 
-// ---------- map: Web Mercator in world units (the whole world spans 1 x 1), d3.zoom scales it to pixels
-const box = document.getElementById("map");
-const canvas = box.querySelector("canvas"), ctx = canvas.getContext("2d");
-const svg = d3.select(box).select("svg"), layer = svg.append("g");
+// ---------- maps: Web Mercator in world units (the whole world spans 1 x 1), d3.zoom scales it to pixels
 const proj = d3.geoMercator().scale(1 / (2 * Math.PI)).translate([0, 0]);
-// los vectores se proyectan directo a píxeles en cada redibujado (Safari pierde precisión con transformaciones SVG
-// de escala tan grande); proj, en unidades de mundo, se usa para el zoom y para leer coordenadas
-const projPantalla = d3.geoMercator(), pathPantalla = d3.geoPath(projPantalla);
 const path = d3.geoPath(proj).digits(12);   // el redondeo por defecto (3 decimales) desplaza el contorno ~30 px a esta escala
-const off = document.createElement("canvas"); off.width = R.w; off.height = R.h;
-const offCtx = off.getContext("2d"), img = offCtx.createImageData(R.w, R.h);
 const rx0 = R.x0 / C, ry0 = -R.y0 / C, rw = R.w * R.res / C, rh = R.h * R.res / C;   // raster in world units
-const tiler = d3.tile().tileSize(256).clampX(false);
-let t = d3.zoomIdentity, W = 0, H = 0;
+let movido = false;                         // pasa a true cuando el usuario acerca o arrastra
 
-function size() {
-  W = box.clientWidth;
-  H = Math.max(420, Math.min(window.innerHeight - 190, W * 1.05));
-  box.style.height = H + "px";
-  H = box.clientHeight;
+function crearMapa(id, nivel) {
+  const box = document.getElementById(id);
+  const M = {id, box, nivel, canvas: box.querySelector("canvas"), svg: d3.select(box).select("svg"),
+             t: d3.zoomIdentity, W: 0, H: 0, pending: false};
+  M.ctx = M.canvas.getContext("2d");
+  M.layer = M.svg.append("g");
+  M.ghost = M.svg.append("g").attr("opacity", 0);          // cursor espejo: dónde está el puntero en el otro mapa
+  M.ghost.append("circle").attr("r", 9).attr("fill", "none").attr("stroke", "#fff").attr("stroke-width", 3);
+  M.ghost.append("circle").attr("r", 9).attr("fill", "none").attr("stroke", css("--maroon")).attr("stroke-width", 1.5);
+  M.off = document.createElement("canvas"); M.off.width = R.w; M.off.height = R.h;
+  M.offCtx = M.off.getContext("2d"); M.img = M.offCtx.createImageData(R.w, R.h);
+  M.tiler = d3.tile().tileSize(256).clampX(false);
+  // los vectores se proyectan directo a píxeles en cada redibujado (Safari pierde precisión con transformaciones SVG
+  // de escala tan grande); proj, en unidades de mundo, se usa para el zoom y para leer coordenadas
+  M.proj = d3.geoMercator(); M.path = d3.geoPath(M.proj);
+  M.zoom = d3.zoom().scaleExtent([256, 2 ** 24]).on("zoom", e => {
+    M.t = e.transform;
+    if (e.sourceEvent) { movido = true; if (e.sourceEvent.type !== "pointerdown") hide(); espejo(M); }
+    M.requestDraw();
+  });
+  M.requestDraw = () => { if (!M.pending) { M.pending = true; requestAnimationFrame(() => { M.pending = false; draw(M); }); } };
+  d3.select(box).call(M.zoom);
+  return M;
+}
+const mapA = crearMapa("mapA", () => comparing() ? state.left : state.level);
+const mapB = crearMapa("mapB", () => state.right);
+const mapas = [mapA, mapB];
+const visibles = () => comparing() ? mapas : [mapA];
+const drawAll = () => mapas.forEach(M => M.requestDraw());
+// lo que se mueve en un mapa se repite en el otro (la transformación es la misma porque miden lo mismo)
+function espejo(src) {
+  for (const M of visibles()) if (M !== src) d3.select(M.box).call(M.zoom.transform, src.t);
+}
+function irA(tr, dur = 800) {
+  for (const M of visibles()) d3.select(M.box).transition().duration(dur).call(M.zoom.transform, tr);
+}
+
+let altoCompare = null;          // alto de los mapas que iguala las dos columnas en la comparación (escritorio)
+let altoExplore = null;          // idem en Explore, solo si la columna derecha no cabe ni con el gráfico al mínimo
+let altoChart = 200;             // alto del gráfico de Explore (curva de éxito o fiabilidad), se ajusta al mapa
+const anchoEscritorio = () => innerWidth > 980;
+function size(M) {
+  M.W = M.box.clientWidth;
+  const H = comparing() && anchoEscritorio() && altoCompare ? altoCompare
+          : !comparing() && anchoEscritorio() && altoExplore ? altoExplore
+          : comparing() && innerWidth > 640 ? Math.min(innerHeight - 230, M.W * 1.3)
+                                            : Math.min(innerHeight - 190, M.W * 1.05);
+  M.box.style.height = Math.max(comparing() ? 320 : 420, H) + "px";
+  M.H = M.box.clientHeight;
   const dpr = window.devicePixelRatio || 1;
-  canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  svg.attr("viewBox", `0 0 ${W} ${H}`);
-  tiler.extent([[0, 0], [W, H]]);
+  M.canvas.width = M.W * dpr; M.canvas.height = M.H * dpr; M.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  M.svg.attr("viewBox", `0 0 ${M.W} ${M.H}`);
+  M.tiler.extent([[0, 0], [M.W, M.H]]);
 }
 
 // basemap tiles from Esri (no API key): base below the model layer, reference labels above it
@@ -224,7 +336,7 @@ function tileImage(service, x, y, z) {
   if (!cache.has(key)) {
     const im = new Image(); im.crossOrigin = "anonymous";
     im.src = `${ESRI}${service}/MapServer/tile/${z}/${y}/${xx}`;
-    im.onload = () => requestDraw(); cache.set(key, im);
+    im.onload = drawAll; cache.set(key, im);
   }
   return cache.get(key);
 }
@@ -233,69 +345,86 @@ function capasBase() {          // servicios de teselas según mapa base y tema
   const bm = BASEMAPS[state.basemap];
   return oscuro() && bm.dark ? bm.dark : bm;
 }
-function drawTiles(tiles, service) {
+function drawTiles(M, tiles, service) {
   const [tx, ty] = tiles.translate, k = tiles.scale;
   for (const [x, y, z] of tiles) {
     if (z > BASEMAPS[state.basemap].maxZ) continue;
     const im = tileImage(service, x, y, z);
-    if (im.complete && im.naturalWidth) ctx.drawImage(im, (x + tx) * k, (y + ty) * k, k + 0.5, k + 0.5);
+    if (im.complete && im.naturalWidth) M.ctx.drawImage(im, (x + tx) * k, (y + ty) * k, k + 0.5, k + 0.5);
   }
 }
 
 const rgba = (c, a) => { const x = d3.color(c); return [x.r, x.g, x.b, Math.round(a * 255)]; };
 const blockScale = d3.scaleSequentialSqrt([0, 0.45], d3.interpolateLab("#f3e7dc", "#4d0f1a")).clamp(true);
 
-function paint() {
-  const data = img.data, n = R.w * R.h;
+function paint(M) {
+  const data = M.img.data, n = R.w * R.h, lvl = M.nivel();
   const rest = rgba(css("--rest"), BASEMAPS[state.basemap].rest), lv = LEVEL_COLOR.map(c => rgba(c, 0.88));
+  const put = (j, c) => { data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; };
   if (state.view === "block") {
     const b = layers[`bloque_${state.model}_${state.side}`], pal = d3.range(251).map(v => rgba(blockScale(v / 500), 0.82));
+    // en la comparación solo se pintan los bloques del k % superior; el resto queda como área de estudio
+    const q = comparing() ? layers[`bloquepct_${state.model}_${state.side}`] : null, thr = thrOf(LEVELS[lvl]);
     for (let i = 0; i < n; i++) { const v = b[i], j = i * 4;
-      if (v === NODATA) { data[j + 3] = 0; continue; } const c = pal[v];
-      data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; }
+      if (v === NODATA) { data[j + 3] = 0; continue; }
+      put(j, q && !(q[i] > thr) ? rest : pal[v]); }
   } else {
-    const p = layers[`pct_${state.model}`], thr = LEVELS.map(k => 250 * (1 - k / 100));
+    const p = layers[`pct_${state.model}`], thr = LEVELS.map(thrOf);
     for (let i = 0; i < n; i++) { const v = p[i], j = i * 4;
       if (v === NODATA) { data[j + 3] = 0; continue; }
-      let c = rest; for (let k = 0; k <= state.level; k++) if (v > thr[k]) { c = lv[k]; break; }
-      data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; }
+      let c = rest; for (let k = 0; k <= lvl; k++) if (v > thr[k]) { c = lv[k]; break; }
+      put(j, c); }
   }
-  offCtx.putImageData(img, 0, 0);
+  M.offCtx.putImageData(M.img, 0, 0);
 }
 
-let pending = false;
-const requestDraw = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; draw(); }); } };
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-  const tiles = tiler(t);
-  const cb = capasBase();
-  cb.base.forEach(s => drawTiles(tiles, s));
+function draw(M) {
+  const {ctx, t} = M;
+  ctx.clearRect(0, 0, M.W, M.H);
+  const tiles = M.tiler(t), cb = capasBase();
+  cb.base.forEach(s => drawTiles(M, tiles, s));
   // el rectángulo del ráster se calcula en píxeles: Safari no dibuja imágenes con escalas de canvas tan grandes
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(off, t.x + rx0 * t.k, t.y + ry0 * t.k, rw * t.k, rh * t.k);
-  cb.labels.forEach(s => drawTiles(tiles, s));
-  projPantalla.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
-  layer.selectAll(".outline, .trend").attr("d", pathPantalla);
-  layer.selectAll(".mine").attr("cx", d => projPantalla([d.lon, d.lat])[0]).attr("cy", d => projPantalla([d.lon, d.lat])[1])
-    .attr("r", radius).attr("stroke-width", 1.2);
+  ctx.drawImage(M.off, t.x + rx0 * t.k, t.y + ry0 * t.k, rw * t.k, rh * t.k);
+  cb.labels.forEach(s => drawTiles(M, tiles, s));
+  M.proj.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
+  M.layer.selectAll(".outline, .trend").attr("d", M.path);
+  M.layer.selectAll(".mine").attr("cx", d => M.proj([d.lon, d.lat])[0]).attr("cy", d => M.proj([d.lon, d.lat])[1])
+    .attr("r", radius).attr("stroke-width", d => d.moz_mapa > 0 ? 1.2 : 0.9);
 }
 
-function vectors() {
-  layer.selectAll("*").remove();
-  layer.append("path").attr("class", "outline").datum(D.area).attr("fill", "none").attr("stroke-width", 1.3);
-  layer.append("g").selectAll("path").data(D.trends.features).join("path").attr("class", "trend")
+function vectors(M) {
+  M.layer.selectAll("*").remove();
+  M.layer.append("path").attr("class", "outline").datum(D.area).attr("fill", "none").attr("stroke-width", 1.3);
+  M.layer.append("g").selectAll("path").data(D.trends.features).join("path").attr("class", "trend")
     .attr("fill", "none").attr("stroke-dasharray", "4 3");
-  const mines = D.minas.slice().sort((a, b) => (b.moz || 0) - (a.moz || 0));
-  layer.append("g").selectAll("circle").data(mines).join("circle").attr("class", "mine")
-    .on("pointermove pointerdown", (e, d) => { e.stopPropagation(); show(e, mineText(d)); }).on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+  const mines = D.minas.slice().sort((a, b) => (b.moz_mapa || 0) - (a.moz_mapa || 0));
+  M.layer.append("g").selectAll("circle").data(mines).join("circle").attr("class", "mine")
+    .on("pointermove pointerdown", (e, d) => { e.stopPropagation(); show(e, mineText(d, M)); })
+    .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
 }
+// el oro de un depósito se dibuja una sola vez, en su mina principal; las demás minas del depósito van pequeñas
 const mozRadius = d3.scaleSqrt([0, 40], [2.5, 17]);
-const radius = d => d.moz > 0 ? mozRadius(d.moz) : 2.5;
+const radius = d => d.moz_mapa > 0 ? mozRadius(d.moz_mapa) : d.mina_principal ? 3.2 : 2.5;
 
-function markCaptured() {
-  const k = LEVELS[state.level], key = `pct_${state.model}`;
-  layer.selectAll(".mine").each(function (d) {
-    const inside = state.view === "block" || (d[key] != null && d[key] > 100 - k);
+// valor de un ráster en la posición de una mina (o -1 fuera del ráster)
+function valorEn(key, lon, lat) {
+  const [wx, wy] = proj([lon, lat]);
+  const c = Math.floor((wx * C - R.x0) / R.res), r = Math.floor((R.y0 + wy * C) / R.res);
+  if (r < 0 || r >= R.h || c < 0 || c >= R.w) return NODATA;
+  return layers[key][r * R.w + c];
+}
+function dentro(d, lvl) {
+  const k = LEVELS[lvl];
+  if (state.view === "zone") { const p = d[`pct_${state.model}`]; return p != null && p > 100 - k; }
+  if (!comparing()) return true;
+  const v = valorEn(`bloquepct_${state.model}_${state.side}`, d.lon, d.lat);
+  return v !== NODATA && v > thrOf(k);
+}
+function markCaptured(M) {
+  const lvl = M.nivel();
+  M.layer.selectAll(".mine").each(function (d) {
+    const inside = dentro(d, lvl);
     d3.select(this).attr("fill", inside ? css("--mine") : "#ffffff").attr("fill-opacity", 0.88)
       .attr("stroke", inside ? "#ffffff" : css("--mine"));
   });
@@ -335,33 +464,44 @@ function show(e, html) {
   y = Math.max(8, Math.min(y, innerHeight - r.height - 8));
   tip.style("left", x + "px").style("top", y + "px");
 }
-const hide = () => tip.style("opacity", 0);
+const hide = () => { tip.style("opacity", 0); mapas.forEach(M => M.ghost.attr("opacity", 0)); };
 const STATUS = {"Producer": "producer", "Past Producer": "past producer", "Prospect": "prospect",
                 "Occurrence": "occurrence", "Plant": "plant", "Unknown": "unknown"};
-function mineText(d) {
+function mineText(d, M) {
   const p = d[`pct_${state.model}`];
   let s = `<b>${d.deposito}</b><br>${d.trend}<br>Status: ${STATUS[d.estado] || d.estado}`;
-  s += d.moz > 0 ? `<br>Contained gold: <b>${f2(d.moz)} Moz</b>` +
-       (d.principal ? "" : ` <span style="color:var(--ink-2)">(${d.usgs} complex)</span>`)
-     : `<br><span style="color:var(--ink-2)">No gold figure in USGS</span>`;
+  if (d.moz_mapa > 0) {
+    s += `<br>USGS deposit: ${d.usgs}` + (d.usgs_incluye ? ` <span class="sub">(includes ${d.usgs_incluye.replace(/,\s*$/, "")})</span>` : "");
+    s += `<br>Contained gold: <b>${f2(d.moz_mapa)} Moz</b> <span class="sub">(production + reserves + resources)</span>`;
+    if (d.prod_moz > 0) s += `<br>Past production: ${f2(d.prod_moz)} Moz` + (d.anios_produccion ? ` (${d.anios_produccion})` : "");
+  } else if (d.mina_principal) {
+    s += `<br>Part of the USGS <b>${d.usgs}</b> deposit (${f1(d.moz)} Moz contained), drawn at ${d.mina_principal}.` +
+         ` <span class="sub">USGS gives no figure per mine.</span>`;
+  } else s += `<br><span class="sub">No gold figure in USGS</span>`;
   if (p != null) s += `<br>In the top ${f0(Math.max(1, Math.ceil(100 - p)))}% of the area (${name(state.model)})`;
+  if (comparing()) s += `<br>Captured in the top ${LEVELS[M.nivel()]}% ${state.view === "zone" ? "zone" : "blocks"}: <b>${dentro(d, M.nivel()) ? "yes" : "no"}</b>`;
   return s + fmtCoord(d.lon, d.lat);
 }
 // pointer events: igual con ratón, dedo (iOS y Android) y lápiz; con un toque se muestra el dato de esa celda
-function cellTip(e) {
+function cellTip(e, M) {
   if (e.target.classList && e.target.classList.contains("mine")) return;
-  const rr = canvas.getBoundingClientRect();
-  const [wx, wy] = t.invert([e.clientX - rr.left, e.clientY - rr.top]);
+  const rr = M.canvas.getBoundingClientRect(), px = e.clientX - rr.left, py = e.clientY - rr.top;
+  const [wx, wy] = M.t.invert([px, py]);
   const c = Math.floor((wx * C - R.x0) / R.res), r = Math.floor((R.y0 + wy * C) / R.res);
-  if (r < 0 || r >= R.h || c < 0 || c >= R.w) return hide();
+  if (comparing()) for (const O of mapas) O.ghost.attr("opacity", O === M ? 0 : 1).attr("transform", `translate(${px},${py})`);
+  if (r < 0 || r >= R.h || c < 0 || c >= R.w) return tip.style("opacity", 0);
   const i = r * R.w + c, v = layers[`pct_${state.model}`][i];
-  if (v === NODATA) return hide();
+  if (v === NODATA) return tip.style("opacity", 0);
   const top = Math.max(1, Math.ceil(100 - v / 2.5));
   let s = `1.5 km cell: <b>top ${f0(top)}% of the area</b>`;
   if (state.view === "block") {
-    const b = layers[`bloque_${state.model}_${state.side}`][i];
+    const b = layers[`bloque_${state.model}_${state.side}`][i], q = layers[`bloquepct_${state.model}_${state.side}`][i];
     if (b !== NODATA) s += `<br>${SIDES[state.side]} block: <b>${pc1(b / 5)}</b> chance of holding at least one known mine` +
+      `<br>Block in the top ${f0(Math.max(1, Math.ceil(100 - q / 2.5)))}% of blocks` +
       (layers[`conmina_${state.side}`][i] ? "<br>This block contains inventory mines" : "");
+    if (comparing() && b !== NODATA) s += cmpLine(k => q > thrOf(k), "blocks");
+  } else if (comparing()) {
+    s += cmpLine(k => v > thrOf(k), "zone");
   } else {
     const n = LEVELS.findIndex(k => v / 2.5 > 100 - k);
     s += n >= 0 ? `<br>Inside the top ${LEVELS[n]}% zone` : "<br>Outside the marked zone";
@@ -369,12 +509,17 @@ function cellTip(e) {
   const [lon, lat] = proj.invert([wx, wy]);
   show(e, s + fmtCoord(lon, lat));
 }
-box.addEventListener("pointermove", e => { if (e.pointerType === "mouse") cellTip(e); });
-box.addEventListener("pointerdown", cellTip);
+const cmpLine = (en, que) => [state.left, state.right].map(i =>     // en celular los mapas van uno sobre otro
+  `<br>Top ${LEVELS[i]}% ${que}: <b>${en(LEVELS[i]) ? "inside" : "outside"}</b>`).join("");
+for (const M of mapas) {
+  M.box.addEventListener("pointermove", e => { if (e.pointerType === "mouse") cellTip(e, M); });
+  M.box.addEventListener("pointerdown", e => cellTip(e, M));
+  M.box.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+}
 // respaldo táctil: d3.zoom detiene la propagación de los touch events en el mapa, así que se escucha en captura
 // desde el contenedor; un toque corto y sin arrastre muestra el dato de la mina o de la celda
 let toque = null;
-const colMapa = box.parentElement;
+const colMapa = document.querySelector(".map-col");
 colMapa.addEventListener("touchstart", e => {
   toque = e.touches.length === 1 ? {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now()} : null;
 }, {capture: true, passive: true});
@@ -382,41 +527,42 @@ colMapa.addEventListener("touchend", e => {
   const c = e.changedTouches[0];
   if (!toque || !c || Date.now() - toque.t > 500 || Math.hypot(c.clientX - toque.x, c.clientY - toque.y) > 10) return;
   const ev = {clientX: c.clientX, clientY: c.clientY, target: document.elementFromPoint(c.clientX, c.clientY)};
-  const d = ev.target && ev.target.classList.contains("mine") ? d3.select(ev.target).datum() : null;
-  if (d) show({...ev, touch: true}, mineText(d)); else if (box.contains(ev.target)) cellTip({...ev, target: box, touch: true});
+  const M = mapas.find(M => ev.target && M.box.contains(ev.target));
+  if (!M) return;
+  const d = ev.target.classList.contains("mine") ? d3.select(ev.target).datum() : null;
+  if (d) show({...ev, touch: true}, mineText(d, M)); else cellTip({...ev, target: M.box, touch: true}, M);
 }, {capture: true, passive: true});
-box.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
 
-// ---------- zoom (from the whole world to street level)
-let movido = false;                                 // pasa a true cuando el usuario acerca o arrastra
-const zoom = d3.zoom().scaleExtent([256, 2 ** 24]).on("zoom", e => {
-  t = e.transform; if (e.sourceEvent) { movido = true; if (e.sourceEvent.type !== "pointerdown") hide(); } requestDraw(); });
 window.addEventListener("scroll", () => { if (Date.now() - ultimoShow > 500) hide(); }, {passive: true});
 document.addEventListener("pointerdown", e => {
-  if (!e.target.closest("#map, .info, .chart rect, #tip")) hide(); }, true);
-d3.select(box).call(zoom);
+  if (!e.target.closest(".map, .info, .chart rect, .chart circle, #tip")) hide(); }, true);
 function fit(geo, pad = 0.9) {
   const [[x0, y0], [x1, y1]] = path.bounds(geo);
-  const k = pad * Math.min(W / (x1 - x0), H / (y1 - y0));
-  return d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+  const k = pad * Math.min(mapA.W / (x1 - x0), mapA.H / (y1 - y0));
+  return d3.zoomIdentity.translate(mapA.W / 2, mapA.H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
 }
-d3.select("#reset").on("click", () => { d3.select("#goto").property("value", ""); d3.select(box).transition().duration(800).call(zoom.transform, fit(D.area)); });
+d3.select("#reset").on("click", () => { d3.select("#goto").property("value", ""); movido = false; irA(fit(D.area)); });
 D.trends.features.forEach((f, i) => d3.select("#goto").append("option").attr("value", i).text(f.properties.Name));
 d3.select("#goto").on("change", function () {
-  const tr = this.value === "" ? fit(D.area) : fit(D.trends.features[+this.value], 0.8);
-  d3.select(box).transition().duration(800).call(zoom.transform, tr);
+  irA(this.value === "" ? fit(D.area) : fit(D.trends.features[+this.value], 0.8));
 });
 
-// ---------- side panel
+// ---------- side panel (Explore)
 const INFO = {
   area: "Area of the top k% of cells by model score. Each cell is 1.5 x 1.5 km.",
   mines: "Share of the 93 mine cells that fall inside the marked zone, using out-of-fold predictions (spatial cross-validation).",
   lift: "How many times more mines the marked zone holds than randomly chosen cells would. 1 = random.",
-  gold: "Share of the contained gold (Moz, USGS) of deposits whose main mine falls inside the marked zone.",
+  gold: "Share of the contained gold (Moz, USGS) of deposits whose main mine falls inside the marked zone. Each deposit counts once.",
   auc: "Probability that a block with a mine gets a higher probability than a block without one. 0.5 = random.",
+  auc_cell: "Probability that a mine cell is ranked above a cell without a mine, within each fold. 0.5 = random; 1 = perfect.",
   skill: "Brier score improvement over always predicting the average share of blocks with mines. 0 = no gain; 1 = perfect.",
   prev: "Share of blocks that contain at least one inventory mine.",
   pmax: "Highest calibrated probability reached by a block on the map.",
+  kmmine: "Area explored per known mine found inside the marked zone. Lower is more efficient.",
+  bmines: "Share of the blocks that hold a known mine which fall inside the top k% of blocks.",
+  hit: "Share of the marked blocks that really hold at least one known mine (precision).",
+  pmean: "Mean calibrated probability of the marked blocks. If it is close to the hit rate, the probability can be trusted.",
+  marg: "Lift of the extra area only: mines added divided by area added, compared with random. It shows whether widening the zone still pays off.",
 };
 const info = k => `<span class="info" data-info="${k}">i</span>`;
 const kpi = (n, t, k) => `<div class="kpi"><div class="n">${n}</div><div class="t">${t}${info(k)}</div></div>`;
@@ -424,7 +570,8 @@ const kpi = (n, t, k) => `<div class="kpi"><div class="n">${n}</div><div class="
 function panel() {
   const m = D.modelos[state.model], k = LEVELS[state.level];
   const gr = d3.select("#chart"); gr.selectAll("*").remove();
-  const wG = gr.node().clientWidth || 340, hG = 200, mg = {l: 38, r: 10, t: 10, b: 30};
+  const wG = gr.node().clientWidth || 340, hG = altoChart, mg = {l: 38, r: 10, t: 10, b: 30};
+  gr.attr("height", hG);
   if (state.view === "zone") {
     const r = m.idea2.find(d => d.nivel_pct === k);
     d3.select("#kpi-title").text(`Top ${k}% favorable zone (${name(state.model)})`);
@@ -469,9 +616,7 @@ function panel() {
     });
     d3.select("#chart-note").text("Blocks grouped into fifths by calibrated probability (cross-fitted by fold). When the bars match, the probability tells the truth.");
   }
-  d3.selectAll(".info").on("pointermove pointerdown", function (e) { show(e, INFO[this.dataset.info]); })
-    .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
-  table(); legend();
+  table();
 }
 
 function table() {
@@ -491,63 +636,224 @@ function table() {
   }
 }
 
+// ---------- side panel (Compare levels): ablación entre los dos niveles elegidos
+const MET = {
+  zone: [
+    {k: "recall", t: "Mines captured", f: pc1, d: pts, info: "mines", pct: true},
+    {k: "lift", t: "Lift", f: v => f1(v) + "×", d: v => f1(v) + "×", info: "lift"},
+    {k: "pct_oro", t: "Gold captured", f: pc1, d: pts, info: "gold", pct: true},
+    {k: "km2_por_mina", t: "km² per mine found", f: f0, d: f0, info: "kmmine"},
+  ],
+  block: [
+    {k: "recall", t: "Blocks with mines captured", f: pc1, d: pts, info: "bmines", pct: true},
+    {k: "acierto", t: "Hit rate", f: pc1, d: pts, info: "hit", pct: true, con: "prob_media"},
+    {k: "lift", t: "Lift", f: v => f1(v) + "×", d: v => f1(v) + "×", info: "lift"},
+    {k: "pct_oro", t: "Gold captured", f: pc1, d: pts, info: "gold", pct: true},
+  ],
+};
+function pts(v) { return f1(v) + " pts"; }
+
+function panelCompare() {
+  const ab = D.ablacion[state.model], m = D.modelos[state.model];
+  const iA = state.left, iB = state.right, kA = LEVELS[iA], kB = LEVELS[iB];
+  const zone = state.view === "zone";
+  d3.select("#cmp-title").text(`Top ${kA}% vs. top ${kB}% ${zone ? "of the area" : `of ${SIDES[state.side]} blocks`} (${name(state.model)})`);
+  d3.select("#abl-title").text(`Ablation by level (${zone ? "favorable zone" : SIDES[state.side] + " blocks"})`);
+  const tb = d3.select("#cmp-table").html(""), mini = d3.select("#abl").html(""), ref = d3.select("#ref");
+  if (!ab) {
+    d3.select("#cmp-insight").text("Ablation pending for this model.");
+    d3.select("#abl-note").text(""); ref.html(""); return;
+  }
+  const src = zone ? ab.zone : ab.block[state.side], nv = src.niveles, A = nv[kA], B = nv[kB];
+  // área del mapa completo (no la de un fold): k % del área o de los bloques
+  const area = k => zone ? m.idea2.find(d => d.nivel_pct === k).km2 : null;
+  const r1 = zone ? null : m.idea1.find(d => String(d.lado_celdas) === state.side);
+  tb.append("tr").html(`<th></th><th>Top ${kA}%</th><th>Top ${kB}%</th><th>Change</th>`);
+  const fila = (t, a, b, d, k) => tb.append("tr").html(`<td>${t}${k ? info(k) : ""}</td><td>${a}</td><td>${b}</td><td>${d}</td>`);
+  if (zone) fila("Area marked", f0(area(kA)) + " km²", f0(area(kB)) + " km²", "+" + f0(area(kB) - area(kA)) + " km²", "area");
+  else fila("Blocks marked", f0(r1.bloques * kA / 100), f0(r1.bloques * kB / 100), "", null);
+  const signo = v => v > 0 ? "+" : v < 0 ? "−" : "";
+  for (const me of MET[state.view]) {
+    const d = B[me.k][0] - A[me.k][0];
+    fila(me.t, me.f(A[me.k][0]), me.f(B[me.k][0]), signo(d) + me.d(Math.abs(d)), me.info);
+    if (me.con) { const dd = B[me.con][0] - A[me.con][0];
+      fila("Mean calibrated probability", pc1(A[me.con][0]), pc1(B[me.con][0]), signo(dd) + pts(Math.abs(dd)), "pmean"); }
+  }
+  // lo que aporta el área extra: lift marginal de la franja entre los dos niveles
+  const [lo, hi] = kA < kB ? [A, B] : [B, A], [klo, khi] = [Math.min(kA, kB), Math.max(kA, kB)];
+  const marg = (hi.recall[0] - lo.recall[0]) / (khi - klo);
+  d3.select("#cmp-insight").html(
+    `Going from ${klo}% to ${khi}% of the ${zone ? "area" : "blocks"} adds <b>${f1(hi.recall[0] - lo.recall[0])} points</b> of ` +
+    `${zone ? "mines" : "blocks with mines"} and ${f1(hi.pct_oro[0] - lo.pct_oro[0])} points of gold. ` +
+    `The extra ${khi - klo}% has a marginal lift of <b>${f1(marg)}×</b>${info("marg")}, against ${f1(lo.lift[0])}× in the first ${klo}%.` +
+    (zone ? "" : ` Hit rate drops from ${pc(lo.acierto[0])} to ${pc(hi.acierto[0])}, and the calibrated probability follows it (${pc(lo.prob_media[0])} to ${pc(hi.prob_media[0])}).`));
+
+  // pequeños múltiplos: cada métrica en los cuatro niveles, con barras de ±1 desviación; los dos elegidos resaltados
+  for (const me of MET[state.view]) {
+    const cols = anchoEscritorio() ? 4 : 2, h = anchoEscritorio() ? 150 : 128, mg = {l: 34, r: 6, t: 8, b: 20};
+    const w = ((mini.node().clientWidth || 340) - 18 * (cols - 1)) / cols;
+    const div = mini.append("div");
+    div.append("h5").html(me.con ? `Hit rate <span style="color:${css("--maroon")}">●</span> vs. probability <span style="color:${css("--maroon-3")}">●</span>${info(me.info)}`
+                                 : me.t + info(me.info));
+    const sv = div.append("svg").attr("class", "chart").attr("width", "100%").attr("height", h).attr("viewBox", `0 0 ${w} ${h}`);
+    const series = me.con ? [me.k, me.con] : [me.k];
+    const vals = LEVELS.flatMap(k => series.flatMap(s => [nv[k][s][0] - nv[k][s][1], nv[k][s][0] + nv[k][s][1]]));
+    const top = d3.max(vals) * 1.05, y = d3.scaleLinear([0, me.pct ? Math.min(100, top) : top], [h - mg.b, mg.t]).nice();
+    const x = d3.scalePoint(LEVELS, [mg.l + 10, w - mg.r - 10]);
+    sv.append("g").attr("class", "axis").attr("transform", `translate(0,${h - mg.b})`).call(d3.axisBottom(x).tickSize(0).tickPadding(6).tickFormat(v => v + "%"));
+    sv.append("g").attr("class", "axis").attr("transform", `translate(${mg.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(w - mg.l - mg.r)).tickFormat(d3.format("~s")))
+      .call(g => g.selectAll(".tick line").attr("stroke", css("--line")).attr("stroke-opacity", 0.6)).call(g => g.select(".domain").remove());
+    series.forEach((s, si) => {
+      const dx = series.length > 1 ? (si ? 5 : -5) : 0, col = si ? css("--maroon-3") : css("--maroon");
+      sv.append("path").datum(LEVELS).attr("fill", "none").attr("stroke", col).attr("stroke-width", 1.5).attr("stroke-opacity", 0.5)
+        .attr("d", d3.line(k => x(k) + dx, k => y(nv[k][s][0])));
+      for (const k of LEVELS) {
+        const [mu, sd] = nv[k][s], sel = k === kA || k === kB;
+        const [lo, hi] = y.domain();
+        sv.append("line").attr("x1", x(k) + dx).attr("x2", x(k) + dx).attr("y1", y(Math.max(lo, mu - sd))).attr("y2", y(Math.min(hi, mu + sd)))
+          .attr("stroke", col).attr("stroke-width", sel ? 2 : 1).attr("stroke-opacity", sel ? 1 : 0.5);
+        sv.append("circle").attr("cx", x(k) + dx).attr("cy", y(mu)).attr("r", sel ? 5 : 3.5)
+          .attr("fill", sel ? col : css("--paper")).attr("stroke", col).attr("stroke-width", 1.5)
+          .on("pointermove pointerdown", e => show(e, `Top ${k}%: <b>${(s === "prob_media" ? pc1 : me.f)(mu)}</b> ± ${(s === "prob_media" ? pc1 : me.f)(sd)}` +
+            (s === "prob_media" ? "<br>mean calibrated probability" : `<br>${me.t.toLowerCase()}`)))
+          .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+      }
+    });
+  }
+  d3.select("#abl-note").text(`Filled points: the two levels on the maps. Whiskers: ±1 standard deviation over folds and seeds (hover a point for the value).` +
+    (zone ? "" : " Blocks are ranked inside each fold; probability is the cross-fitted isotonic calibration."));
+  ref.html(zone ? kpi(`${f3(src.AUC[0])} <small>± ${f3(src.AUC[1])}</small>`, "cell AUC (per fold)", "auc_cell") +
+                  kpi("93", "mine cells in the inventory", "mines")
+                : kpi(`${f3(src.AUC[0])} <small>± ${f3(src.AUC[1])}</small>`, "block AUC", "auc") +
+                  kpi(`${f2(src.Brier_skill[0])} <small>± ${f2(src.Brier_skill[1])}</small>`, "Brier skill", "skill"));
+}
+
 function legend() {
   const L = d3.select("#legend").html("");
+  const top = comparing() ? Math.max(state.left, state.right) : state.level;
+  const g1 = L.append("div");
   if (state.view === "zone") {
-    L.append("h4").text("Most favorable zone");
-    LEVELS.slice(0, state.level + 1).forEach((k, i) => L.append("div").attr("class", "row")
+    g1.append("h4").text("Most favorable zone");
+    LEVELS.slice(0, top + 1).forEach((k, i) => g1.append("div").attr("class", "row")
       .html(`<span class="swatch" style="background:${LEVEL_COLOR[i]}"></span>top ${i ? LEVELS[i - 1] + " to " + k : "0 to " + k}%`));
-    L.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>rest of the study area`);
+    g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>rest of the study area`);
   } else {
-    L.append("h4").text("Chance of a known mine in the block");
-    const sv = L.append("svg").attr("width", 220).attr("height", 30), gid = "g" + Math.random().toString(36).slice(2);
+    g1.append("h4").text(comparing() ? "Chance of a known mine (marked blocks only)" : "Chance of a known mine in the block");
+    const sv = g1.append("svg").attr("width", 220).attr("height", 30), gid = "g" + Math.random().toString(36).slice(2);
     const gd = sv.append("defs").append("linearGradient").attr("id", gid);
     d3.range(0, 1.01, 0.1).forEach(s => gd.append("stop").attr("offset", s).attr("stop-color", blockScale(s * s * 0.45)));
     sv.append("rect").attr("x", 6).attr("width", 194).attr("height", 10).attr("rx", 3).attr("fill", `url(#${gid})`);
     [0, 0.1, 0.2, 0.3, 0.45].forEach(v => sv.append("text").attr("x", 6 + 194 * Math.sqrt(v / 0.45)).attr("y", 24)
       .attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(f0(v * 100) + (v === 0.45 ? "%+" : "")));
+    if (comparing()) g1.append("div").attr("class", "row").html(`<span class="swatch" style="background:${css("--rest")}"></span>blocks outside the top k%`);
   }
-  L.append("h4").style("margin-top", "8px").text("Mines (size = contained gold)");
-  const sv = L.append("svg").attr("width", 230).attr("height", 44);
+  const g2 = L.append("div");
+  g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Deposits (size = contained gold, USGS)");
+  const sv = g2.append("svg").attr("width", 230).attr("height", 44);
   [[1, 20], [5, 62], [15, 112], [40, 172]].forEach(([v, x]) => {
     sv.append("circle").attr("cx", x).attr("cy", 20).attr("r", mozRadius(v)).attr("fill", css("--mine")).attr("fill-opacity", .88).attr("stroke", "#fff");
     sv.append("text").attr("x", x).attr("y", 42).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", css("--ink-2")).text(v + " Moz");
   });
-  if (state.view === "zone") L.append("div").attr("class", "row")
-    .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${css("--mine")}" stroke-width="1.5"/></svg>mine outside the marked zone`);
-  L.append("div").attr("class", "row").html(`<svg width="14" height="14"><path d="M1,7 h12" stroke="${css("--ink-2")}" stroke-dasharray="3 2"/></svg>trends`);
+  g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><circle cx="7" cy="7" r="3.2" fill="${css("--mine")}" stroke="#fff" stroke-width=".9"/></svg>other mine of a deposit, or no USGS figure`);
+  if (state.view === "zone" || comparing()) g2.append("div").attr("class", "row")
+    .html(`<svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${css("--mine")}" stroke-width="1.5"/></svg>mine outside the marked ${state.view === "zone" ? "zone" : "blocks"}`);
+  g2.append("div").attr("class", "row").html(`<svg width="14" height="14"><path d="M1,7 h12" stroke="${css("--ink-2")}" stroke-dasharray="3 2"/></svg>trends`);
 }
 
 function update() {
+  const cmp = comparing();
+  d3.selectAll(".tabs button").attr("aria-selected", function () { return this.dataset.tab === state.tab; });
   d3.selectAll("#models button").attr("aria-pressed", function () { return this.dataset.m === state.model; });
   d3.selectAll("#views button").attr("aria-pressed", function () { return this.dataset.v === state.view; });
   d3.selectAll("#sides button").attr("aria-pressed", function () { return this.dataset.s === state.side; });
-  d3.select("#ctl-zone").attr("hidden", state.view === "zone" ? null : true);
+  d3.selectAll("#lefts button").attr("aria-pressed", function () { return +this.dataset.i === state.left; })
+    .property("disabled", function () { return +this.dataset.i === state.right; });
+  d3.selectAll("#rights button").attr("aria-pressed", function () { return +this.dataset.i === state.right; })
+    .property("disabled", function () { return +this.dataset.i === state.left; });
+  d3.select("#ctl-zone").attr("hidden", !cmp && state.view === "zone" ? null : true);
+  d3.select("#ctl-left").attr("hidden", cmp ? null : true);
+  d3.select("#ctl-right").attr("hidden", cmp ? null : true);
   d3.select("#ctl-block").attr("hidden", state.view === "block" ? null : true);
+  d3.select("#aside-explore").attr("hidden", cmp ? true : null);
+  d3.select("#aside-compare").attr("hidden", cmp ? null : true);
+  d3.select("#below-compare").attr("hidden", cmp ? null : true);
   d3.select("#level-v").text(LEVELS[state.level] + "%");
   d3.selectAll("#basemaps button").attr("aria-pressed", function () { return this.dataset.b === state.basemap; });
   d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
-  d3.select(box).style("background", oscuro() ? "#1b1b1b" : "#eef0f0");
-  const bm = BASEMAPS[state.basemap];
-  d3.select("#attribution").text(bm.attribution);
-  layer.select(".outline").attr("stroke", bm.outline.startsWith("--") ? css(bm.outline) : bm.outline);
-  layer.selectAll(".trend").attr("stroke", bm.trend.startsWith("--") ? css(bm.trend) : bm.trend);
-  paint(); markCaptured(); requestDraw(); panel();
+  const bm = BASEMAPS[state.basemap], que = state.view === "zone" ? "of the area" : "of blocks";
+  d3.select(mapA.box).select(".badge").attr("hidden", cmp ? null : true).text(`Top ${LEVELS[state.left]}% ${que}`);
+  d3.select(mapB.box).select(".badge").text(`Top ${LEVELS[state.right]}% ${que}`);
+  for (const M of mapas) {
+    d3.select(M.box).style("background", oscuro() ? "#1b1b1b" : "#eef0f0").select(".attribution").text(bm.attribution);
+    M.layer.select(".outline").attr("stroke", bm.outline.startsWith("--") ? css(bm.outline) : bm.outline);
+    M.layer.selectAll(".trend").attr("stroke", bm.trend.startsWith("--") ? css(bm.trend) : bm.trend);
+    M.ghost.select("circle:last-child").attr("stroke", css("--maroon"));
+  }
+  for (const M of visibles()) { paint(M); markCaptured(M); M.requestDraw(); }
+  if (cmp) panelCompare(); else panel();
+  bindInfo();
+  legend();
+  igualar();          // al cambiar vista o bloque cambia el alto de la columna derecha
 }
 
-size(); vectors();
-d3.select(box).call(zoom.transform, fit(D.area));
+function bindInfo() {
+  d3.selectAll(".info").on("pointermove pointerdown", function (e) { show(e, INFO[this.dataset.info]); })
+    .on("pointerleave", e => { if (e.pointerType === "mouse") hide(); });
+}
+
+// cambiar de pestaña: el segundo mapa aparece con la misma vista que el primero
+function setTab(tab) {
+  if (tab === state.tab) return;
+  const centro = mapA.t.invert([mapA.W / 2, mapA.H / 2]), k = mapA.t.k;
+  state.tab = tab;
+  d3.select("#main").classed("compare", comparing());
+  d3.select(mapB.box).attr("hidden", comparing() ? null : true);
+  altoCompare = altoExplore = null; relayout(centro, k);
+  update();
+}
+// Explore: el gráfico de la columna derecha toma el alto que falta o sobra para terminar donde termina el mapa
+// (con GAT y GAT bagging la tabla de modelos tiene dos filas más); si ni al mínimo cabe, crece el mapa.
+// Compare: los mapas crecen o se encogen hasta que la columna izquierda termina donde termina la derecha
+function igualar() {
+  if (!anchoEscritorio()) { altoCompare = altoExplore = null; if (altoChart !== 200) { altoChart = 200; if (!comparing()) { panel(); bindInfo(); } } return; }
+  if (!comparing()) {
+    const dif = () => mapA.box.getBoundingClientRect().height - document.getElementById("aside-explore").getBoundingClientRect().height;
+    const nuevo = Math.max(160, Math.min(560, Math.round(altoChart + dif())));
+    if (Math.abs(nuevo - altoChart) >= 3) { altoChart = nuevo; panel(); bindInfo(); }
+    const falta = -dif();
+    if (falta >= 3) {
+      const centro = mapA.t.invert([mapA.W / 2, mapA.H / 2]), k = mapA.t.k;
+      altoExplore = Math.round(mapA.H + falta); relayout(centro, k);
+    }
+    return;
+  }
+  const izq = document.querySelector(".left-col").getBoundingClientRect().height;
+  const der = document.getElementById("aside-compare").getBoundingClientRect().height;
+  const alto = Math.max(320, Math.round(mapA.H + der - izq));
+  if (Math.abs(alto - mapA.H) < 3) return;
+  const centro = mapA.t.invert([mapA.W / 2, mapA.H / 2]), k = mapA.t.k;
+  altoCompare = alto; relayout(centro, k);
+}
+function relayout(centro, k) {
+  visibles().forEach(size);
+  const tr = movido ? d3.zoomIdentity.translate(mapA.W / 2, mapA.H / 2).scale(k).translate(-centro[0], -centro[1]) : fit(D.area);
+  for (const M of visibles()) d3.select(M.box).call(M.zoom.transform, tr);
+}
+
+d3.select("#main").classed("compare", comparing());
+d3.select(mapB.box).attr("hidden", comparing() ? null : true);
+mapas.forEach(vectors);
+visibles().forEach(size);
+for (const M of visibles()) d3.select(M.box).call(M.zoom.transform, fit(D.area));
 update();
 // remedir cuando cambia el tamaño real del mapa (barra de desplazamiento, giro del teléfono, ventana)
-let lastW = W;
+let lastW = mapA.W;
 new ResizeObserver(() => {
-  if (box.clientWidth === lastW) return;
-  const center = t.invert([W / 2, H / 2]);
-  size(); lastW = W;
-  d3.select(box).call(zoom.transform, movido ? d3.zoomIdentity.translate(W / 2, H / 2).scale(t.k).translate(-center[0], -center[1])
-                                             : fit(D.area));
-  panel();
-}).observe(box);
+  if (mapA.box.clientWidth === lastW) return;
+  const centro = mapA.t.invert([mapA.W / 2, mapA.H / 2]), k = mapA.t.k;
+  altoCompare = altoExplore = null; relayout(centro, k); lastW = mapA.W;
+  update();
+}).observe(mapA.box);
 </script>
 </body>
 </html>

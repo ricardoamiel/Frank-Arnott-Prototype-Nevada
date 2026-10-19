@@ -1,137 +1,137 @@
-id,deposito,trend,estado,tamano_mrds,lon,lat,usgs,usgs_incluye,moz,toneladas_mt,ley_g_t,anios_produccion,km_a_usgs,principal,clase_moz,productor
-0,Alligator Ridge Mine,Alligator Ridge district,Producer,L,-115.51839,39.7602,Alligator Ridge,,0.788,6.8,3.6,n.d.,0.39,True,"0,1 a 1 Moz",True
-1,Bida Mine,Alligator Ridge district,Producer,N,-115.4948,39.9168,,,,,,,,False,sin dato,True
-2,Casino Mine,Alligator Ridge district,Producer,S,-115.51528,39.9682,Casino,,0.045,0.77,1.85,n.d.,0.05,True,"menos de 0,1 Moz",True
-3,Commodore Mine,Alligator Ridge district,Producer,S,-115.5123,39.1896,,,,,,,,False,sin dato,True
-4,Decker Flats Deposit,Alligator Ridge district,Prospect,N,-115.67617,39.16965,,,,,,,,False,sin dato,False
-5,Easy Junior Mine,Alligator Ridge district,Producer,S,-115.67422,39.18104,Easy Junior,,0.177,6.2,0.89,1989–1997,0.25,True,"0,1 a 1 Moz",True
-6,Galaxy Mine,Alligator Ridge district,Producer,S,-115.4835,39.9353,Galaxy,,0.064,1.8,1.1,after 1999,0.13,True,"menos de 0,1 Moz",True
-7,Golden Butte Gold Mine,Alligator Ridge district,Past Producer,S,-115.0481,39.88882,Golden Butte,Northern Golden Butte,0.167,4.1,1.27,1989–1991,0.15,True,"0,1 a 1 Moz",True
-8,Green Springs Mine,Alligator Ridge district,Producer,S,-115.55449,39.14132,Green Springs,,0.074,1.1,2.1,1988–1990,0.19,True,"menos de 0,1 Moz",True
-9,Green Springs Mine,Alligator Ridge district,Producer,S,-115.55449,39.14132,Green Springs,,0.074,1.1,2.1,1988–1990,0.19,False,"menos de 0,1 Moz",True
-10,Griffon Mine,Alligator Ridge district,Producer,S,-115.39894,39.06069,Griffon,,0.09,2.7,1.03,1997–1999,0.15,True,"menos de 0,1 Moz",True
-11,Horseshoe Mine,Alligator Ridge district,Producer,S,-115.5014,39.9196,,,,,,,,False,sin dato,True
-12,Illipah Mine,Alligator Ridge district,Past Producer,S,-115.4512,39.4607,Illipah,,0.072,1.9,1.18,1988–1989,0.1,True,"menos de 0,1 Moz",True
-13,Nighthawk Ridge Mine,Alligator Ridge district,Producer,S,-115.67422,39.18104,,,,,,,,False,sin dato,True
-14,Pan Mine,Alligator Ridge district,Producer,N,-115.67422,39.18104,,,,,,,,False,sin dato,True
-15,Saga Mine,Alligator Ridge district,Producer,N,-115.4925,39.8961,,,,,,,,False,sin dato,True
-16,Winrock Mine,Alligator Ridge district,Producer,S,-115.4493,39.9458,Winrock,,0.109,2.6,1.3,1990-1992,0.01,True,"0,1 a 1 Moz",True
-17,Yankee Mine,Alligator Ridge district,Producer,S,-115.52558,39.6779,Yankee,,0.281,5.75,1.51,1989–1998,0.17,True,"0,1 a 1 Moz",True
-18,Gold Quarry Mine,Central Carlin trend (Maggie Creek area),Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,1981-2011,0.7,True,más de 15 Moz,True
-19,Gold Quarry Mine Area,Central Carlin trend (Maggie Creek area),Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,1981-2011,0.7,False,más de 15 Moz,True
-20,Gold Ridge Deposit,Central Carlin trend (Maggie Creek area),Past Producer,S,-116.34924,39.80131,Gold Pick/Gold Ridge,,1.071,30.0,1.11,1991–1994,0.74,False,1 a 5 Moz,True
-21,Goldstone Deposit,Central Carlin trend (Maggie Creek area),Past Producer,S,-116.34424,39.81103,Goldstone,,0.08,0.94,2.64,1991–1995,0.08,True,"menos de 0,1 Moz",True
-22,Maggie Creek Open Pit Gold Mine,Central Carlin trend (Maggie Creek area),Producer,M,-116.22203,40.78491,,,,,,,,False,sin dato,True
-23,Tusc Deposit,Central Carlin trend (Maggie Creek area),Producer,N,-116.23625,40.8031,Tusc,,0.916,14.1,2.02,n.d.,0.01,True,"0,1 a 1 Moz",True
-24,Chert Cliff Deposit,Chert Cliff,Prospect,N,-116.29322,39.89633,Chert Cliff,,0.056,1.27,1.37,,0.28,True,"menos de 0,1 Moz",False
-25,Cortez Gold Mine,Cortez subdistrito,Producer,L,-116.62593,40.19158,Cortez,Ada 52 pit,1.042,3.92,8.26,1968–1973; 1988–1993,0.74,True,1 a 5 Moz,True
-26,Cortez Hills Gold Property,Cortez subdistrito,Past Producer,N,-116.60257,40.16899,Cortez Hills,Pediment,9.806,83.5,3.65,2008–2011,0.52,True,5 a 15 Moz,True
-27,Elder Creek Mine,Cortez subdistrito,Past Producer,S,-116.85037,40.30269,,,,,,,,False,sin dato,True
-28,Elder Creek Mine area,Cortez subdistrito,Past Producer,S,-116.85037,40.30269,,,,,,,,False,sin dato,True
-29,Gold Acres Deposit,Cortez subdistrito,Producer,M,-116.73982,40.25213,Gold Acres,,1.003,9.1,3.43,1942–1984,0.68,True,1 a 5 Moz,True
-30,Gold Acres Deposit,Cortez subdistrito,Producer,M,-116.73982,40.25213,Gold Acres,,1.003,9.1,3.43,1942–1984,0.68,False,1 a 5 Moz,True
-31,Horse Canyon Mine,Cortez subdistrito,Past Producer,S,-116.56342,40.15991,Horse Canyon,,0.392,3.2,3.8,1983–1987,0.45,True,"0,1 a 1 Moz",True
-32,Horse Canyon Mine,Cortez subdistrito,Producer,S,-116.56342,40.15991,Horse Canyon,,0.392,3.2,3.8,1983–1987,0.45,False,"0,1 a 1 Moz",True
-33,New Pass Deposit,Cortez subdistrito,Prospect,S,-117.45894,39.66691,,,,,,,,False,sin dato,False
-34,Pediment Gold Property,Cortez subdistrito,Past Producer,N,-116.6037,40.1543,Cortez Hills,Pediment,9.806,83.5,3.65,2008–2011,1.76,False,5 a 15 Moz,True
-35,Pipeline,Cortez subdistrito,Occurrence,N,-116.74093,40.25491,Pipeline,South Pipeline,27.007,497.3,1.69,1994–2011,2.76,False,más de 15 Moz,False
-36,Pipeline & South Pipeline Mines,Cortez subdistrito,Producer,L,-116.712,40.247,Pipeline,South Pipeline,27.007,497.3,1.69,1994–2011,0.15,True,más de 15 Moz,True
-37,Toiyabe Saddle,Cortez subdistrito,Plant,,-116.73983,39.94711,,,,,,,,False,sin dato,False
-38,Ratto Canyon Deposit,Eureka district,Past Producer,S,-116.00089,39.39993,,,,,,,,False,sin dato,True
-39,Ratto Canyon Deposit,Eureka district,Producer,N,-115.99062,39.40049,,,,,,,,False,sin dato,True
-40,Ruby Hill Gold Mine,Eureka district,Producer,S,-115.9843,39.526,Archimedes,"East Archimedes, West Archimedes",3.955,132.0,1.06,1997–2011,0.04,True,1 a 5 Moz,True
-41,C-Zone,Getchell trend,Prospect,N,-117.2629,41.13239,,,,,,,,False,sin dato,False
-42,Chimney Creek Deposit,Getchell trend,Producer,S,-117.17179,41.276,Twin Creeks,,15.561,223.4,2.36,1990–2010,3.35,False,más de 15 Moz,True
-43,Chimney Creek Mine,Getchell trend,Producer,L,-117.15763,41.27961,Twin Creeks,,15.561,223.4,2.36,1990–2010,3.92,False,más de 15 Moz,True
-44,Chimney Creek Mine,Getchell trend,Producer,M,-117.15763,41.27961,Twin Creeks,,15.561,223.4,2.36,1990–2010,3.92,False,más de 15 Moz,True
-45,Cx Deposit,Getchell trend,Prospect,N,-117.26068,41.13517,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,1980–2001,0.31,True,1 a 5 Moz,False
-46,Felix Canyon,Getchell trend,Producer,S,-117.27429,41.12517,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,1980–2001,1.84,False,1 a 5 Moz,True
-47,Getchell Gold Mine,Getchell trend,Producer,M,-117.2513,41.2079,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,1938–2011,0.51,False,más de 15 Moz,True
-48,Hansen Creek Deposit,Getchell trend,Producer,M,-117.25874,41.20989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,1938–2011,0.39,True,más de 15 Moz,True
-49,Kinsley Mountain Mine,Getchell trend,Past Producer,S,-114.34266,40.14976,,,,,,,,False,sin dato,True
-50,Mag Deposit,Getchell trend,Producer,S,-117.25235,41.13878,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,1980–2001,0.55,False,1 a 5 Moz,True
-51,Pinson Gold Mine,Getchell trend,Producer,S,-117.26902,41.12989,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,1980–2001,1.18,False,1 a 5 Moz,True
-52,Pinson Mine,Getchell trend,Producer,S,-117.26902,41.12989,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,1980–2001,1.18,False,1 a 5 Moz,True
-53,Preble Mine,Getchell trend,Past Producer,S,-117.39207,40.99795,Preble,,0.109,1.6,2.14,1985–1990,0.45,True,"0,1 a 1 Moz",True
-54,Preble Mine,Getchell trend,Past Producer,S,-117.39207,40.99795,Preble,,0.109,1.6,2.14,1985–1990,0.45,False,"0,1 a 1 Moz",True
-55,Rabbit Creek Mine,Getchell trend,Producer,L,-117.17235,41.24683,Twin Creeks,,15.561,223.4,2.36,1990–2010,0.14,True,más de 15 Moz,True
-56,Stonehouse Deposit,Getchell trend,Prospect,N,-117.21067,40.82712,,,,,,,,False,sin dato,False
-57,Summer Camp Deposit,Getchell trend,Producer,M,-117.25096,41.19989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,1938–2011,1.34,False,más de 15 Moz,True
-58,Turquoise Ridge Mine,Getchell trend,Producer,L,-117.25874,41.20989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,1938–2011,0.39,False,más de 15 Moz,True
-59,Twin Creeks Mine,Getchell trend,Producer,L,-117.15096,41.28322,Twin Creeks,,15.561,223.4,2.36,1990–2010,4.49,False,más de 15 Moz,True
-60,Afgan Deposit,Gold Bar district,Prospect,N,-116.32413,39.72605,Afgan,,0.096,3.5,0.87,,5.9,True,"menos de 0,1 Moz",False
-61,Gold Bar Mine,Gold Bar district,Producer,S,-116.44063,39.75936,Gold Bar,,0.307,3.58,2.67,1987–1990,1.31,True,"0,1 a 1 Moz",True
-62,Gold Bar Mine,Gold Bar district,Producer,S,-116.44063,39.75936,Gold Bar,,0.307,3.58,2.67,1987–1990,1.31,False,"0,1 a 1 Moz",True
-63,Gold Canyon,Gold Bar district,Occurrence,N,-116.17091,39.75992,,,,,,,,False,sin dato,False
-64,Gold Pick Deposit,Gold Bar district,Past Producer,M,-116.33508,39.79492,Gold Pick/Gold Ridge,,1.071,30.0,1.11,1991–1994,0.7,True,1 a 5 Moz,True
-65,Big Springs Mine,Jerritt Canyon district,Producer,S,-115.97557,41.5605,,,,,,,,False,sin dato,True
-66,Burns Basin Gold Deposit,Jerritt Canyon district,Producer,Y,-116.001,41.3421,Burns Basin,,0.621,3.6,5.29,"n.d., OP",0.1,True,"0,1 a 1 Moz",True
-67,California Mine - Dash Pit,Jerritt Canyon district,Producer,Y,-115.95377,41.37379,California Mountain,,0.18,1.4,4.15,n.d.,0.15,True,"0,1 a 1 Moz",True
-68,Cobb Creek Prospect,Jerritt Canyon district,Occurrence,U,-116.02593,41.7749,,,,,,,,False,sin dato,False
-69,Coulee Deposit,Jerritt Canyon district,Producer,,-115.95377,41.37379,,,,,,,,False,sin dato,True
-70,Dam Creek Deposit,Jerritt Canyon district,Producer,,-115.94311,41.34403,,,,,,,,False,sin dato,True
-71,Doby George Deposit,Jerritt Canyon district,Past Producer,S,-116.05993,41.6629,,,,,,,,False,sin dato,True
-72,Generator Hill Deposit,Jerritt Canyon district,Producer,M,-116.00091,41.39546,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,after 1981,1.6,False,1 a 5 Moz,True
-73,Jerritt Canyon Gold Mine,Jerritt Canyon district,Producer,M,-115.995,41.4088,,,,,,,,False,sin dato,True
-74,Lee Smith Mine,Jerritt Canyon district,Producer,Y,-115.9393,41.35751,Smith,"Dash, Mahala, Smith East",1.897,7.6,7.47,"n.d., UG",0.88,True,1 a 5 Moz,True
-75,Long Canyon,Jerritt Canyon district,Unknown,,-114.5312,40.9733,Long Canyon,,2.202,29.54,2.32,,0.01,True,1 a 5 Moz,False
-76,Marlboro Canyon Deposit,Jerritt Canyon district,Past Producer,M,-115.98398,41.40851,Marlboro Canyon,MCE,2.894,11.4,7.9,from 1981,0.28,True,1 a 5 Moz,True
-77,Maverick Springs Project,Jerritt Canyon district,Producer,N,-115.45228,39.94825,,,,,,,,False,sin dato,True
-78,Mill Creek Deposit,Jerritt Canyon district,Producer,N,-116.0365,41.3428,Mill Creek,,0.177,1.0,5.69,"n.d., OP",0.25,True,"0,1 a 1 Moz",True
-79,Murray Gold Mine,Jerritt Canyon district,Producer,M,-116.00091,41.39546,Murray,Coyote Zone,0.18,0.6000000000000001,9.26,n.d.,0.27,True,"0,1 a 1 Moz",True
-80,New Deep Deposit,Jerritt Canyon district,Occurrence,N,-116.00814,41.39157,,,,,,,,False,sin dato,False
-81,North Generator Hill Deposit,Jerritt Canyon district,Past Producer,M,-116.00064,41.41046,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,after 1981,0.43,True,1 a 5 Moz,True
-82,North Sammy Creek Deposit,Jerritt Canyon district,Producer,Y,-115.97315,41.56518,,,,,,,,False,sin dato,True
-83,Pattani Springs Deposit,Jerritt Canyon district,Past Producer,S,-115.98481,41.34907,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,1.15,False,1 a 5 Moz,True
-84,Pattani Springs Deposit,Jerritt Canyon district,Past Producer,S,-115.98481,41.34907,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,1.15,False,1 a 5 Moz,True
-85,Saval Canyon Deposit,Jerritt Canyon district,Occurrence,N,-115.98814,41.36712,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,0.88,True,1 a 5 Moz,False
-86,Saval-Steer Deposit,Jerritt Canyon district,Prospect,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,1.19,False,1 a 5 Moz,False
-87,Slaven Canyon Deposit,Jerritt Canyon district,Producer,N,-116.7726,40.5199,,,,,,,,False,sin dato,True
-88,South Bullion / Trout Creek Deposit,Jerritt Canyon district,Producer,N,-116.00174,40.46352,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,0.22,True,1 a 5 Moz,True
-89,South Bullion Deposit,Jerritt Canyon district,Prospect,N,-115.99702,40.45908,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,0.73,False,1 a 5 Moz,False
-90,South Sammy Creek Deposit,Jerritt Canyon district,Past Producer,S,-115.97093,41.55601,,,,,,,,False,sin dato,True
-91,South Saval Extension (SSX) Mine,Jerritt Canyon district,Producer,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,1.19,False,1 a 5 Moz,True
-92,Starvation Canyon-Waterpipe Deposit,Jerritt Canyon district,Producer,S,-116.06266,41.27517,Starvation Canyon,,0.215,0.69,9.67,,3.76,True,"0,1 a 1 Moz",True
-93,Steer Canyon Deposit,Jerritt Canyon district,Prospect,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,after 1997,1.19,False,1 a 5 Moz,False
-94,Trout Creek Deposit,Jerritt Canyon district,Occurrence,N,-116.00174,40.46352,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,0.22,False,1 a 5 Moz,False
-95,West Generator Hill Deposit,Jerritt Canyon district,Past Producer,M,-116.01399,41.40518,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,after 1981,0.85,False,1 a 5 Moz,True
-96,West Pequip,Jerritt Canyon district,Unknown,,-114.9,41.1,,,,,,,,False,sin dato,False
-97,Winters Creek Mine,Jerritt Canyon district,Producer,,-115.97929,41.41525,Winters Creek,,0.293,1.44,7.32,,0.25,True,"0,1 a 1 Moz",True
-98,Wood Gulch Mine,Jerritt Canyon district,Producer,S,-115.96649,41.67934,,,,,,,,False,sin dato,True
-99,Bazza Deposit,North Carlin trend,Occurrence,N,-116.38426,40.9499,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,3.56,False,más de 15 Moz,False
-100,Blue Star Mine,North Carlin trend,Producer,M,-116.36371,40.94296,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,1.06,False,más de 15 Moz,True
-101,Bobcat Deposit,North Carlin trend,Past Producer,S,-116.37843,40.95101,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,1.35,False,más de 15 Moz,True
-102,Bootstrap Mine,North Carlin trend,Producer,M,-116.41704,41.01879,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,1988–2006,0.66,True,1 a 5 Moz,True
-103,Bootstrap-Capstone-Tara Gold Mine,North Carlin trend,Producer,M,-116.41704,41.01879,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,1988–2006,0.66,False,1 a 5 Moz,True
-104,Capstone Deposit,North Carlin trend,Producer,S,-116.41343,41.0224,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,1988–2006,1.05,False,1 a 5 Moz,True
-105,Carlin Gold Mine,North Carlin trend,Past Producer,M,-116.32399,40.91184,Carlin,"Hardie Footwall, Carlin East, Carlin West",13.696,242.0,1.76,1965–2011,0.76,True,5 a 15 Moz,True
-106,Carlin-Hardie-Pete Mine Area,North Carlin trend,Producer,M,-116.32399,40.91184,Carlin,"Hardie Footwall, Carlin East, Carlin West",13.696,242.0,1.76,1965–2011,0.76,False,5 a 15 Moz,True
-107,Chukar Footwall Mine,North Carlin trend,Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,1981-2011,0.7,False,más de 15 Moz,True
-108,Dark Star,North Carlin trend,Occurrence,N,-115.8448,40.45797,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,13.52,False,1 a 5 Moz,False
-109,Dark Star Gold Deposit,North Carlin trend,Prospect,U,-115.96249,40.45385,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,3.67,False,1 a 5 Moz,False
-110,Dee Gold Mine,North Carlin trend,Producer,S,-116.4276,41.0324,Dee,,0.852,13.36,1.98,1984–2000,0.41,True,"0,1 a 1 Moz",True
-111,Dee Gold Mine,North Carlin trend,Producer,S,-116.4276,41.0324,Dee,,0.852,13.36,1.98,1984–2000,0.41,False,"0,1 a 1 Moz",True
-112,Deep Post Mine,North Carlin trend,Producer,L,-116.34732,40.97518,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,2.71,False,más de 15 Moz,True
-113,Deep Star Deposit,North Carlin trend,Producer,N,-116.37593,40.95907,Deep Star,,1.73,1.4,38.4,"1996–2008, UG",1.25,True,1 a 5 Moz,True
-114,Genesis Mine,North Carlin trend,Producer,M,-116.36621,40.95434,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,0.37,True,más de 15 Moz,True
-115,Genesis Mine,North Carlin trend,Producer,S,-116.32399,40.9299,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,4.1,False,más de 15 Moz,True
-116,Genesis-Blue Star Mines Area,North Carlin trend,Producer,S,-116.32399,40.9299,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,4.1,False,más de 15 Moz,True
-117,Gnome,North Carlin trend,Occurrence,,-116.01761,40.60411,Gnom,,0.129,2.45,1.65,,0.44,True,"0,1 a 1 Moz",False
-118,Goldstrike Mine,North Carlin trend,Producer,L,-116.36565,40.97157,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,1.55,False,más de 15 Moz,True
-119,"Greater Goldstrike, North Mines",North Carlin trend,Producer,L,-116.36565,40.97157,Meikle,"Banshee, Barrel, Coldbug, Deep Post, Griffin, North Post, Rodeo ",16.387,40.1,12.7,1996–2011,3.74,False,más de 15 Moz,True
-120,Lantern Deposit,North Carlin trend,Past Producer,S,-116.35593,40.92296,North Lantern,,0.199,6.04,1.03,n.d.,0.18,True,"0,1 a 1 Moz",True
-121,Leeville Mine Deposits,North Carlin trend,Producer,N,-116.32399,40.91184,Leeville,Four Corners,5.369,17.6,9.47,2006-2011,2.34,True,5 a 15 Moz,True
-122,Long Lac Deposit,North Carlin trend,Occurrence,N,-116.38426,40.9499,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,3.56,False,más de 15 Moz,False
-123,Mac Ridge Deposit,North Carlin trend,Producer,S,-115.95649,41.54962,,,,,,,,False,sin dato,True
-124,Meikle Mine,North Carlin trend,Producer,L,-116.36,41.01111,Meikle,"Banshee, Barrel, Coldbug, Deep Post, Griffin, North Post, Rodeo ",16.387,40.1,12.7,1996–2011,2.11,True,más de 15 Moz,True
-125,North Star Deposit,North Carlin trend,Past Producer,S,-116.37954,40.95907,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,1974–2011,1.61,False,más de 15 Moz,True
-126,POD deposit,North Carlin trend,Producer,U,-116.00979,40.53336,,,,,,,,False,sin dato,True
-127,Pete Deposit,North Carlin trend,Occurrence,N,-116.3076,40.90907,Pete,,1.0,15.1,2.06,n.d.,1.5,True,1 a 5 Moz,False
-128,Pinon Project,North Carlin trend,Prospect,,-115.84481,40.45801,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,2002–2004,13.52,False,1 a 5 Moz,False
-129,Post Deposit,North Carlin trend,Producer,L,-116.34732,40.97518,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,2.71,False,más de 15 Moz,True
-130,Ren-Banshee,North Carlin trend,Producer,S,-116.38796,41.01487,REN,,1.98,5.73,10.75,"n.d., OP",1.27,True,1 a 5 Moz,True
-131,Rossi Gold Mine,North Carlin trend,Past Producer,L,-116.42954,41.07462,Storm,,0.122,2.8,12.8,2008–2010,3.57,True,"0,1 a 1 Moz",True
-132,Screamer Deposit,North Carlin trend,Past Producer,S,-116.38649,40.98268,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,1974–2011,0.7,True,más de 15 Moz,True
-133,Wright Window Deposit,North Carlin trend,Past Producer,,-116.04411,41.38545,Wright Window,,0.039,0.21,5.5,n.d.,0.97,True,"menos de 0,1 Moz",True
-134,Emigrant Deposit,South Carlin trend (Rain subdistrito),Prospect,N,-115.97341,40.61741,Emigrant Springs,,1.199,62.0,0.62,,0.07,True,1 a 5 Moz,False
-135,Rain Mine,South Carlin trend (Rain subdistrito),Producer,M,-116.0111,40.61348,Rain,"Saddle, Tess",3.016,27.1,3.46,1988–2005,0.05,True,1 a 5 Moz,True
+id,deposito,trend,estado,tamano_mrds,lon,lat,usgs,usgs_incluye,moz,toneladas_mt,ley_g_t,prod_moz,anios_produccion,km_a_usgs,principal,mina_principal,moz_mapa,clase_moz,productor
+0,Alligator Ridge Mine,Alligator Ridge district,Producer,L,-115.51839,39.7602,Alligator Ridge,,0.788,6.8,3.6,0.787,n.d.,0.39,True,,0.788,"0,1 a 1 Moz",True
+1,Bida Mine,Alligator Ridge district,Producer,N,-115.4948,39.9168,,,,,,,,,False,,,sin dato,True
+2,Casino Mine,Alligator Ridge district,Producer,S,-115.51528,39.9682,Casino,,0.045,0.77,1.85,0.046,n.d.,0.05,True,,0.045,"menos de 0,1 Moz",True
+3,Commodore Mine,Alligator Ridge district,Producer,S,-115.5123,39.1896,,,,,,,,,False,,,sin dato,True
+4,Decker Flats Deposit,Alligator Ridge district,Prospect,N,-115.67617,39.16965,,,,,,,,,False,,,sin dato,False
+5,Easy Junior Mine,Alligator Ridge district,Producer,S,-115.67422,39.18104,Easy Junior,,0.177,6.2,0.89,0.012,1989–1997,0.25,True,,0.177,"0,1 a 1 Moz",True
+6,Galaxy Mine,Alligator Ridge district,Producer,S,-115.4835,39.9353,Galaxy,,0.064,1.8,1.1,0.064,after 1999,0.13,True,,0.064,"menos de 0,1 Moz",True
+7,Golden Butte Gold Mine,Alligator Ridge district,Past Producer,S,-115.0481,39.88882,Golden Butte,Northern Golden Butte,0.167,4.1,1.27,0.106,1989–1991,0.15,True,,0.167,"0,1 a 1 Moz",True
+8,Green Springs Mine,Alligator Ridge district,Producer,S,-115.55449,39.14132,Green Springs,,0.074,1.1,2.1,0.074,1988–1990,0.19,True,,0.074,"menos de 0,1 Moz",True
+9,Green Springs Mine,Alligator Ridge district,Producer,S,-115.55449,39.14132,Green Springs,,0.074,1.1,2.1,0.074,1988–1990,0.19,False,Green Springs Mine,,parte de un depósito,True
+10,Griffon Mine,Alligator Ridge district,Producer,S,-115.39894,39.06069,Griffon,,0.09,2.7,1.03,0.089,1997–1999,0.15,True,,0.09,"menos de 0,1 Moz",True
+11,Horseshoe Mine,Alligator Ridge district,Producer,S,-115.5014,39.9196,,,,,,,,,False,,,sin dato,True
+12,Illipah Mine,Alligator Ridge district,Past Producer,S,-115.4512,39.4607,Illipah,,0.072,1.9,1.18,0.037,1988–1989,0.1,True,,0.072,"menos de 0,1 Moz",True
+13,Nighthawk Ridge Mine,Alligator Ridge district,Producer,S,-115.67422,39.18104,,,,,,,,,False,,,sin dato,True
+14,Pan Mine,Alligator Ridge district,Producer,N,-115.67422,39.18104,,,,,,,,,False,,,sin dato,True
+15,Saga Mine,Alligator Ridge district,Producer,N,-115.4925,39.8961,,,,,,,,,False,,,sin dato,True
+16,Winrock Mine,Alligator Ridge district,Producer,S,-115.4493,39.9458,Winrock,,0.109,2.6,1.3,0.109,1990-1992,0.01,True,,0.109,"0,1 a 1 Moz",True
+17,Yankee Mine,Alligator Ridge district,Producer,S,-115.52558,39.6779,Yankee,,0.281,5.75,1.51,0.279,1989–1998,0.17,True,,0.281,"0,1 a 1 Moz",True
+18,Gold Quarry Mine,Central Carlin trend (Maggie Creek area),Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,22.618,1981-2011,0.7,True,,22.634,más de 15 Moz,True
+19,Gold Quarry Mine Area,Central Carlin trend (Maggie Creek area),Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,22.618,1981-2011,0.7,False,Gold Quarry Mine,,parte de un depósito,True
+20,Gold Ridge Deposit,Central Carlin trend (Maggie Creek area),Past Producer,S,-116.34924,39.80131,Gold Pick/Gold Ridge,,1.071,30.0,1.11,0.206,1991–1994,0.74,False,Gold Pick Deposit,,parte de un depósito,True
+21,Goldstone Deposit,Central Carlin trend (Maggie Creek area),Past Producer,S,-116.34424,39.81103,Goldstone,,0.08,0.94,2.64,0.08,1991–1995,0.08,True,,0.08,"menos de 0,1 Moz",True
+22,Maggie Creek Open Pit Gold Mine,Central Carlin trend (Maggie Creek area),Producer,M,-116.22203,40.78491,,,,,,,,,False,,,sin dato,True
+23,Tusc Deposit,Central Carlin trend (Maggie Creek area),Producer,N,-116.23625,40.8031,Tusc,,0.916,14.1,2.02,0.884,n.d.,0.01,True,,0.916,"0,1 a 1 Moz",True
+24,Chert Cliff Deposit,Chert Cliff,Prospect,N,-116.29322,39.89633,Chert Cliff,,0.056,1.27,1.37,,,0.28,True,,0.056,"menos de 0,1 Moz",False
+25,Cortez Gold Mine,Cortez subdistrito,Producer,L,-116.62593,40.19158,Cortez,Ada 52 pit,1.042,3.92,8.26,0.876,1968–1973; 1988–1993,0.74,True,,1.042,1 a 5 Moz,True
+26,Cortez Hills Gold Property,Cortez subdistrito,Past Producer,N,-116.60257,40.16899,Cortez Hills,Pediment,9.806,83.5,3.65,2.58,2008–2011,0.52,True,,9.806,5 a 15 Moz,True
+27,Elder Creek Mine,Cortez subdistrito,Past Producer,S,-116.85037,40.30269,,,,,,,,,False,,,sin dato,True
+28,Elder Creek Mine area,Cortez subdistrito,Past Producer,S,-116.85037,40.30269,,,,,,,,,False,,,sin dato,True
+29,Gold Acres Deposit,Cortez subdistrito,Producer,M,-116.73982,40.25213,Gold Acres,,1.003,9.1,3.43,0.493,1942–1984,0.68,True,,1.003,1 a 5 Moz,True
+30,Gold Acres Deposit,Cortez subdistrito,Producer,M,-116.73982,40.25213,Gold Acres,,1.003,9.1,3.43,0.493,1942–1984,0.68,False,Gold Acres Deposit,,parte de un depósito,True
+31,Horse Canyon Mine,Cortez subdistrito,Past Producer,S,-116.56342,40.15991,Horse Canyon,,0.392,3.2,3.8,0.391,1983–1987,0.45,True,,0.392,"0,1 a 1 Moz",True
+32,Horse Canyon Mine,Cortez subdistrito,Producer,S,-116.56342,40.15991,Horse Canyon,,0.392,3.2,3.8,0.391,1983–1987,0.45,False,Horse Canyon Mine,,parte de un depósito,True
+33,New Pass Deposit,Cortez subdistrito,Prospect,S,-117.45894,39.66691,,,,,,,,,False,,,sin dato,False
+34,Pediment Gold Property,Cortez subdistrito,Past Producer,N,-116.6037,40.1543,Cortez Hills,Pediment,9.806,83.5,3.65,2.58,2008–2011,1.76,False,Cortez Hills Gold Property,,parte de un depósito,True
+35,Pipeline,Cortez subdistrito,Occurrence,N,-116.74093,40.25491,Pipeline,South Pipeline,27.007,497.3,1.69,10.353,1994–2011,2.76,False,Pipeline & South Pipeline Mines,,parte de un depósito,False
+36,Pipeline & South Pipeline Mines,Cortez subdistrito,Producer,L,-116.712,40.247,Pipeline,South Pipeline,27.007,497.3,1.69,10.353,1994–2011,0.15,True,,27.007,más de 15 Moz,True
+37,Toiyabe Saddle,Cortez subdistrito,Plant,,-116.73983,39.94711,,,,,,,,,False,,,sin dato,False
+38,Ratto Canyon Deposit,Eureka district,Past Producer,S,-116.00089,39.39993,,,,,,,,,False,,,sin dato,True
+39,Ratto Canyon Deposit,Eureka district,Producer,N,-115.99062,39.40049,,,,,,,,,False,,,sin dato,True
+40,Ruby Hill Gold Mine,Eureka district,Producer,S,-115.9843,39.526,Archimedes,"East Archimedes, West Archimedes",3.955,132.0,1.06,1.235,1997–2011,0.04,True,,3.955,1 a 5 Moz,True
+41,C-Zone,Getchell trend,Prospect,N,-117.2629,41.13239,,,,,,,,,False,,,sin dato,False
+42,Chimney Creek Deposit,Getchell trend,Producer,S,-117.17179,41.276,Twin Creeks,,15.561,223.4,2.36,10.644,1990–2010,3.35,False,Rabbit Creek Mine,,parte de un depósito,True
+43,Chimney Creek Mine,Getchell trend,Producer,L,-117.15763,41.27961,Twin Creeks,,15.561,223.4,2.36,10.644,1990–2010,3.92,False,Rabbit Creek Mine,,parte de un depósito,True
+44,Chimney Creek Mine,Getchell trend,Producer,M,-117.15763,41.27961,Twin Creeks,,15.561,223.4,2.36,10.644,1990–2010,3.92,False,Rabbit Creek Mine,,parte de un depósito,True
+45,Cx Deposit,Getchell trend,Prospect,N,-117.26068,41.13517,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,0.762,1980–2001,0.31,True,,3.697,1 a 5 Moz,False
+46,Felix Canyon,Getchell trend,Producer,S,-117.27429,41.12517,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,0.762,1980–2001,1.84,False,Cx Deposit,,parte de un depósito,True
+47,Getchell Gold Mine,Getchell trend,Producer,M,-117.2513,41.2079,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,5.82,1938–2011,0.51,False,Hansen Creek Deposit,,parte de un depósito,True
+48,Hansen Creek Deposit,Getchell trend,Producer,M,-117.25874,41.20989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,5.82,1938–2011,0.39,True,,23.02,más de 15 Moz,True
+49,Kinsley Mountain Mine,Getchell trend,Past Producer,S,-114.34266,40.14976,,,,,,,,,False,,,sin dato,True
+50,Mag Deposit,Getchell trend,Producer,S,-117.25235,41.13878,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,0.762,1980–2001,0.55,False,Cx Deposit,,parte de un depósito,True
+51,Pinson Gold Mine,Getchell trend,Producer,S,-117.26902,41.12989,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,0.762,1980–2001,1.18,False,Cx Deposit,,parte de un depósito,True
+52,Pinson Mine,Getchell trend,Producer,S,-117.26902,41.12989,Pinson,"Mag, CX, Felix Canyon",3.697,39.0,2.96,0.762,1980–2001,1.18,False,Cx Deposit,,parte de un depósito,True
+53,Preble Mine,Getchell trend,Past Producer,S,-117.39207,40.99795,Preble,,0.109,1.6,2.14,0.081,1985–1990,0.45,True,,0.109,"0,1 a 1 Moz",True
+54,Preble Mine,Getchell trend,Past Producer,S,-117.39207,40.99795,Preble,,0.109,1.6,2.14,0.081,1985–1990,0.45,False,Preble Mine,,parte de un depósito,True
+55,Rabbit Creek Mine,Getchell trend,Producer,L,-117.17235,41.24683,Twin Creeks,,15.561,223.4,2.36,10.644,1990–2010,0.14,True,,15.561,más de 15 Moz,True
+56,Stonehouse Deposit,Getchell trend,Prospect,N,-117.21067,40.82712,,,,,,,,,False,,,sin dato,False
+57,Summer Camp Deposit,Getchell trend,Producer,M,-117.25096,41.19989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,5.82,1938–2011,1.34,False,Hansen Creek Deposit,,parte de un depósito,True
+58,Turquoise Ridge Mine,Getchell trend,Producer,L,-117.25874,41.20989,Getchell/Turquoise Ridge,"Hansen Creek, Summer Camp, Valmy",23.02,106.7,6.71,5.82,1938–2011,0.39,False,Hansen Creek Deposit,,parte de un depósito,True
+59,Twin Creeks Mine,Getchell trend,Producer,L,-117.15096,41.28322,Twin Creeks,,15.561,223.4,2.36,10.644,1990–2010,4.49,False,Rabbit Creek Mine,,parte de un depósito,True
+60,Afgan Deposit,Gold Bar district,Prospect,N,-116.32413,39.72605,Afgan,,0.096,3.5,0.87,,,5.9,True,,0.096,"menos de 0,1 Moz",False
+61,Gold Bar Mine,Gold Bar district,Producer,S,-116.44063,39.75936,Gold Bar,,0.307,3.58,2.67,0.307,1987–1990,1.31,True,,0.307,"0,1 a 1 Moz",True
+62,Gold Bar Mine,Gold Bar district,Producer,S,-116.44063,39.75936,Gold Bar,,0.307,3.58,2.67,0.307,1987–1990,1.31,False,Gold Bar Mine,,parte de un depósito,True
+63,Gold Canyon,Gold Bar district,Occurrence,N,-116.17091,39.75992,,,,,,,,,False,,,sin dato,False
+64,Gold Pick Deposit,Gold Bar district,Past Producer,M,-116.33508,39.79492,Gold Pick/Gold Ridge,,1.071,30.0,1.11,0.206,1991–1994,0.7,True,,1.071,1 a 5 Moz,True
+65,Big Springs Mine,Jerritt Canyon district,Producer,S,-115.97557,41.5605,,,,,,,,,False,,,sin dato,True
+66,Burns Basin Gold Deposit,Jerritt Canyon district,Producer,Y,-116.001,41.3421,Burns Basin,,0.621,3.6,5.29,0.598,"n.d., OP",0.1,True,,0.621,"0,1 a 1 Moz",True
+67,California Mine - Dash Pit,Jerritt Canyon district,Producer,Y,-115.95377,41.37379,California Mountain,,0.18,1.4,4.15,0.165,n.d.,0.15,True,,0.18,"0,1 a 1 Moz",True
+68,Cobb Creek Prospect,Jerritt Canyon district,Occurrence,U,-116.02593,41.7749,,,,,,,,,False,,,sin dato,False
+69,Coulee Deposit,Jerritt Canyon district,Producer,,-115.95377,41.37379,,,,,,,,,False,,,sin dato,True
+70,Dam Creek Deposit,Jerritt Canyon district,Producer,,-115.94311,41.34403,,,,,,,,,False,,,sin dato,True
+71,Doby George Deposit,Jerritt Canyon district,Past Producer,S,-116.05993,41.6629,,,,,,,,,False,,,sin dato,True
+72,Generator Hill Deposit,Jerritt Canyon district,Producer,M,-116.00091,41.39546,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,2.261,after 1981,1.6,False,North Generator Hill Deposit,,parte de un depósito,True
+73,Jerritt Canyon Gold Mine,Jerritt Canyon district,Producer,M,-115.995,41.4088,,,,,,,,,False,,,sin dato,True
+74,Lee Smith Mine,Jerritt Canyon district,Producer,Y,-115.9393,41.35751,Smith,"Dash, Mahala, Smith East",1.897,7.6,7.47,0.206,"n.d., UG",0.88,True,,1.897,1 a 5 Moz,True
+75,Long Canyon,Jerritt Canyon district,Unknown,,-114.5312,40.9733,Long Canyon,,2.202,29.54,2.32,,,0.01,True,,2.202,1 a 5 Moz,False
+76,Marlboro Canyon Deposit,Jerritt Canyon district,Past Producer,M,-115.98398,41.40851,Marlboro Canyon,MCE,2.894,11.4,7.9,2.895,from 1981,0.28,True,,2.894,1 a 5 Moz,True
+77,Maverick Springs Project,Jerritt Canyon district,Producer,N,-115.45228,39.94825,,,,,,,,,False,,,sin dato,True
+78,Mill Creek Deposit,Jerritt Canyon district,Producer,N,-116.0365,41.3428,Mill Creek,,0.177,1.0,5.69,0.168,"n.d., OP",0.25,True,,0.177,"0,1 a 1 Moz",True
+79,Murray Gold Mine,Jerritt Canyon district,Producer,M,-116.00091,41.39546,Murray,Coyote Zone,0.18,0.6000000000000001,9.26,0.033,n.d.,0.27,True,,0.18,"0,1 a 1 Moz",True
+80,New Deep Deposit,Jerritt Canyon district,Occurrence,N,-116.00814,41.39157,,,,,,,,,False,,,sin dato,False
+81,North Generator Hill Deposit,Jerritt Canyon district,Past Producer,M,-116.00064,41.41046,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,2.261,after 1981,0.43,True,,2.26,1 a 5 Moz,True
+82,North Sammy Creek Deposit,Jerritt Canyon district,Producer,Y,-115.97315,41.56518,,,,,,,,,False,,,sin dato,True
+83,Pattani Springs Deposit,Jerritt Canyon district,Past Producer,S,-115.98481,41.34907,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,1.15,False,Saval Canyon Deposit,,parte de un depósito,True
+84,Pattani Springs Deposit,Jerritt Canyon district,Past Producer,S,-115.98481,41.34907,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,1.15,False,Saval Canyon Deposit,,parte de un depósito,True
+85,Saval Canyon Deposit,Jerritt Canyon district,Occurrence,N,-115.98814,41.36712,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,0.88,True,,1.845,1 a 5 Moz,False
+86,Saval-Steer Deposit,Jerritt Canyon district,Prospect,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,1.19,False,Saval Canyon Deposit,,parte de un depósito,False
+87,Slaven Canyon Deposit,Jerritt Canyon district,Producer,N,-116.7726,40.5199,,,,,,,,,False,,,sin dato,True
+88,South Bullion / Trout Creek Deposit,Jerritt Canyon district,Producer,N,-116.00174,40.46352,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,0.22,True,,1.048,1 a 5 Moz,True
+89,South Bullion Deposit,Jerritt Canyon district,Prospect,N,-115.99702,40.45908,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,0.73,False,South Bullion / Trout Creek Deposit,,parte de un depósito,False
+90,South Sammy Creek Deposit,Jerritt Canyon district,Past Producer,S,-115.97093,41.55601,,,,,,,,,False,,,sin dato,True
+91,South Saval Extension (SSX) Mine,Jerritt Canyon district,Producer,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,1.19,False,Saval Canyon Deposit,,parte de un depósito,True
+92,Starvation Canyon-Waterpipe Deposit,Jerritt Canyon district,Producer,S,-116.06266,41.27517,Starvation Canyon,,0.215,0.69,9.67,,,3.76,True,,0.215,"0,1 a 1 Moz",True
+93,Steer Canyon Deposit,Jerritt Canyon district,Prospect,N,-116.00091,41.36379,SSX/Steer/Saval,Pattani,1.845,7.4,7.76,0.651,after 1997,1.19,False,Saval Canyon Deposit,,parte de un depósito,False
+94,Trout Creek Deposit,Jerritt Canyon district,Occurrence,N,-116.00174,40.46352,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,0.22,False,South Bullion / Trout Creek Deposit,,parte de un depósito,False
+95,West Generator Hill Deposit,Jerritt Canyon district,Past Producer,M,-116.01399,41.40518,Generator Hill ,"North Generator Hill, West Generator Hill",2.26,12.06,5.83,2.261,after 1981,0.85,False,North Generator Hill Deposit,,parte de un depósito,True
+96,West Pequip,Jerritt Canyon district,Unknown,,-114.9,41.1,,,,,,,,,False,,,sin dato,False
+97,Winters Creek Mine,Jerritt Canyon district,Producer,,-115.97929,41.41525,Winters Creek,,0.293,1.44,7.32,,,0.25,True,,0.293,"0,1 a 1 Moz",True
+98,Wood Gulch Mine,Jerritt Canyon district,Producer,S,-115.96649,41.67934,,,,,,,,,False,,,sin dato,True
+99,Bazza Deposit,North Carlin trend,Occurrence,N,-116.38426,40.9499,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,3.56,False,Screamer Deposit,,parte de un depósito,False
+100,Blue Star Mine,North Carlin trend,Producer,M,-116.36371,40.94296,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,1.06,False,Genesis Mine,,parte de un depósito,True
+101,Bobcat Deposit,North Carlin trend,Past Producer,S,-116.37843,40.95101,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,1.35,False,Genesis Mine,,parte de un depósito,True
+102,Bootstrap Mine,North Carlin trend,Producer,M,-116.41704,41.01879,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,0.886,1988–2006,0.66,True,,1.029,1 a 5 Moz,True
+103,Bootstrap-Capstone-Tara Gold Mine,North Carlin trend,Producer,M,-116.41704,41.01879,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,0.886,1988–2006,0.66,False,Bootstrap Mine,,parte de un depósito,True
+104,Capstone Deposit,North Carlin trend,Producer,S,-116.41343,41.0224,Bootstrap/Capstone/Tara,,1.029,19.2,1.64,0.886,1988–2006,1.05,False,Bootstrap Mine,,parte de un depósito,True
+105,Carlin Gold Mine,North Carlin trend,Past Producer,M,-116.32399,40.91184,Carlin,"Hardie Footwall, Carlin East, Carlin West",13.696,242.0,1.76,6.138,1965–2011,0.76,True,,13.696,5 a 15 Moz,True
+106,Carlin-Hardie-Pete Mine Area,North Carlin trend,Producer,M,-116.32399,40.91184,Carlin,"Hardie Footwall, Carlin East, Carlin West",13.696,242.0,1.76,6.138,1965–2011,0.76,False,Carlin Gold Mine,,parte de un depósito,True
+107,Chukar Footwall Mine,North Carlin trend,Producer,L,-116.20925,40.79158,Gold Quarry,"Chukar Footwall, West-of-West",22.634,469.0,1.5,22.618,1981-2011,0.7,False,Gold Quarry Mine,,parte de un depósito,True
+108,Dark Star,North Carlin trend,Occurrence,N,-115.8448,40.45797,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,13.52,False,South Bullion / Trout Creek Deposit,,parte de un depósito,False
+109,Dark Star Gold Deposit,North Carlin trend,Prospect,U,-115.96249,40.45385,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,3.67,False,South Bullion / Trout Creek Deposit,,parte de un depósito,False
+110,Dee Gold Mine,North Carlin trend,Producer,S,-116.4276,41.0324,Dee,,0.852,13.36,1.98,0.853,1984–2000,0.41,True,,0.852,"0,1 a 1 Moz",True
+111,Dee Gold Mine,North Carlin trend,Producer,S,-116.4276,41.0324,Dee,,0.852,13.36,1.98,0.853,1984–2000,0.41,False,Dee Gold Mine,,parte de un depósito,True
+112,Deep Post Mine,North Carlin trend,Producer,L,-116.34732,40.97518,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,2.71,False,Screamer Deposit,,parte de un depósito,True
+113,Deep Star Deposit,North Carlin trend,Producer,N,-116.37593,40.95907,Deep Star,,1.73,1.4,38.4,1.728,"1996–2008, UG",1.25,True,,1.73,1 a 5 Moz,True
+114,Genesis Mine,North Carlin trend,Producer,M,-116.36621,40.95434,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,0.37,True,,15.465,más de 15 Moz,True
+115,Genesis Mine,North Carlin trend,Producer,S,-116.32399,40.9299,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,4.1,False,Genesis Mine,,parte de un depósito,True
+116,Genesis-Blue Star Mines Area,North Carlin trend,Producer,S,-116.32399,40.9299,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,4.1,False,Genesis Mine,,parte de un depósito,True
+117,Gnome,North Carlin trend,Occurrence,,-116.01761,40.60411,Gnom,,0.129,2.45,1.65,,,0.44,True,,0.129,"0,1 a 1 Moz",False
+118,Goldstrike Mine,North Carlin trend,Producer,L,-116.36565,40.97157,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,1.55,False,Screamer Deposit,,parte de un depósito,True
+119,"Greater Goldstrike, North Mines",North Carlin trend,Producer,L,-116.36565,40.97157,Meikle,"Banshee, Barrel, Coldbug, Deep Post, Griffin, North Post, Rodeo ",16.387,40.1,12.7,11.532,1996–2011,3.74,False,Meikle Mine,,parte de un depósito,True
+120,Lantern Deposit,North Carlin trend,Past Producer,S,-116.35593,40.92296,North Lantern,,0.199,6.04,1.03,0.2,n.d.,0.18,True,,0.199,"0,1 a 1 Moz",True
+121,Leeville Mine Deposits,North Carlin trend,Producer,N,-116.32399,40.91184,Leeville,Four Corners,5.369,17.6,9.47,1.116,2006-2011,2.34,True,,5.369,5 a 15 Moz,True
+122,Long Lac Deposit,North Carlin trend,Occurrence,N,-116.38426,40.9499,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,3.56,False,Screamer Deposit,,parte de un depósito,False
+123,Mac Ridge Deposit,North Carlin trend,Producer,S,-115.95649,41.54962,,,,,,,,,False,,,sin dato,True
+124,Meikle Mine,North Carlin trend,Producer,L,-116.36,41.01111,Meikle,"Banshee, Barrel, Coldbug, Deep Post, Griffin, North Post, Rodeo ",16.387,40.1,12.7,11.532,1996–2011,2.11,True,,16.387,más de 15 Moz,True
+125,North Star Deposit,North Carlin trend,Past Producer,S,-116.37954,40.95907,Bluestar/Genesis,"Beast, Bobcat, North Star, Sold",15.465,411.0,1.17,3.89,1974–2011,1.61,False,Genesis Mine,,parte de un depósito,True
+126,POD deposit,North Carlin trend,Producer,U,-116.00979,40.53336,,,,,,,,,False,,,sin dato,True
+127,Pete Deposit,North Carlin trend,Occurrence,N,-116.3076,40.90907,Pete,,1.0,15.1,2.06,1.0,n.d.,1.5,True,,1.0,1 a 5 Moz,False
+128,Pinon Project,North Carlin trend,Prospect,,-115.84481,40.45801,Piñon,"Cord Ranch, Dark Star, South Bullion, Trout Creek ",1.048,34.2,0.88,0.155,2002–2004,13.52,False,South Bullion / Trout Creek Deposit,,parte de un depósito,False
+129,Post Deposit,North Carlin trend,Producer,L,-116.34732,40.97518,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,2.71,False,Screamer Deposit,,parte de un depósito,True
+130,Ren-Banshee,North Carlin trend,Producer,S,-116.38796,41.01487,REN,,1.98,5.73,10.75,0.001,"n.d., OP",1.27,True,,1.98,1 a 5 Moz,True
+131,Rossi Gold Mine,North Carlin trend,Past Producer,L,-116.42954,41.07462,Storm,,0.122,2.8,12.8,0.189,2008–2010,3.57,True,,0.122,"0,1 a 1 Moz",True
+132,Screamer Deposit,North Carlin trend,Past Producer,S,-116.38649,40.98268,Betze-Post,"Bazza, Deep Post, Long Lac, Screamer, West Bazza, ",39.545,374.8,3.27,29.998,1974–2011,0.7,True,,39.545,más de 15 Moz,True
+133,Wright Window Deposit,North Carlin trend,Past Producer,,-116.04411,41.38545,Wright Window,,0.039,0.21,5.5,0.007,n.d.,0.97,True,,0.039,"menos de 0,1 Moz",True
+134,Emigrant Deposit,South Carlin trend (Rain subdistrito),Prospect,N,-115.97341,40.61741,Emigrant Springs,,1.199,62.0,0.62,,,0.07,True,,1.199,1 a 5 Moz,False
+135,Rain Mine,South Carlin trend (Rain subdistrito),Producer,M,-116.0111,40.61348,Rain,"Saddle, Tess",3.016,27.1,3.46,1.774,1988–2005,0.05,True,,3.016,1 a 5 Moz,True

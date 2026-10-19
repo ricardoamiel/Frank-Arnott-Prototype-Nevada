@@ -8,7 +8,10 @@ Los productos están en la malla UTM 11N de 1500 m del cuaderno. Para dibujarlos
 Rásteres (uint8, 255 = sin dato):
     pct_<modelo>          percentil de la celda en el mapa final, de 0 a 250
     bloque_<modelo>_<L>   probabilidad calibrada del bloque de lado L celdas, x 500 (0,5 = 250)
+    bloquepct_<modelo>_<L> percentil del bloque en el mapa final, de 0 a 250 (para marcar el k % de bloques)
     conmina_<L>           1 si el bloque contiene una mina del inventario (igual para todos los modelos)
+
+La pestaña de comparación lee analisis/ablacion_ideas/web_ablacion.json (ablacion_ideas_v14.py).
 
 Uso: python web/construir_web.py
 """
@@ -78,6 +81,10 @@ def main():
             pb = np.array([prob.get(k, np.nan) for k in claves])
             vals = np.where(np.isnan(pb), SIN_DATO, np.clip(np.round(pb * 500), 0, 250)).astype(np.uint8)
             rasters[f"bloque_{m}_{lado}"] = a_mercator(raster_celdas(vals))
+            pct_b = {(r, c): q for r, c, q in zip(b["r"], b["c"], b["pct"])}
+            qb = np.array([pct_b.get(k, np.nan) for k in claves])
+            rasters[f"bloquepct_{m}_{lado}"] = a_mercator(raster_celdas(
+                np.where(np.isnan(qb), SIN_DATO, np.clip(np.round(qb * 250), 0, 250)).astype(np.uint8)))
             if f"conmina_{lado}" not in rasters:
                 rasters[f"conmina_{lado}"] = a_mercator(raster_celdas(
                     np.array([con.get(k, 0) for k in claves], np.uint8)))
@@ -90,12 +97,14 @@ def main():
     trends["Name"] = trends.Name.replace({"Gretchell Trend": "Getchell Trend"})   # errata en el shapefile
     simpl = lambda gdf: json.loads(gdf.assign(geometry=gdf.geometry.force_2d().simplify(0.004)).to_json())
 
+    fa = RAIZ / "analisis" / "ablacion_ideas" / "web_ablacion.json"
+    ablacion = json.loads(fa.read_text(encoding="utf8")) if fa.exists() else {}
     datos = dict(
         raster=dict(w=W3, h=H3, x0=izq, y0=arriba, res=res),
         capas={k: b64(v) for k, v in rasters.items()},
         area=simpl(area[["geometry"]]), trends=simpl(trends[["Name", "geometry"]]),
         minas=json.loads(minas.drop(columns=["x", "y"], errors="ignore").to_json(orient="records")),
-        modelos=modelos,
+        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos},
     )
     html = (AQUI / "plantilla.html").read_text(encoding="utf8")
     html = html.replace("/*__DATA__*/null", json.dumps(datos, ensure_ascii=False, separators=(",", ":")))
