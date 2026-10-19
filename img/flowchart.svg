@@ -1,0 +1,309 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="2090" viewBox="0 0 1240 2090" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif">
+<title>Flowchart of the 13th attempt notebook and 14th attempt products</title>
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52606d"/></marker><marker id="punta2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7b1e2b"/></marker></defs>
+<rect width="1240" height="2090" fill="#ffffff"/>
+<rect x="24" y="82" width="1192" height="96" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="198" width="1192" height="176" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="394" width="1192" height="150" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="564" width="1192" height="352" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="936" width="1192" height="232" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="1188" width="1192" height="290" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<rect x="24" y="1498" width="1192" height="470" rx="14" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.35"/>
+<path d="M256,296.0 L270,296.0" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M486,296.0 L500,296.0" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M716,296.0 L730,296.0" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M946,296.0 L960,296.0" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M224,166 L224,186 L380,186 L380,230" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M610,166 L610,230" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1016,166 L1016,190 L840,190 L840,230" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1070,358 L1070,384 L620,384 L620,426" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M440,479 L388,479" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M800,479 L852,479" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M254.0,668 L254.0,676" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M254.0,706 L254.0,714" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M254.0,744 L254.0,752" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M254.0,782 L254.0,790" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M254.0,820 L254.0,828" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M330,528 L330,596" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M900,528 L900,596" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M464,668 L488,668" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M657,738 L657,754" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M822,827 L846,827" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1023,738 L1023,754" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M384,1060 L416,1060" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M800,1014 L832,1014" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M800,1106 L832,1106" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M657,896 L657,916 L610,916 L610,970" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M500,1146 L500,1176 L300,1176 L300,1220" fill="none" stroke="#52606d" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#punta)"/>
+<path d="M1016,1146 L1016,1172 L620,1172 L620,1220" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1196,1014 L1214,1014 L1214,1200 L1026,1200 L1026,1220" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M214,1344 L214,1372" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M620,1344 L620,1372" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1026,1344 L1026,1372" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M214,1456 L214,1530" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M384,1598 L436,1598" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M800,1598 L852,1598" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M620,1662 L620,1696" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<path d="M1036,1662 L1036,1696" fill="none" stroke="#52606d" stroke-width="1.5" marker-end="url(#punta)"/>
+<text x="24" y="40" font-size="20" font-weight="bold" fill="#1f2933" text-anchor="start">13th attempt notebook and 14th attempt products: from evidence layers to prospectivity maps</text>
+<text x="24" y="62" font-size="11.5" font-weight="normal" fill="#52606d" text-anchor="start">Flow of prospectividad_carlin_GAT_v8_bagging_sin_lito_lineam.ipynb. Notebook cell in brackets; figures come from the team run (salida folder, October 18, 2026).</text>
+<text x="44" y="106" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">Inputs</text>
+<rect x="44" y="114" width="360" height="52" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="123" width="4" height="34" rx="2" fill="#7b1e2b"/>
+<text x="58" y="136" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">6 evidence rasters (0 to 1)</text>
+<text x="58" y="154" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">Geophysics, hydro, rocks, silica, stream, soils</text>
+<rect x="440" y="114" width="360" height="52" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="440" y="123" width="4" height="34" rx="2" fill="#7b1e2b"/>
+<text x="454" y="136" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">AREA.shp</text>
+<text x="454" y="154" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">study area polygon</text>
+<rect x="836" y="114" width="360" height="52" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="836" y="123" width="4" height="34" rx="2" fill="#7b1e2b"/>
+<text x="850" y="136" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">MINAS_PUNTOS.shp</text>
+<text x="850" y="154" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">136 Carlin-type deposits (positives)</text>
+<text x="44" y="222" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">A. Data preparation</text>
+<text x="1196" y="222" font-size="11" font-weight="normal" fill="#52606d" text-anchor="end">from separate rasters to a node table</text>
+<rect x="44" y="234" width="212" height="124" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="243" width="4" height="106" rx="2" fill="#7b1e2b"/>
+<text x="58" y="256" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[1, 3] Configuration</text>
+<text x="58" y="274" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">SEED = 42; GPU if available</text>
+<text x="58" y="289" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">a single cell holds</text>
+<text x="58" y="304" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">every parameter</text>
+<text x="58" y="319" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(README, section 4)</text>
+<rect x="274" y="234" width="212" height="124" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="274" y="243" width="4" height="106" rx="2" fill="#7b1e2b"/>
+<text x="288" y="256" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[5] Align rasters</text>
+<text x="288" y="274" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">REF_LAYER grid:</text>
+<text x="288" y="289" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">SUELOS GEOQ, 250 m,</text>
+<text x="288" y="304" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">EPSG:32611, 2240 x 1782</text>
+<text x="288" y="319" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">bilinear; nodata = NaN</text>
+<rect x="504" y="234" width="212" height="124" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="504" y="243" width="4" height="106" rx="2" fill="#7b1e2b"/>
+<text x="518" y="256" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[7] Aggregate to 1500 m</text>
+<text x="518" y="274" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">AGG_FACTOR = 6, chosen</text>
+<text x="518" y="289" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">to stay below</text>
+<text x="518" y="304" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">MAX_NODES = 60,000</text>
+<text x="518" y="319" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">mean over 6 x 6 blocks</text>
+<rect x="734" y="234" width="212" height="124" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="734" y="243" width="4" height="106" rx="2" fill="#7b1e2b"/>
+<text x="748" y="256" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[7] Positives and exclusion</text>
+<text x="748" y="274" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">cell with a mine = 1:</text>
+<text x="748" y="289" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">93 cells (136 mines)</text>
+<text x="748" y="304" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">within 2500 m of a mine:</text>
+<text x="748" y="319" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">never a negative (598)</text>
+<rect x="964" y="234" width="212" height="124" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="964" y="243" width="4" height="106" rx="2" fill="#7b1e2b"/>
+<text x="978" y="256" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[8] Nodes and features X</text>
+<text x="978" y="274" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">52,573 nodes (cells</text>
+<text x="978" y="289" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">with any data)</text>
+<text x="978" y="304" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">NaN = 0 plus a coverage</text>
+<text x="978" y="319" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">flag: 10 features</text>
+<text x="44" y="418" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">B. Graph</text>
+<text x="1196" y="418" font-size="11" font-weight="normal" fill="#52606d" text-anchor="end">each cell is a node; edges join neighboring cells</text>
+<rect x="440" y="430" width="360" height="98" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="440" y="439" width="4" height="80" rx="2" fill="#7b1e2b"/>
+<text x="454" y="452" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[10] 8-connected grid</text>
+<text x="454" y="470" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">each cell links to its 8 neighbors</text>
+<text x="454" y="485" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">417,818 edges, mean degree 7.9</text>
+<text x="454" y="500" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">LIN_LAYERS empty: no structural edges</text>
+<line x1="752" y1="486" x2="736" y2="470" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="736" y2="486" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="736" y2="502" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="752" y2="470" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="752" y2="502" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="768" y2="470" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="768" y2="486" stroke="#7b1e2b" stroke-width="1.2"/>
+<line x1="752" y1="486" x2="768" y2="502" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="736" cy="470" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="736" cy="486" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="736" cy="502" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="752" cy="470" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="752" cy="486" r="4.5" fill="#7b1e2b" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="752" cy="502" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="768" cy="470" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="768" cy="486" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<circle cx="768" cy="502" r="3" fill="#fff" stroke="#7b1e2b" stroke-width="1.2"/>
+<rect x="44" y="430" width="340" height="98" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="439" width="4" height="80" rx="2" fill="#7b1e2b"/>
+<text x="58" y="452" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[10] Graph to the GPU</text>
+<text x="58" y="470" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">Data(x = X, edge_index) on the GPU</text>
+<text x="58" y="485" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">estimated GAT VRAM: 2.6 GB</text>
+<text x="58" y="500" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(the team GPU has 4.3 GB)</text>
+<rect x="856" y="430" width="340" height="98" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="856" y="439" width="4" height="80" rx="2" fill="#7b1e2b"/>
+<text x="870" y="452" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[10] Neighborhood context</text>
+<text x="870" y="470" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">X_ctx = X + mean X</text>
+<text x="870" y="485" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">of the 8 neighbors</text>
+<text x="870" y="500" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(used only by RF_ctx)</text>
+<text x="44" y="588" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">C. Models</text>
+<text x="1196" y="588" font-size="11" font-weight="normal" fill="#52606d" text-anchor="end">defined here; trained in D and E</text>
+<rect x="44" y="600" width="420" height="296" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<text x="58" y="622" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[12] GAT architecture (GNN_LAYERS = 3)</text>
+<rect x="60" y="638" width="388" height="30" rx="6" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="657" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Input X: 52,573 nodes x 10 features</text>
+<rect x="60" y="676" width="388" height="30" rx="6" fill="#f3e9e0" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="695" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Layer 1: dropout 0.5  ·  GATConv 10 to 16 x 8 heads  ·  ELU</text>
+<rect x="60" y="714" width="388" height="30" rx="6" fill="#f3e9e0" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="733" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Layer 2: dropout 0.5  ·  GATConv 128 to 16 x 8 heads  ·  ELU</text>
+<rect x="60" y="752" width="388" height="30" rx="6" fill="#f3e9e0" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="771" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Layer 3: dropout 0.5  ·  GATConv 128 to 16 x 8 heads  ·  ELU</text>
+<rect x="60" y="790" width="388" height="30" rx="6" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="809" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Linear 128 to 1: one logit per cell</text>
+<rect x="60" y="828" width="388" height="30" rx="6" fill="#fbf7f1" stroke="#7b1e2b" stroke-opacity="0.5"/>
+<text x="72" y="847" font-size="10.5" font-weight="normal" fill="#1f2933" text-anchor="start">Sigmoid: probability between 0 and 1</text>
+<text x="60" y="872" font-size="10" font-weight="normal" fill="#52606d" text-anchor="start">Each layer widens the view by one hop: with 3 layers a cell</text>
+<text x="60" y="886" font-size="10" font-weight="normal" fill="#52606d" text-anchor="start">sees neighbors up to 3 cells away (4.5 km at 1500 m).</text>
+<rect x="492" y="600" width="330" height="138" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="492" y="609" width="4" height="120" rx="2" fill="#7b1e2b"/>
+<text x="506" y="622" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[12] train_gnn (training)</text>
+<text x="506" y="640" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">Adam: LR = 0.002, WEIGHT_DECAY = 0.001</text>
+<text x="506" y="655" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">EPOCHS = 200, full graph each epoch</text>
+<text x="506" y="670" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">fresh negatives every epoch:</text>
+<text x="506" y="685" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">NEG_PER_POS = 50 per mine</text>
+<text x="506" y="700" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">balanced loss: mines = negatives</text>
+<rect x="492" y="758" width="330" height="138" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="492" y="767" width="4" height="120" rx="2" fill="#7b1e2b"/>
+<text x="506" y="780" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[12] GAT_bag (bagging)</text>
+<text x="506" y="798" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">BAG_N = 4 GATs, different seeds</text>
+<text x="506" y="813" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">BAG_BOOTSTRAP: each sees a</text>
+<text x="506" y="828" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">resample with replacement of mines</text>
+<text x="506" y="843" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">and of negatives</text>
+<text x="506" y="858" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">their 4 probabilities are averaged</text>
+<rect x="850" y="600" width="346" height="138" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="850" y="609" width="4" height="120" rx="2" fill="#7b1e2b"/>
+<text x="864" y="622" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[14] Tabular models</text>
+<text x="864" y="640" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">LogReg, RF, HistGB, SVM, MLP, RF_ctx</text>
+<text x="864" y="655" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">20 negatives per mine (TAB_NEG_PER_POS)</text>
+<text x="864" y="670" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">mines weighted for balance</text>
+<text x="864" y="685" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(MLP takes no weights: mines repeated)</text>
+<text x="864" y="700" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">one value per cell, no neighbors</text>
+<rect x="850" y="758" width="346" height="138" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="850" y="767" width="4" height="120" rx="2" fill="#7b1e2b"/>
+<text x="864" y="780" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[14] run_model and minmax</text>
+<text x="864" y="798" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">fit_model trains; predict scores</text>
+<text x="864" y="813" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">all 52,573 cells</text>
+<text x="864" y="828" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">minmax rescales the score to 0 to 1</text>
+<text x="864" y="843" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(favorability, not a true probability)</text>
+<text x="44" y="960" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">D. Spatial block validation</text>
+<text x="1196" y="960" font-size="11" font-weight="normal" fill="#52606d" text-anchor="end">each cell is scored by a model that never saw its block</text>
+<rect x="44" y="974" width="340" height="172" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="983" width="4" height="154" rx="2" fill="#7b1e2b"/>
+<text x="58" y="996" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[20] Blocks and folds</text>
+<text x="58" y="1014" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">blocks of BLOCK_CELLS = 15 cells</text>
+<text x="58" y="1029" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">(22.5 km per side)</text>
+<text x="58" y="1044" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">blocks with mines are split</text>
+<text x="58" y="1059" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">to balance: 19, 19, 19, 18, 18</text>
+<text x="58" y="1074" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">the rest, at random among</text>
+<text x="58" y="1089" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">N_FOLDS = 5 folds</text>
+<rect x="420" y="974" width="380" height="172" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="420" y="983" width="4" height="154" rx="2" fill="#7b1e2b"/>
+<text x="434" y="996" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[21] Loop: 5 folds x 8 models</text>
+<text x="434" y="1014" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">train on 4 folds: mines and</text>
+<text x="434" y="1029" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">admissible negatives (neg_ok)</text>
+<text x="434" y="1044" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">score everything, minmax, store</text>
+<text x="434" y="1059" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">the held-out fold in oof</text>
+<text x="434" y="1074" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">in the end, oof holds one</text>
+<text x="434" y="1089" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">out-of-fold prediction per cell</text>
+<path d="M772,1000 a16,16 0 1,1 -2,-1" fill="none" stroke="#7b1e2b" stroke-width="1.6" marker-end="url(#punta2)"/>
+<rect x="836" y="974" width="360" height="80" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="836" y="983" width="4" height="62" rx="2" fill="#7b1e2b"/>
+<text x="850" y="996" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[16] Fold metrics</text>
+<text x="850" y="1014" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">ROC_AUC, PR_AUC, SRC_AUC, Youden, MCC, F1,</text>
+<text x="850" y="1029" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">Brier, ECE, capture at P80, P90, P95</text>
+<rect x="836" y="1066" width="360" height="80" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="836" y="1075" width="4" height="62" rx="2" fill="#7b1e2b"/>
+<text x="850" y="1088" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[18] Permutation importance</text>
+<text x="850" y="1106" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">GAT, GAT_bag, LogReg, RF: shuffle one layer</text>
+<text x="850" y="1121" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">and rescore without retraining (x 3)</text>
+<rect x="617" y="918" width="140.20000000000002" height="17" rx="4" fill="#fff" fill-opacity="0.92"/>
+<text x="622" y="930" font-size="10" font-weight="normal" fill="#52606d" text-anchor="start">fit_model / run_model</text>
+<text x="44" y="1212" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">E. Results</text>
+<rect x="44" y="1224" width="340" height="120" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="1233" width="4" height="102" rx="2" fill="#7b1e2b"/>
+<text x="58" y="1246" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[28, 29] Final models and maps</text>
+<text x="58" y="1264" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">same recipe, with all 93 mine</text>
+<text x="58" y="1279" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">cells and nothing held out</text>
+<text x="58" y="1294" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">N_ENSEMBLE = 3 seeds (100 to 102)</text>
+<text x="58" y="1309" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">average, minmax and figure</text>
+<rect x="440" y="1224" width="360" height="120" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="440" y="1233" width="4" height="102" rx="2" fill="#7b1e2b"/>
+<text x="454" y="1246" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[26] Layer importance</text>
+<text x="454" y="1264" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">consensus of 4 models:</text>
+<text x="454" y="1279" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">1 ROCAS  2 STREAM GEOQ  3 GEOFISICA</text>
+<text x="454" y="1294" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">4 SILICE  5 SUELOS GEOQ  6 HIDRO GEOQ</text>
+<rect x="856" y="1224" width="340" height="120" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="856" y="1233" width="4" height="102" rx="2" fill="#7b1e2b"/>
+<text x="870" y="1246" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[23, 24] Table and curves</text>
+<text x="870" y="1264" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">metrics on pooled oof</text>
+<text x="870" y="1279" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">ROC_AUC: LogReg 0.923; GAT 0.917;</text>
+<text x="870" y="1294" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">GAT_bag 0.917; SVM 0.895</text>
+<text x="870" y="1309" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">success-rate curve and AUC per fold</text>
+<rect x="311" y="1159" width="189.8" height="17" rx="4" fill="#fff" fill-opacity="0.92"/>
+<text x="316" y="1171" font-size="10" font-weight="normal" fill="#52606d" text-anchor="start">same recipe, all mines</text>
+<path d="M64,1376 h288 l12,12 v68 h-300 z" fill="#fff" stroke="#7b1e2b" stroke-width="1.3"/>
+<path d="M352,1376 v12 h12" fill="none" stroke="#7b1e2b" stroke-width="1.3"/>
+<text x="78" y="1398" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">favorabilidad_&lt;model&gt;.tif</text>
+<text x="78" y="1416" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">8 maps: 1500 m, EPSG:32611,</text>
+<text x="78" y="1431" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">values from 0 to 1</text>
+<path d="M470,1376 h288 l12,12 v68 h-300 z" fill="#fff" stroke="#7b1e2b" stroke-width="1.3"/>
+<path d="M758,1376 v12 h12" fill="none" stroke="#7b1e2b" stroke-width="1.3"/>
+<text x="484" y="1398" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">importancia_capas.csv</text>
+<text x="484" y="1416" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">importancia_capas_consenso.csv</text>
+<path d="M876,1376 h288 l12,12 v68 h-300 z" fill="#fff" stroke="#7b1e2b" stroke-width="1.3"/>
+<path d="M1164,1376 v12 h12" fill="none" stroke="#7b1e2b" stroke-width="1.3"/>
+<text x="890" y="1398" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">estadisticas_modelos.csv</text>
+<text x="890" y="1416" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">estadisticas_por_fold.csv</text>
+<text x="44" y="1522" font-size="14" font-weight="bold" fill="#1f2933" text-anchor="start">F. Calibration and products (14th attempt)</text>
+<text x="1196" y="1522" font-size="11" font-weight="normal" fill="#52606d" text-anchor="end">model shown: GAT; spatially validated figures</text>
+<rect x="221" y="1482" width="140.20000000000002" height="17" rx="4" fill="#fff" fill-opacity="0.92"/>
+<text x="226" y="1494" font-size="10" font-weight="normal" fill="#52606d" text-anchor="start">oof from D and maps from E</text>
+<rect x="44" y="1534" width="340" height="128" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="44" y="1543" width="4" height="110" rx="2" fill="#7b1e2b"/>
+<text x="58" y="1556" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[calibrar_v13] Per-cell isotonic</text>
+<text x="58" y="1574" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">out-of-fold percentile to observed</text>
+<text x="58" y="1589" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">mine frequency (1% bins)</text>
+<text x="58" y="1604" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">order unchanged: same AUC per fold</text>
+<text x="58" y="1619" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">yields true but low probabilities:</text>
+<text x="58" y="1634" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">at most 4 to 5% per cell</text>
+<rect x="440" y="1534" width="360" height="128" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="440" y="1543" width="4" height="110" rx="2" fill="#7b1e2b"/>
+<text x="454" y="1556" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[productos_v14] Idea 2: top k% zone</text>
+<text x="454" y="1574" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">k = 5, 10, 15 or 20% of the area</text>
+<text x="454" y="1589" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">10%: 80% of mines, 98% of the gold</text>
+<text x="454" y="1604" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">5%: 61% of mines, 70% of the gold</text>
+<text x="454" y="1619" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">10% lift: 8.0 times random</text>
+<text x="454" y="1634" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">gold: USGS Moz (OFR 2014-1074)</text>
+<rect x="856" y="1534" width="340" height="128" rx="9" fill="#fff" stroke="#7b1e2b" stroke-width="1.5"/>
+<rect x="856" y="1543" width="4" height="110" rx="2" fill="#7b1e2b"/>
+<text x="870" y="1556" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">[productos_v14] Idea 1: blocks</text>
+<text x="870" y="1574" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">blocks of 4.5, 10.5 and 15 km</text>
+<text x="870" y="1589" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">grouped isotonic, cross-fitted</text>
+<text x="870" y="1604" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">10.5 km: AUC 0.84, Brier skill 0.12</text>
+<text x="870" y="1619" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">probability of at least one known</text>
+<text x="870" y="1634" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">mine in the block</text>
+<image x="522.8" y="1700.0" width="194.3" height="220.0" href="data:image/png;base64,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"/>
+<rect x="518.8" y="1696.0" width="202.3" height="228.0" fill="none" stroke="#7b1e2b" stroke-width="1.2" rx="5"/>
+<text x="620" y="1938" font-size="11.5" font-weight="bold" fill="#1f2933" text-anchor="middle">Top 10% zone</text>
+<text x="620" y="1954" font-size="10" font-weight="normal" fill="#3e4c59" text-anchor="middle">dark: top 5%; light: 5 to 10%</text>
+<image x="938.8" y="1700.0" width="194.3" height="220.0" href="data:image/png;base64,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"/>
+<rect x="934.8" y="1696.0" width="202.3" height="228.0" fill="none" stroke="#7b1e2b" stroke-width="1.2" rx="5"/>
+<text x="1036" y="1938" font-size="11.5" font-weight="bold" fill="#1f2933" text-anchor="middle">10.5 km blocks</text>
+<text x="1036" y="1954" font-size="10" font-weight="normal" fill="#3e4c59" text-anchor="middle">darker = higher probability</text>
+<path d="M64,1716 h288 l12,12 v80 h-300 z" fill="#fff" stroke="#7b1e2b" stroke-width="1.3"/>
+<path d="M352,1716 v12 h12" fill="none" stroke="#7b1e2b" stroke-width="1.3"/>
+<text x="78" y="1738" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">web/index.html (d3 v7)</text>
+<text x="78" y="1756" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">interactive viewer of both ideas</text>
+<text x="78" y="1771" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">mines sized by gold Moz</text>
+<text x="78" y="1786" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">single page, no server</text>
+<path d="M64,1828 h288 l12,12 v80 h-300 z" fill="#fff" stroke="#7b1e2b" stroke-width="1.3"/>
+<path d="M352,1828 v12 h12" fill="none" stroke="#7b1e2b" stroke-width="1.3"/>
+<text x="78" y="1850" font-size="12" font-weight="bold" fill="#1f2933" text-anchor="start">analisis/productos/&lt;modelo&gt;/</text>
+<text x="78" y="1868" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">idea2_niveles_validacion.csv</text>
+<text x="78" y="1883" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">idea1_bloques_resumen.csv</text>
+<text x="78" y="1898" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">idea1_fiabilidad.csv</text>
+<text x="24" y="1996" font-size="13" font-weight="bold" fill="#1f2933" text-anchor="start">How to read it</text>
+<text x="24" y="2018" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">1. Bands A and B run once. Band D trains 5 x 8 = 40 models to measure performance; band E trains 3 per model on all mines to draw the maps.</text>
+<text x="24" y="2032" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">2. Maps (E) and metrics (D) come from different models: the metrics are honest because they never score a block seen in training.</text>
+<text x="24" y="2046" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">3. Negative does not mean barren: it is a cell with no known mine and more than 2500 m from one. Favorability therefore ranks cells; it is not a true probability.</text>
+<text x="24" y="2060" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">4. GAT_bag costs 4 times as much as the GAT (about 165 s per fold versus 41 s on the team GTX 1650).</text>
+<text x="24" y="2074" font-size="10.5" font-weight="normal" fill="#3e4c59" text-anchor="start">5. Band F retrains nothing: it takes the out-of-fold predictions from D to measure and the maps from E to draw.</text>
+</svg>

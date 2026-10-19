@@ -7,6 +7,25 @@ Interactive viewer for a graph neural network prospectivity model of Carlin-type
 The page is a single self-contained file (`index.html`): maps, model outputs, mines and charts are embedded, so it
 works offline and needs no server. Basemap tiles come from Esri.
 
+![Explore tab: top 10 % favorable zone of the GAT model, with known mines sized by contained gold](img/explore.jpg)
+
+![Compare levels tab: top 5 % and top 20 % zones side by side, with the ablation between both levels](img/compare.jpg)
+
+## Workflow
+
+![Flowchart from the evidence layers to the prospectivity maps](img/flowchart.svg)
+
+1. **Inputs:** 6 evidence rasters, the study area and the known mines.
+2. **Data preparation (A):** rasters aligned and aggregated to 1.5 km cells; mine cells are positives, cells within
+   2.5 km of a mine cannot be negatives.
+3. **Graph (B):** each cell is a node linked to its 8 neighbors.
+4. **Models (C):** GAT, GAT bagging and tabular baselines (LogReg among them).
+5. **Spatial validation (D):** 5 folds of 22.5 km blocks; each block is scored by a model that never saw it, and layer
+   importance is measured by permutation.
+6. **Results (E):** final maps trained on all mines, metrics and layer importance.
+7. **Calibration and products (F):** isotonic calibration, the two views of this page (favorable zone and block
+   probability) and the page itself.
+
 ## What the page shows
 
 The same model ranking is read in two ways:
@@ -50,6 +69,7 @@ and **LogReg** (logistic regression baseline), all calibrated with isotonic regr
 | `preparar_minas.py` | Joins the mine inventory with the USGS deposit table (contained and produced gold per deposit). |
 | `datos/` | Mines with their USGS gold figures (`minas_produccion.csv`, `minas.geojson`). |
 | `fuentes/` | USGS OFR 2014-1074 deposit table. |
+| `img/` | Screenshots and flowchart used in this README. |
 
 ## Rebuilding the page
 
