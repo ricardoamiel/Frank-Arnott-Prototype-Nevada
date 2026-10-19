@@ -7,9 +7,9 @@ Interactive viewer for a graph neural network prospectivity model of Carlin-type
 The page is a single self-contained file (`index.html`): maps, model outputs, mines and charts are embedded, so it
 works offline and needs no server. Basemap tiles come from Esri.
 
-![Explore tab: top 10 % favorable zone of the GAT model, with known mines sized by contained gold](img/explore.jpg)
+![Explore tab: top 10 % favorable zone of the GAT model over the access and environment traffic light, with known mines sized by contained gold](img/explore.jpg)
 
-![Compare levels tab: top 5 % and top 20 % zones side by side, with the ablation between both levels](img/compare.jpg)
+![Compare levels tab: top 5 % and top 20 % zones side by side over the traffic light, with the ablation between both levels and the green ground in each](img/compare.jpg)
 
 ## Workflow
 
