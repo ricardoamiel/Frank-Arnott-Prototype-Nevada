@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="470" viewBox="0 0 900 470" font-family="DejaVu Sans, Arial, sans-serif">
+  <rect width="900" height="470" fill="#f7f2ea"/>
+  <text x="30" y="40" font-size="20" font-weight="bold" fill="#2a1f1d">CEOExplorer: tres propuestas de logo</text>
+  <g transform="translate(30,70)"><rect width="270" height="370" rx="12" fill="#fffdf9" stroke="#e3d8ca"/>
+    <image href="logo_a_grafo.svg" x="75" y="25" width="120" height="120"/>
+    <text x="135" y="175" text-anchor="middle" font-size="15" font-weight="bold" fill="#2a1f1d">A. Grafo</text>
+    <text x="135" y="198" text-anchor="middle" font-size="11.5" fill="#6b5d58">red de nodos (la GAT) con</text>
+    <text x="135" y="214" text-anchor="middle" font-size="11.5" fill="#6b5d58">el target dorado al centro</text>
+    <rect x="18" y="250" width="234" height="44" rx="8" fill="#f7f2ea"/><image href="logo_a_grafo.svg" x="28" y="256" width="32" height="32"/>
+    <text x="68" y="279" font-size="17" font-weight="bold" fill="#2a1f1d">CEOExplorer</text>
+    <rect x="18" y="304" width="234" height="44" rx="8" fill="#1f1917"/><image href="logo_a_grafo.svg" x="28" y="310" width="32" height="32"/>
+    <text x="68" y="333" font-size="17" font-weight="bold" fill="#f2ebe7">CEOExplorer</text></g>
+  <g transform="translate(315,70)"><rect width="270" height="370" rx="12" fill="#fffdf9" stroke="#e3d8ca"/>
+    <image href="logo_b_mira.svg" x="75" y="25" width="120" height="120"/>
+    <text x="135" y="175" text-anchor="middle" font-size="15" font-weight="bold" fill="#2a1f1d">B. Mira</text>
+    <text x="135" y="198" text-anchor="middle" font-size="11.5" fill="#6b5d58">mira de puntería sobre curvas</text>
+    <text x="135" y="214" text-anchor="middle" font-size="11.5" fill="#6b5d58">de nivel: apuntar al target</text>
+    <rect x="18" y="250" width="234" height="44" rx="8" fill="#f7f2ea"/><image href="logo_b_mira.svg" x="28" y="256" width="32" height="32"/>
+    <text x="68" y="279" font-size="17" font-weight="bold" fill="#2a1f1d">CEOExplorer</text>
+    <rect x="18" y="304" width="234" height="44" rx="8" fill="#1f1917"/><image href="logo_b_mira.svg" x="28" y="310" width="32" height="32"/>
+    <text x="68" y="333" font-size="17" font-weight="bold" fill="#f2ebe7">CEOExplorer</text></g>
+  <g transform="translate(600,70)"><rect width="270" height="370" rx="12" fill="#fffdf9" stroke="#e3d8ca"/>
+    <image href="logo_c_pin.svg" x="75" y="25" width="120" height="120"/>
+    <text x="135" y="175" text-anchor="middle" font-size="15" font-weight="bold" fill="#2a1f1d">C. Marcador</text>
+    <text x="135" y="198" text-anchor="middle" font-size="11.5" fill="#6b5d58">marcador de mapa con estratos</text>
+    <text x="135" y="214" text-anchor="middle" font-size="11.5" fill="#6b5d58">y una pepita de oro</text>
+    <rect x="18" y="250" width="234" height="44" rx="8" fill="#f7f2ea"/><image href="logo_c_pin.svg" x="28" y="256" width="32" height="32"/>
+    <text x="68" y="279" font-size="17" font-weight="bold" fill="#2a1f1d">CEOExplorer</text>
+    <rect x="18" y="304" width="234" height="44" rx="8" fill="#1f1917"/><image href="logo_c_pin.svg" x="28" y="310" width="32" height="32"/>
+    <text x="68" y="333" font-size="17" font-weight="bold" fill="#f2ebe7">CEOExplorer</text></g>
+</svg>

@@ -11,6 +11,14 @@ Rásteres (uint8, 255 = sin dato):
     bloquepct_<modelo>_<L> percentil del bloque en el mapa final, de 0 a 250 (para marcar el k % de bloques)
     conmina_<L>           1 si el bloque contiene una mina del inventario (igual para todos los modelos)
 
+Tierras y denuncios (capa opcional del visor):
+    datos/PADUS41_NV_fee_area.geojson   PAD-US 4.1 (USGS), capa Fee de Nevada en el área: administrador y nivel GAP
+    datos/MLRS_denuncios_activos_area.gpkg   denuncios mineros activos del BLM (MLRS), bajados con
+                                        MLRS_denuncios_NV/bajar_denuncios.py
+Clases de tierra: 1 protegida (GAP 1 o 2), 2 BLM, 3 Servicio Forestal (USFS), 4 otra tierra pública, 0 privada o fuera
+de PAD-US. Se rasterizan en una malla Mercator de unos 300 m para el mapa y a 150 m en la malla del modelo para las
+cifras (parte de cada celda en cada clase y parte denunciada).
+
 La pestaña de comparación lee analisis/ablacion_ideas/web_ablacion.json (ablacion_ideas_v14.py).
 
 Semáforo de accesibilidad y ambiente (datos/03_MapaSemaforo_COLOR.tif, RGBA de 30 m en NAD83 UTM 11N): sus tres
@@ -56,6 +64,92 @@ def leer_semaforo(ruta, paso=5):
     cls[al & (r > 240) & (v > 150)] = 2
     cls[al & (r > 200) & (v < 100)] = 3
     return cls, tr, crs
+
+
+def construir_tierras(g, modelos, a, merc):
+    """PAD-US (clase de tierra y administrador) y denuncios activos del BLM: imágenes para el mapa y cifras por zona."""
+    import io
+    from PIL import Image
+    from rasterio import features
+    from scipy.ndimage import label
+    fp, fd = RAIZ / "datos" / "PADUS41_NV_fee_area.geojson", RAIZ / "datos" / "MLRS_denuncios_activos_area.gpkg"
+    if not fp.exists():
+        return None
+    izq, arriba, res, W3, H3 = merc
+    h, w, tr, crs, rows, cols = g["h"], g["w"], g["transform_g"], g["crs"], g["rows"], g["cols"]
+    p = gpd.read_file(fp)
+    p["gap"] = p.GAP_Sts.astype(int)
+    p["clase"] = np.select([p.gap <= 2, p.Mang_Name == "BLM", p.Mang_Name == "USFS"], [1, 2, 3], 4)
+    p = p.reset_index(drop=True)
+    p["idx"] = p.index + 1                                   # 1 a 104: índice para el tooltip
+    orden = [4, 2, 3, 1]                                     # se pinta al final lo más restrictivo
+    p = p.sort_values("clase", key=lambda s: s.map({v: i for i, v in enumerate(orden)}))
+
+    def pintar(gdf, shape, trf, col):
+        out = np.zeros(shape, np.uint8)
+        for v, geom in zip(gdf[col], gdf.geometry):
+            features.rasterize([(geom, int(v))], out=out, transform=trf)
+        return out
+
+    def png(arr, paleta=None):
+        im = Image.fromarray(arr, "P" if paleta else "L")
+        if paleta:
+            im.putpalette(paleta + [0] * (768 - len(paleta)))
+        buf = io.BytesIO(); im.save(buf, "PNG", optimize=True)
+        return base64.b64encode(buf.getvalue()).decode()
+
+    # mapa: malla Mercator 5 veces más fina que la del modelo (unos 300 m en el terreno)
+    f = 5
+    Wf, Hf = W3 * f, H3 * f
+    trm = from_origin(izq, arriba, res / f, res / f)
+    pm = p.to_crs(3857)
+    clase_m = pintar(pm, (Hf, Wf), trm, "clase")
+    idx_m = pintar(pm, (Hf, Wf), trm, "idx")
+    den = gpd.read_file(fd).to_crs(3857) if fd.exists() else None
+    den_m = features.rasterize(((geom, 1) for geom in den.geometry), out_shape=(Hf, Wf), transform=trm,
+                               fill=0, dtype="uint8") if den is not None else None
+
+    # cifras: malla del modelo a 150 m (10 x 10 subceldas por celda de 1500 m)
+    s = 10
+    trs = tr * tr.scale(1 / s, 1 / s)
+    pu = p.to_crs(crs)
+    clase_u = pintar(pu, (h * s, w * s), trs, "clase").reshape(h, s, w, s)
+    frac = {k: (clase_u == k).mean(axis=(1, 3))[rows, cols] for k in range(5)}
+    if den is not None:
+        du = den.to_crs(crs)
+        den_u = features.rasterize(((geom, 1) for geom in du.geometry), out_shape=(h * s, w * s), transform=trs,
+                                   fill=0, dtype="uint8").reshape(h, s, w, s).mean(axis=(1, 3))
+        fden = den_u[rows, cols]
+    km2 = tr.a * -tr.e / 1e6
+
+    def resumen(sel):
+        tot = sel.sum()
+        r = dict(clases=[round(100 * float(frac[k][sel].sum() / tot), 1) for k in (1, 2, 3, 4, 0)])
+        if den is not None:
+            r["denunciado"] = round(100 * float(fden[sel].sum() / tot), 1)
+            mask = np.zeros((h, w), bool); mask[rows, cols] = sel
+            lab, n = label(mask, structure=np.ones((3, 3)))
+            dg = np.zeros((h, w)); dg[rows, cols] = fden
+            sumas = np.bincount(lab.ravel(), weights=dg.ravel())[1:]
+            tam = np.bincount(lab.ravel())[1:]
+            libres = (sumas / np.maximum(tam, 1)) < 0.1      # target libre: menos del 10 % de su área denunciada
+            r["targets"] = int(n)
+            r["targets_libres"] = int(libres.sum())
+            r["km2_libres"] = round(float(tam[libres].sum() * km2))
+        return r
+
+    for m, wj in modelos.items():
+        pct = np.array(json.loads((RAIZ / a.productos / m / "web.json").read_text(encoding="utf8"))["pct_final"])
+        wj["tierras"] = {str(k): resumen(pct > 1 - k / 100) for k in (5, 10, 15, 20)}
+    todo = resumen(np.ones(len(rows), bool))
+    tabla = p.sort_values("idx")[["idx", "Mang_Name", "Unit_Nm", "gap", "Des_Tp"]]
+    unidades = {int(r.idx): [r.Mang_Name, r.Unit_Nm, int(r.gap), r.Des_Tp] for r in tabla.itertuples()}
+    # imágenes en escala de grises: el valor del píxel es la clase o el índice; el color lo pone la página
+    out = dict(w=Wf, h=Hf, clase=png(clase_m), idx=png(idx_m), unidades=unidades, area=todo,
+               denuncios=png(den_m * 255) if den_m is not None else None, n_denuncios=int(len(den)) if den is not None else 0)
+    print(f"tierras: {len(p)} parcelas PAD-US, {out['n_denuncios']} denuncios | área: clases % {todo['clases']}"
+          + (f", denunciado {todo['denunciado']} %" if den is not None else ""))
+    return out
 
 
 def b64(arr):
@@ -170,6 +264,8 @@ def main():
                         minas=[int(np.sum(c[g["y"] == 1] == k)) for k in (1, 2, 3, 0)])
         print(f"semáforo: {Ws} x {Hs} px, PNG {len(buf.getvalue()) / 1e3:.0f} kB | área verde/amarillo/rojo/sin dato % {semaforo['area']}")
 
+    tierras = construir_tierras(g, modelos, a, (izq, arriba, res, W3, H3))
+
     fa = RAIZ / a.ablacion / "web_ablacion.json"
     ablacion = json.loads(fa.read_text(encoding="utf8")) if fa.exists() else {}
     datos = dict(
@@ -177,7 +273,8 @@ def main():
         capas={k: b64(v) for k, v in rasters.items()},
         area=simpl(area[["geometry"]]), trends=simpl(trends[["Name", "geometry"]]),
         minas=json.loads(minas.drop(columns=["x", "y"], errors="ignore").to_json(orient="records")),
-        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos}, semaforo=semaforo,
+        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos}, semaforo=semaforo, tierras=tierras,
+        oro=dict(moz=round(float(minas[minas.principal].moz.sum()), 1), depositos=int(minas.principal.sum())),
     )
     html = (AQUI / "plantilla.html").read_text(encoding="utf8")
     html = html.replace("/*__DATA__*/null", json.dumps(datos, ensure_ascii=False, separators=(",", ":")))

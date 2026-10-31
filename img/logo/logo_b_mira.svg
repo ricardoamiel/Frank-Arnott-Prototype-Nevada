@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>CEOExplorer, propuesta B: mira</title>
+  <circle cx="32" cy="32" r="30" fill="#7b1e2b"/>
+  <g fill="none" stroke="#f3e3d3" stroke-width="1.6" opacity=".55">
+    <path d="M10 40 C18 30 26 44 36 36 S50 26 56 30"/><path d="M8 30 C18 20 28 34 38 26 S50 16 57 21"/>
+  </g>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#f3e3d3" stroke-width="2.6"/>
+  <g stroke="#f3e3d3" stroke-width="2.6" stroke-linecap="round"><path d="M32 8 V18 M32 46 V56 M8 32 H18 M46 32 H56"/></g>
+  <circle cx="32" cy="32" r="6" fill="#d4a54a"/>
+</svg>

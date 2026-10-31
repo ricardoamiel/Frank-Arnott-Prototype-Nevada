@@ -1,4 +1,6 @@
-# Carlin Gold Prospectivity, Nevada
+# <img src="img/logo/ceoexplorer_logo.svg" width="40" align="center"> CEOExplorer
+
+Carlin-type gold prospectivity in northern Nevada: a decision tool for exploration.
 
 Interactive viewer for a graph neural network prospectivity model of Carlin-type gold in northern Nevada.
 
@@ -99,6 +101,20 @@ cells joined through their 8 neighbors) and the size of the largest one. Links c
 
 On phones, one finger scrolls the page and two fingers move or zoom the map.
 
+**Land & claims** (Off, Land status, Claims, Both) adds two official layers:
+
+- **Land status** from PAD-US 4.1 (USGS, Fee layer): protected land (GAP 1 or 2), BLM, National Forest, other public
+  and private land. None of the top 10% zone falls on strictly protected land; 60% is BLM land, generally open to
+  mining claims.
+- **Active mining claims** from the BLM Mineral & Land Records System (MLRS), 184,757 claims in the study area. 57% of
+  the top 5% zone is already claimed, against 15% of the whole area: industry is staking where the model points.
+  Targets with known mines are 63% claimed; new targets only 17%, and 6 high-scoring new targets lie mostly on
+  unclaimed BLM land.
+
+The **Gold in the district** card shows the known contained gold of the study area (228 Moz in 55 USGS deposits) and,
+as a regional reference, the gold still to discover in the Great Basin according to the USGS 1998 national assessment
+(Circular 1178: mean 3,800 t, about 122 Moz, all deposit types).
+
 ## How the figures were obtained
 
 - **Input layers (7):** GEOFISICA, HIDRO GEOQ, LITO GEOQ, ROCAS, SILICE, STREAM GEOQ and SUELOS GEOQ, on a 1.5 km
@@ -126,6 +142,7 @@ On phones, one finger scrolls the page and two fingers move or zoom the map.
 | `preparar_minas.py` | Joins the mine inventory with the USGS deposit table (contained and produced gold per deposit). |
 | `datos/` | Mines with their USGS gold figures (`minas_produccion.csv`, `minas.geojson`) and how they were built (`GOLD_PER_MINE_en.md`, `ORO_MINAS.md`). |
 | `fuentes/` | USGS OFR 2014-1074 deposit table. |
+| `servir_local.py` | Serves the folder at http://localhost:8000 for local testing, clearing old browser caches for that port. |
 | `img/` | Screenshots and flowchart used in this README. |
 
 ## Rebuilding the page

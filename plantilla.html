@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carlin Gold Prospectivity</title>
+<title>CEOExplorer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2230%22%20fill%3D%22%237b1e2b%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23f3e3d3%22%20stroke-width%3D%221.6%22%20opacity%3D%22.55%22%3E%3Cpath%20d%3D%22M10%2040%20C18%2030%2026%2044%2036%2036%20S50%2026%2056%2030%22/%3E%3Cpath%20d%3D%22M8%2030%20C18%2020%2028%2034%2038%2026%20S50%2016%2057%2021%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22none%22%20stroke%3D%22%23f3e3d3%22%20stroke-width%3D%222.6%22/%3E%3Cg%20stroke%3D%22%23f3e3d3%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M32%208%20V18%20M32%2046%20V56%20M8%2032%20H18%20M46%2032%20H56%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%226%22%20fill%3D%22%23d4a54a%22/%3E%3C/svg%3E">
 <style>
   :root {
     color-scheme: light;
@@ -30,6 +31,11 @@
   header { padding: 20px 24px 8px; }
   h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
   header p { margin: 4px 0 0; color: var(--ink-2); }
+  /* logo: granate de la UNI con el target dorado; a la izquierda del nombre */
+  .marca { display: flex; align-items: center; gap: 12px; }
+  .marca .logo { width: 44px; height: 44px; flex: none; }
+  @media (max-width: 640px) { .marca .logo { width: 36px; height: 36px; } }
+  .sub-h1 { display: block; font-size: 15px; font-weight: 500; color: var(--ink-2); margin-top: 2px; }
   .tabs { display: flex; gap: 4px; padding: 10px 24px 0; border-bottom: 1px solid var(--line); }
   .tabs button { border: 1px solid transparent; border-bottom: 0; background: none; color: var(--ink-2); font: inherit;
                  font-weight: 600; padding: 8px 14px; border-radius: 8px 8px 0 0; cursor: pointer; margin-bottom: -1px; }
@@ -133,6 +139,8 @@
   .envrow { font-size: 12px; color: var(--ink-2); display: flex; gap: 12px; flex-wrap: wrap; }
   .envrow i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
   #env-card[hidden] { display: none; }
+  #land-tbl td:first-child i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px;
+                               vertical-align: -1px; }
   .seg .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
   #env-tbl td:first-child i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
   #env-tbl tr.active td { font-weight: 650; color: var(--maroon); }
@@ -140,7 +148,7 @@
 </head>
 <body>
 <header>
-  <h1>Carlin-type gold prospectivity, Nevada</h1>
+  <h1 class="marca"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#7b1e2b"/><g fill="none" stroke="#f3e3d3" stroke-width="1.6" opacity=".55"><path d="M10 40 C18 30 26 44 36 36 S50 26 56 30"/><path d="M8 30 C18 20 28 34 38 26 S50 16 57 21"/></g><circle cx="32" cy="32" r="16" fill="none" stroke="#f3e3d3" stroke-width="2.6"/><g stroke="#f3e3d3" stroke-width="2.6" stroke-linecap="round"><path d="M32 8 V18 M32 46 V56 M8 32 H18 M46 32 H56"/></g><circle cx="32" cy="32" r="6" fill="#d4a54a"/></svg><span>CEOExplorer <span class="sub-h1">Carlin-type gold prospectivity, Nevada · a decision tool for exploration</span></span></h1>
   <p>Two ways to read the same model. <b>Favorable zone</b>: the top k% of the area by model score, and how many known
     mines and how much gold it holds. <b>Block probability</b>: the calibrated frequency (isotonic regression) of blocks
     that contain at least one known mine. All figures come from spatial block cross-validation: each zone was scored by
@@ -172,6 +180,10 @@
     <button data-g="0">All areas</button><button data-g="1"><i class="dot" style="background:#5fbf7f"></i>Unrestricted</button>
     <button data-g="2"><i class="dot" style="background:#f6cf55"></i>Conditional</button>
     <button data-g="3"><i class="dot" style="background:#e8705f"></i>Restricted</button></div></div>
+  <div class="group" id="ctl-land"><span>Land &amp; claims</span><div class="seg" id="lands"
+    aria-label="Land status (PAD-US) and active mining claims (BLM)">
+    <button data-l="0">Off</button><button data-l="1">Land status</button><button data-l="2">Claims</button>
+    <button data-l="3">Both</button></div></div>
   <div class="group"><span>Basemap</span><div class="seg" id="basemaps">
     <button data-b="satellite" aria-pressed="true">Satellite</button>
     <button data-b="light" aria-pressed="false">Map</button></div></div>
@@ -201,8 +213,11 @@
     <p class="note" id="abl-note"></p></div>
   </div>
   <aside id="aside-explore">
+    <div class="card" id="oro-card"><h3>Gold in the district</h3><div class="kpis" id="oro-kpis"></div>
+      <p class="note" id="oro-note"></p></div>
     <div class="card"><h3 id="kpi-title"></h3><div class="kpis" id="kpis"></div><p class="note" id="kpi-note"></p></div>
     <div class="card" id="env-card" hidden><h3 id="env-title"></h3><div id="env-body"></div></div>
+    <div class="card" id="land-card" hidden><h3 id="land-title"></h3><div id="land-body"></div></div>
     <div class="card"><h3 id="chart-title"></h3><svg class="chart" id="chart" width="100%" height="200"></svg>
       <p class="note" id="chart-note"></p></div>
     <div class="card"><h3>Model comparison</h3><table id="table"></table><p class="note" id="table-note"></p></div>
@@ -230,7 +245,8 @@
 <footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
   and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
   groups several inventory mines, its gold is split among them by their MRDS size class (an estimate; no per-mine
-  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Access and environment layer: project traffic-light map (Unrestricted in green, Conditional in yellow, Restricted in red),
+  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Land status: PAD-US 4.1 (USGS), Fee layer. Mining claims: active BLM claims (MLRS).
+  Access and environment layer: project traffic-light map (Unrestricted in green, Conditional in yellow, Restricted in red),
   read at 300 m on the map and as the most frequent class of each 1.5 km cell in the figures. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
 
@@ -256,7 +272,7 @@ const thrOf = k => 250 * (1 - k / 100);      // umbral del k % en la escala 0 a 
 // modelo final del proyecto (ver MODELO_FINAL.md): primero en los botones y elegido por defecto
 const FINAL = "GAT";
 const state = {tab: "explore", model: D.modelos[FINAL] ? FINAL : Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
-               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.85, ground: 0};
+               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.85, ground: 0, land: 0};
 { const q = new URLSearchParams(location.search);   // e.g. ?tab=compare&left=5&right=20&view=block&side=10
   if (D.modelos[q.get("model")]) state.model = q.get("model");
   if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
@@ -264,6 +280,7 @@ const state = {tab: "explore", model: D.modelos[FINAL] ? FINAL : Object.keys(D.m
   if (SIDES[q.get("side")]) state.side = q.get("side");
   if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
   if (q.get("env") === "1" && D.semaforo) state.env = true;
+  const lq = ["off", "status", "claims", "both"].indexOf((q.get("land") || "").toLowerCase()); if (lq > 0 && D.tierras) state.land = lq;
   const gv = (q.get("ground") || "").toLowerCase();        // ?ground=unrestricted|conditional|restricted (o green|yellow|red)
   const gq = Math.max(["all", "unrestricted", "conditional", "restricted"].indexOf(gv), ["all", "green", "yellow", "red"].indexOf(gv));
   if (gq > 0 && D.semaforo) { state.env = true; state.ground = gq; }
@@ -291,6 +308,8 @@ d3.select("#ctl-env").attr("hidden", D.semaforo ? null : true);
 d3.selectAll("#envs button").on("click", function () { state.env = this.dataset.e === "1"; update(); });
 d3.selectAll("#env-ops button").on("click", function () { state.envOp = +this.dataset.o; update(); });
 d3.selectAll("#grounds button").on("click", function () { state.ground = +this.dataset.g; update(); });
+d3.select("#ctl-land").attr("hidden", D.tierras ? null : true);
+d3.selectAll("#lands button").on("click", function () { state.land = +this.dataset.l; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
 // izquierda y derecha nunca muestran el mismo nivel: el botón del nivel del otro lado queda desactivado
@@ -336,6 +355,61 @@ function envEn(wx, wy) {        // clase del semáforo en un punto (unidades de 
   const S = D.semaforo, res = R.res * R.w / S.w;
   const c = Math.floor((wx * C - R.x0) / res), r = Math.floor((R.y0 + wy * C) / res);
   return r < 0 || r >= S.h || c < 0 || c >= S.w ? 0 : envLayer.cls[r * S.w + c];
+}
+
+// ---------- land status (PAD-US 4.1, USGS) and active mining claims (BLM MLRS), on a grid 5 times finer than the model
+// clase: 1 protected (GAP 1 or 2), 2 BLM, 3 National Forest, 4 other public, 0 private or not in PAD-US
+const LAND = [{c: "#a89c90", a: 0.38, t: "Private or not listed", d: "not in PAD-US; mostly private land (e.g. railroad checkerboard)"},
+              {c: "#23436e", a: 0.6, t: "Protected", d: "GAP 1 or 2: wilderness, refuges, parks; mining closed or tightly restricted"},
+              {c: null, a: 0, t: "BLM", d: "federal multiple-use land, generally open to mining claims (no shading)"},
+              {c: "#2f8a8f", a: 0.35, t: "National Forest", d: "USFS multiple-use land; claims allowed under Forest Service rules"},
+              {c: "#7f6fb2", a: 0.35, t: "Other public", d: "state, local and other federal land"}];
+const ORDEN_LAND = [1, 2, 3, 4, 0];                 // orden de las clases en tablas y leyenda
+const landLayer = {ok: false};
+const leerPNG = b => new Promise(ok => { const im = new Image(); im.onload = () => {
+  const cv = document.createElement("canvas"); cv.width = im.width; cv.height = im.height;
+  const cx = cv.getContext("2d"); cx.drawImage(im, 0, 0); ok(cx.getImageData(0, 0, im.width, im.height)); };
+  im.src = "data:image/png;base64," + b; });
+if (D.tierras) {
+  const T = D.tierras;
+  Promise.all([leerPNG(T.clase), leerPNG(T.idx), T.denuncios ? leerPNG(T.denuncios) : null]).then(([cl, ix, dn]) => {
+    const n = T.w * T.h, clase = new Uint8Array(n), idx = new Uint8Array(n), den = new Uint8Array(n);
+    const dentroArea = i => {                    // solo dentro del área de estudio (malla del modelo)
+      const r = Math.floor(Math.floor(i / T.w) * R.h / T.h), c = Math.floor((i % T.w) * R.w / T.w);
+      return layers[`pct_${state.model}`][r * R.w + c] !== NODATA; };
+    const tinte = document.createElement("canvas"); tinte.width = T.w; tinte.height = T.h;
+    const tx = tinte.getContext("2d"), ti = tx.createImageData(T.w, T.h);
+    const mascara = document.createElement("canvas"); mascara.width = T.w; mascara.height = T.h;
+    const mx = mascara.getContext("2d"), mi = mx.createImageData(T.w, T.h);
+    const col = LAND.map(l => l.c ? rgba(l.c, l.a) : null);
+    for (let i = 0; i < n; i++) {
+      clase[i] = cl.data[i * 4]; idx[i] = ix.data[i * 4]; den[i] = dn ? dn.data[i * 4] > 127 : 0;
+      if (!dentroArea(i)) { clase[i] = 255; den[i] = 0; continue; }
+      const k = col[clase[i]];
+      if (k) for (let b = 0; b < 4; b++) ti.data[i * 4 + b] = k[b];
+      if (den[i]) mi.data[i * 4 + 3] = 255;
+    }
+    tx.putImageData(ti, 0, 0); mx.putImageData(mi, 0, 0);
+    Object.assign(landLayer, {ok: true, clase, idx, den, tinte, mascara});
+    if (state.land) update();
+  });
+}
+function landEn(wx, wy) {          // [clase, índice de la parcela, denunciado] en un punto (unidades de mundo)
+  if (!landLayer.ok) return null;
+  const T = D.tierras, res = R.res * R.w / T.w;
+  const c = Math.floor((wx * C - R.x0) / res), r = Math.floor((R.y0 + wy * C) / res);
+  if (r < 0 || r >= T.h || c < 0 || c >= T.w) return null;
+  const i = r * T.w + c;
+  return landLayer.clase[i] === 255 ? null : [landLayer.clase[i], landLayer.idx[i], landLayer.den[i]];
+}
+const landOn = () => state.land && landLayer.ok;
+// achurado diagonal para el terreno denunciado (se ve sobre el satélite, el semáforo y la zona)
+function achurado(ctx) {
+  const p = document.createElement("canvas"); p.width = p.height = 7;
+  const x = p.getContext("2d"), oscuroBase = oscuro() && state.basemap === "light";
+  x.strokeStyle = oscuroBase ? "rgba(242,235,231,.9)" : "rgba(29,26,26,.85)"; x.lineWidth = 1.3;
+  x.beginPath(); x.moveTo(0, 7); x.lineTo(7, 0); x.moveTo(-1, 1); x.lineTo(1, -1); x.moveTo(6, 8); x.lineTo(8, 6); x.stroke();
+  return ctx.createPattern(p, "repeat");
 }
 
 // ---------- maps: Web Mercator in world units (the whole world spans 1 x 1), d3.zoom scales it to pixels
@@ -505,6 +579,17 @@ function draw(M) {
   const ox = t.x + rx0 * t.k, oy = t.y + ry0 * t.k;
   if (semaforoOn()) { ctx.globalAlpha = ENV_OP; ctx.drawImage(envLayer.porClase[state.ground], ox, oy, rw * t.k, rh * t.k); ctx.globalAlpha = 1; }
   ctx.drawImage(M.off, ox, oy, rw * t.k, rh * t.k);
+  if (landOn() && state.land !== 2) ctx.drawImage(landLayer.tinte, ox, oy, rw * t.k, rh * t.k);
+  if (landOn() && state.land >= 2) {                 // denuncios: la máscara se rellena con el achurado
+    if (!M.hatch) M.hatch = document.createElement("canvas");
+    const hc = M.hatch; hc.width = M.canvas.width; hc.height = M.canvas.height;
+    const hx = hc.getContext("2d"), dpr = window.devicePixelRatio || 1;
+    hx.setTransform(dpr, 0, 0, dpr, 0, 0); hx.imageSmoothingEnabled = false;
+    hx.drawImage(landLayer.mascara, ox, oy, rw * t.k, rh * t.k);
+    hx.globalCompositeOperation = "source-in"; hx.fillStyle = achurado(hx); hx.fillRect(0, 0, M.W, M.H);
+    hx.globalCompositeOperation = "source-over";
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(hc, 0, 0); ctx.restore();
+  }
   cb.labels.forEach(s => drawTiles(M, tiles, s));
   M.proj.scale(t.k / (2 * Math.PI)).translate([t.x, t.y]);
   M.layer.selectAll(".outline, .trend").attr("d", M.path);
@@ -636,6 +721,12 @@ function cellTip(e, M) {
   }
   if (state.env) { const k = envEn(wx, wy);
     if (k) s += `<br>Access &amp; environment: <b>${ENV[k].t}</b> <span class="sub">(${ENV[k].d})</span>`; }
+  if (landOn()) { const l = landEn(wx, wy);
+    if (l) {
+      if (state.land !== 2) { const u = D.tierras.unidades[l[1]];
+        s += `<br>Land: <b>${LAND[l[0]].t}</b>` + (u ? ` <span class="sub">(${u[0]}, ${u[1]}; GAP ${u[2]})</span>` : ""); }
+      if (state.land >= 2) s += `<br>Active mining claims: <b>${l[2] ? "yes" : "none"}</b>`;
+    } }
   const [lon, lat] = proj.invert([wx, wy]);
   show(e, s + fmtCoord(lon, lat));
 }
@@ -693,6 +784,10 @@ const INFO = {
   hit: "Share of the marked blocks that really hold at least one known mine (precision).",
   pmean: "Mean calibrated probability of the marked blocks. If it is close to the hit rate, the probability can be trusted.",
   env: "Share of the marked zone in each class of the project traffic-light map of access and environmental constraints (each 1.5 km cell takes its most frequent class).",
+  oro_conocido: "Sum of the contained gold (past production + reserves + resources) of the USGS deposits (OFR 2014-1074) whose mines fall in the study area. Each deposit counts once.",
+  oro_falta: "USGS 1998 assessment of undiscovered deposits (Circular 1178, table 3): mean gold in undiscovered deposits of the Great Basin region, 3,800 t (1,600 t at 90% probability to 6,400 t at 10%). It covers every deposit type and the whole region, and predates later discoveries such as Goldrush and Long Canyon.",
+  claims: "Share of the marked zone covered by active BLM mining claims (MLRS, unpatented lode and placer claims), measured on a 150 m grid.",
+  freeclaims: "Targets (patches of marked cells joined through their 8 neighbors) with less than 10% of their area under active claims: ground still open to staking.",
   targets: "Patches of marked cells in the same traffic-light class (Unrestricted, Conditional or Restricted), joined through their 8 neighbors, on the final map of the model. Each patch is a candidate target for a field program.",
   marg: "Lift of the extra area only: mines added divided by area added, compared with random. It shows whether widening the zone still pays off.",
 };
@@ -753,6 +848,37 @@ function panel() {
 
 const envBar = v => `<div class="envbar">${[1, 2, 3].map(k => `<span style="width:${v[k - 1]}%;background:${ENV[k].c}"></span>`).join("")}</div>`;
 const envTxt = v => `<div class="envrow">${[1, 2, 3].map(k => `<span><i style="background:${ENV[k].c}"></i>${pc(v[k - 1])} ${ENV[k].t}</span>`).join("")}</div>`;
+// oro conocido en el área (USGS OFR 2014-1074) y oro aún por descubrir según la evaluación nacional del USGS de 1998
+// (Circular 1178, tabla 3: región Great Basin, todos los tipos de depósito; media 3.800 t, de 1.600 a 6.400 t)
+const OZ_T = 32150.7466 / 1e6;
+function panelOro() {
+  if (!D.oro) return d3.select("#oro-card").attr("hidden", true);
+  d3.select("#oro-kpis").html(kpi(f0(D.oro.moz) + " <small>Moz</small>", `known contained gold in ${D.oro.depositos} deposits of the study area`, "oro_conocido") +
+    kpi("~" + f0(3800 * OZ_T) + " <small>Moz</small>", `still to discover in the Great Basin (${f0(1600 * OZ_T)} to ${f0(6400 * OZ_T)} Moz)`, "oro_falta"));
+  d3.select("#oro-note").text("Undiscovered gold: USGS 1998 National Mineral Resource Assessment (Circular 1178), mean for the Great Basin region, " +
+    "all deposit types. It is a regional reference, not an estimate for this study area.");
+}
+
+function panelLand() {
+  const m = D.modelos[state.model], mostrar = landOn() && state.view === "zone" && m.tierras;
+  d3.select("#land-card").attr("hidden", mostrar ? null : true);
+  if (!mostrar) return;
+  const k = LEVELS[state.level], T = m.tierras[k], A = D.tierras.area, area = m.idea2.find(d => d.nivel_pct === k).km2;
+  d3.select("#land-title").text(`Land status and claims in the top ${k}% zone`);
+  let h = "";
+  if (state.land !== 2) {
+    const filas = ORDEN_LAND.map((c, j) => `<tr><td><i style="background:${LAND[c].c || "transparent"};${LAND[c].c ? "" : "border:1px solid " + css("--ink-2")}"></i>${LAND[c].t}</td>` +
+      `<td>${f0(area * T.clases[j] / 100)} km²</td><td>${pc1(T.clases[j])}</td><td>${pc1(A.clases[j])}</td></tr>`).join("");
+    h += `<table id="land-tbl"><tr><th>Land</th><th>Area</th><th>Zone</th><th>Study area</th></tr>${filas}</table>`;
+  }
+  if (state.land >= 2 && T.denunciado != null)
+    h += `<div class="kpis" style="margin-top:10px">${kpi(pc1(T.denunciado), "of the zone under active claims", "claims")}` +
+         `${kpi(`${f0(T.targets_libres)} <small>of ${f0(T.targets)}</small>`, `targets free of claims (${f0(T.km2_libres)} km²)`, "freeclaims")}</div>`;
+  h += `<p class="note">PAD-US 4.1 (USGS, Fee layer) and active BLM mining claims (MLRS). Whole study area: ${pc1(A.clases[0])} protected` +
+       (A.denunciado != null ? `, ${pc1(A.denunciado)} under active claims` : "") + `.</p>`;
+  d3.select("#land-body").html(h);
+}
+
 function panelEnv() {
   const card = d3.select("#env-card"), mostrar = state.env && state.view === "zone" && D.modelos[state.model].semaforo;
   card.attr("hidden", mostrar ? null : true);
@@ -829,6 +955,14 @@ function panelCompare() {
     fila(`In ${ENV[g].t} areas`, f0(TA[0]) + " km²", f0(TB[0]) + " km²", "+" + f0(TB[0] - TA[0]) + " km²", "env");
     fila(`Targets in ${ENV[g].t} areas`, f0(TA[1]), f0(TB[1]), (TB[1] >= TA[1] ? "+" : "−") + f0(Math.abs(TB[1] - TA[1])), "targets");
     if (!state.ground) fila("Share unrestricted / restricted", `${pc(m.semaforo[kA][0])} / ${pc(m.semaforo[kA][2])}`, `${pc(m.semaforo[kB][0])} / ${pc(m.semaforo[kB][2])}`, "", "env");
+  }
+  if (zone && landOn() && m.tierras) {
+    const LA = m.tierras[kA], LB = m.tierras[kB];
+    if (state.land !== 2) fila("Protected land (GAP 1 or 2)", pc1(LA.clases[0]), pc1(LB.clases[0]), "", null);
+    if (state.land >= 2 && LA.denunciado != null) {
+      fila("Under active claims", pc1(LA.denunciado), pc1(LB.denunciado), signo(LB.denunciado - LA.denunciado) + pts(Math.abs(LB.denunciado - LA.denunciado)), "claims");
+      fila("Targets free of claims", `${f0(LA.targets_libres)} of ${f0(LA.targets)}`, `${f0(LB.targets_libres)} of ${f0(LB.targets)}`, "", "freeclaims");
+    }
   }
   for (const me of MET[state.view]) {
     const d = B[me.k][0] - A[me.k][0];
@@ -911,6 +1045,17 @@ function legend() {
     (state.ground ? [state.ground] : [1, 2, 3]).forEach(k => ge.append("div").attr("class", "row")
       .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span><span><b style="white-space:nowrap">${ENV[k].t}</b> (${ENV[k].d})</span>`));
   }
+  if (landOn()) {
+    const gl = L.append("div");
+    if (state.land !== 2) {
+      gl.append("h4").style("margin-top", comparing() ? null : "8px").text("Land status (PAD-US 4.1)");
+      ORDEN_LAND.forEach(k => gl.append("div").attr("class", "row").html(LAND[k].c
+        ? `<span class="swatch" style="background:${LAND[k].c};opacity:${Math.max(.55, LAND[k].a)}"></span><span><b>${LAND[k].t}</b> (${LAND[k].d})</span>`
+        : `<span class="swatch" style="border:1px solid ${css("--ink-2")}"></span><span><b>${LAND[k].t}</b> (${LAND[k].d})</span>`));
+    }
+    if (state.land >= 2) gl.append("div").attr("class", "row").style("margin-top", state.land === 2 ? "8px" : null)
+      .html(`<svg width="14" height="14"><defs><pattern id="hl" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="${css("--ink")}" stroke-width="1.4"/></pattern></defs><rect width="14" height="14" fill="url(#hl)" stroke="${css("--ink-2")}" stroke-width=".6"/></svg><span><b>Active mining claims</b> (BLM MLRS)</span>`);
+  }
   const g2 = L.append("div");
   g2.append("h4").style("margin-top", comparing() ? null : "8px").text("Mines (size = contained gold, USGS, split among the mines of a deposit)");
   const sv = g2.append("svg").attr("width", 230).attr("height", 36);
@@ -950,6 +1095,7 @@ function update() {
   d3.select("#env-ops-l").attr("hidden", state.env ? null : true);
   d3.selectAll("#env-ops button").attr("aria-pressed", function () { return +this.dataset.o === state.envOp; });
   d3.select("#ctl-ground").attr("hidden", state.env ? null : true);
+  d3.selectAll("#lands button").attr("aria-pressed", function () { return +this.dataset.l === state.land; });
   d3.selectAll("#grounds button").attr("aria-pressed", function () { return +this.dataset.g === state.ground; });
   d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
   const bm = BASEMAPS[state.basemap], que = state.view === "zone" ? "of the area" : "of blocks";
@@ -962,7 +1108,7 @@ function update() {
     M.ghost.select("circle:last-child").attr("stroke", css("--maroon"));
   }
   for (const M of visibles()) { paint(M); markCaptured(M); M.requestDraw(); }
-  if (cmp) panelCompare(); else { panelEnv(); panel(); }
+  if (cmp) panelCompare(); else { panelOro(); panelEnv(); panelLand(); panel(); }
   bindInfo();
   legend();
   igualar();          // al cambiar vista o bloque cambia el alto de la columna derecha

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>CEOExplorer, propuesta C: marcador</title>
+  <defs><clipPath id="pin"><path d="M32 4 C18 4 9 14 9 27 C9 43 32 60 32 60 C32 60 55 43 55 27 C55 14 46 4 32 4 Z"/></clipPath></defs>
+  <path d="M32 4 C18 4 9 14 9 27 C9 43 32 60 32 60 C32 60 55 43 55 27 C55 14 46 4 32 4 Z" fill="#7b1e2b"/>
+  <g clip-path="url(#pin)" fill="none" stroke="#f3e3d3" stroke-width="2" opacity=".6">
+    <path d="M4 34 C16 28 26 38 38 32 S54 26 62 30"/><path d="M4 42 C16 36 26 46 38 40 S54 34 62 38"/>
+  </g>
+  <path d="M27 20 L35 17 L40 22 L38 29 L30 30 L25 26 Z" fill="#d4a54a" stroke="#f3e3d3" stroke-width="1.2"/>
+</svg>
