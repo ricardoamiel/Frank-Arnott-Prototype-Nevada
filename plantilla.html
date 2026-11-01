@@ -139,6 +139,7 @@
   .envrow { font-size: 12px; color: var(--ink-2); display: flex; gap: 12px; flex-wrap: wrap; }
   .envrow i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
   #env-card[hidden] { display: none; }
+  #econ-tbl td:first-child i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
   #land-tbl td:first-child i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px;
                                vertical-align: -1px; }
   .seg .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
@@ -180,6 +181,9 @@
     <button data-g="0">All areas</button><button data-g="1"><i class="dot" style="background:#5fbf7f"></i>Unrestricted</button>
     <button data-g="2"><i class="dot" style="background:#f6cf55"></i>Conditional</button>
     <button data-g="3"><i class="dot" style="background:#e8705f"></i>Restricted</button></div></div>
+  <div class="group" id="ctl-econ"><span>Economics</span><div class="seg" id="econs"
+    aria-label="Economic tier of the top 5% cells (break-even gold grade)">
+    <button data-c="0">Off</button><button data-c="1">On</button></div></div>
   <div class="group" id="ctl-land"><span>Land &amp; claims</span><div class="seg" id="lands"
     aria-label="Land status (PAD-US) and active mining claims (BLM)">
     <button data-l="0">Off</button><button data-l="1">Land status</button><button data-l="2">Claims</button>
@@ -217,6 +221,7 @@
       <p class="note" id="oro-note"></p></div>
     <div class="card"><h3 id="kpi-title"></h3><div class="kpis" id="kpis"></div><p class="note" id="kpi-note"></p></div>
     <div class="card" id="env-card" hidden><h3 id="env-title"></h3><div id="env-body"></div></div>
+    <div class="card" id="econ-card" hidden><h3 id="econ-title"></h3><div id="econ-body"></div></div>
     <div class="card" id="land-card" hidden><h3 id="land-title"></h3><div id="land-body"></div></div>
     <div class="card"><h3 id="chart-title"></h3><svg class="chart" id="chart" width="100%" height="200"></svg>
       <p class="note" id="chart-note"></p></div>
@@ -245,7 +250,7 @@
 <footer>Mines: project inventory (136 points). Circle size: contained gold of the USGS deposit (past production, reserves
   and resources; USGS Open-File Report 2014-1074). USGS reports one figure per deposit, not per mine: when a deposit
   groups several inventory mines, its gold is split among them by their MRDS size class (an estimate; no per-mine
-  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Land status: PAD-US 4.1 (USGS), Fee layer. Mining claims: active BLM claims (MLRS).
+  production is published), so the circles of a deposit add up to its total. Model cells are 1.5 km. Economics: break-even gold grade of the top 5% cells (team economic model). Land status: PAD-US 4.1 (USGS), Fee layer. Mining claims: active BLM claims (MLRS).
   Access and environment layer: project traffic-light map (Unrestricted in green, Conditional in yellow, Restricted in red),
   read at 300 m on the map and as the most frequent class of each 1.5 km cell in the figures. Basemaps: Esri World Light Gray Canvas and Esri World Imagery with reference labels.</footer>
 <div id="tip"></div>
@@ -272,7 +277,7 @@ const thrOf = k => 250 * (1 - k / 100);      // umbral del k % en la escala 0 a 
 // modelo final del proyecto (ver MODELO_FINAL.md): primero en los botones y elegido por defecto
 const FINAL = "GAT";
 const state = {tab: "explore", model: D.modelos[FINAL] ? FINAL : Object.keys(D.modelos)[0], view: "zone", level: 1, side: "7",
-               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.85, ground: 0, land: 0};
+               basemap: "satellite", left: 0, right: 3, env: false, envOp: 0.85, ground: 0, land: 0, econ: false};
 { const q = new URLSearchParams(location.search);   // e.g. ?tab=compare&left=5&right=20&view=block&side=10
   if (D.modelos[q.get("model")]) state.model = q.get("model");
   if (["zone", "block"].includes(q.get("view"))) state.view = q.get("view");
@@ -280,6 +285,7 @@ const state = {tab: "explore", model: D.modelos[FINAL] ? FINAL : Object.keys(D.m
   if (SIDES[q.get("side")]) state.side = q.get("side");
   if (["light", "satellite"].includes(q.get("basemap"))) state.basemap = q.get("basemap");
   if (q.get("env") === "1" && D.semaforo) state.env = true;
+  if (q.get("econ") === "1" && D.economia) state.econ = true;
   const lq = ["off", "status", "claims", "both"].indexOf((q.get("land") || "").toLowerCase()); if (lq > 0 && D.tierras) state.land = lq;
   const gv = (q.get("ground") || "").toLowerCase();        // ?ground=unrestricted|conditional|restricted (o green|yellow|red)
   const gq = Math.max(["all", "unrestricted", "conditional", "restricted"].indexOf(gv), ["all", "green", "yellow", "red"].indexOf(gv));
@@ -309,6 +315,8 @@ d3.selectAll("#envs button").on("click", function () { state.env = this.dataset.
 d3.selectAll("#env-ops button").on("click", function () { state.envOp = +this.dataset.o; update(); });
 d3.selectAll("#grounds button").on("click", function () { state.ground = +this.dataset.g; update(); });
 d3.select("#ctl-land").attr("hidden", D.tierras ? null : true);
+d3.select("#ctl-econ").attr("hidden", D.economia ? null : true);
+d3.selectAll("#econs button").on("click", function () { state.econ = this.dataset.c === "1"; update(); });
 d3.selectAll("#lands button").on("click", function () { state.land = +this.dataset.l; update(); });
 for (const [k, t] of Object.entries(SIDES))
   d3.select("#sides").append("button").text(t).attr("data-s", k).on("click", () => { state.side = k; update(); });
@@ -356,6 +364,13 @@ function envEn(wx, wy) {        // clase del semáforo en un punto (unidades de 
   const c = Math.floor((wx * C - R.x0) / res), r = Math.floor((R.y0 + wy * C) / res);
   return r < 0 || r >= S.h || c < 0 || c >= S.w ? 0 : envLayer.cls[r * S.w + c];
 }
+
+// ---------- economic tier (break-even gold grade) of the top 5% cells of the final model; dorado: más intenso, más rentable
+const ECON = [null, {c: "#a8740a", t: "High", d: "break-even grade 5.0 g/t Au or less"},
+              {c: "#d9a92e", t: "Moderate", d: "break-even grade 5.0 to 5.4 g/t Au"},
+              {c: "#f0d78c", t: "Low", d: "break-even grade above 5.4 g/t Au"},
+              {c: "#9e978f", t: "No host rock", d: "top 5% cell without carbonate or clastic host rock (not evaluated)"}];
+const econOn = () => state.econ && D.economia;
 
 // ---------- land status (PAD-US 4.1, USGS) and active mining claims (BLM MLRS), on a grid 5 times finer than the model
 // clase: 1 protected (GAP 1 or 2), 2 BLM, 3 National Forest, 4 other public, 0 private or not in PAD-US
@@ -565,6 +580,11 @@ function paint(M) {
       let c = rest; for (let k = 0; k <= lvl; k++) if (v > thr[k]) { c = lv[k]; break; }
       put(j, c); }
   }
+  if (econOn()) {             // las celdas evaluadas se pintan encima, con su color dorado
+    const ec = layers.economia, pal = ECON.map(x => x && rgba(x.c, 0.92));
+    for (let i = 0; i < n; i++) { const v = ec[i]; if (v > 0 && v < 5) { const j = i * 4, c = pal[v];
+      data[j] = c[0]; data[j + 1] = c[1]; data[j + 2] = c[2]; data[j + 3] = c[3]; } }
+  }
   M.offCtx.putImageData(M.img, 0, 0);
 }
 
@@ -721,6 +741,8 @@ function cellTip(e, M) {
   }
   if (state.env) { const k = envEn(wx, wy);
     if (k) s += `<br>Access &amp; environment: <b>${ENV[k].t}</b> <span class="sub">(${ENV[k].d})</span>`; }
+  if (econOn()) { const v = layers.economia[i];
+    if (v > 0 && v < 5) s += `<br>Economics: <b>${ECON[v].t}</b> <span class="sub">(${ECON[v].d})</span>`; }
   if (landOn()) { const l = landEn(wx, wy);
     if (l) {
       if (state.land !== 2) { const u = D.tierras.unidades[l[1]];
@@ -857,6 +879,20 @@ function panelOro() {
     kpi("~" + f0(3800 * OZ_T) + " <small>Moz</small>", `still to discover in the Great Basin (${f0(1600 * OZ_T)} to ${f0(6400 * OZ_T)} Moz)`, "oro_falta"));
   d3.select("#oro-note").text("Undiscovered gold: USGS 1998 National Mineral Resource Assessment (Circular 1178), mean for the Great Basin region, " +
     "all deposit types. It is a regional reference, not an estimate for this study area.");
+}
+
+function panelEcon() {
+  const mostrar = econOn() && !comparing();
+  d3.select("#econ-card").attr("hidden", mostrar ? null : true);
+  if (!mostrar) return;
+  const E = D.economia.clases, tot = [1, 2, 3, 4].reduce((s, k) => s + E[k].km2, 0);
+  d3.select("#econ-title").text("Economic tier of the top 5% zone");
+  const filas = [1, 2, 3, 4].map(k => `<tr><td><i style="background:${ECON[k].c}"></i>${ECON[k].t}</td><td>${f0(E[k].km2)} km²</td>` +
+    `<td>${pc(100 * E[k].km2 / tot)}</td><td>${f0(E[k].celdas_mina)}</td><td>${f1(E[k].moz)}</td></tr>`).join("");
+  d3.select("#econ-body").html(`<table id="econ-tbl"><tr><th>Tier</th><th>Area</th><th>Share</th><th>Mine cells</th><th>Moz</th></tr>${filas}</table>` +
+    `<p class="note">Break-even gold grade from the team's economic model, computed for the top 5% cells of the final GAT model` +
+    (state.model !== "GAT" ? ` (shown on ${name(state.model)} for reference)` : "") + `. Lower break-even means cheaper ounces. ` +
+    `Moz: contained gold of the deposits whose main mine falls in each tier.</p>`);
 }
 
 function panelLand() {
@@ -1045,6 +1081,12 @@ function legend() {
     (state.ground ? [state.ground] : [1, 2, 3]).forEach(k => ge.append("div").attr("class", "row")
       .html(`<span class="swatch" style="background:${ENV[k].c};opacity:${ENV_OP}"></span><span><b style="white-space:nowrap">${ENV[k].t}</b> (${ENV[k].d})</span>`));
   }
+  if (econOn()) {
+    const gc = L.append("div");
+    gc.append("h4").style("margin-top", comparing() ? null : "8px").text("Economic tier (top 5% cells)");
+    [1, 2, 3, 4].forEach(k => gc.append("div").attr("class", "row")
+      .html(`<span class="swatch" style="background:${ECON[k].c}"></span><span><b>${ECON[k].t}</b> (${ECON[k].d})</span>`));
+  }
   if (landOn()) {
     const gl = L.append("div");
     if (state.land !== 2) {
@@ -1096,6 +1138,7 @@ function update() {
   d3.selectAll("#env-ops button").attr("aria-pressed", function () { return +this.dataset.o === state.envOp; });
   d3.select("#ctl-ground").attr("hidden", state.env ? null : true);
   d3.selectAll("#lands button").attr("aria-pressed", function () { return +this.dataset.l === state.land; });
+  d3.selectAll("#econs button").attr("aria-pressed", function () { return (this.dataset.c === "1") === state.econ; });
   d3.selectAll("#grounds button").attr("aria-pressed", function () { return +this.dataset.g === state.ground; });
   d3.selectAll("#themes button").attr("aria-pressed", function () { return this.dataset.t === document.documentElement.dataset.theme; });
   const bm = BASEMAPS[state.basemap], que = state.view === "zone" ? "of the area" : "of blocks";
@@ -1108,7 +1151,7 @@ function update() {
     M.ghost.select("circle:last-child").attr("stroke", css("--maroon"));
   }
   for (const M of visibles()) { paint(M); markCaptured(M); M.requestDraw(); }
-  if (cmp) panelCompare(); else { panelOro(); panelEnv(); panelLand(); panel(); }
+  if (cmp) panelCompare(); else { panelOro(); panelEcon(); panelEnv(); panelLand(); panel(); }
   bindInfo();
   legend();
   igualar();          // al cambiar vista o bloque cambia el alto de la columna derecha

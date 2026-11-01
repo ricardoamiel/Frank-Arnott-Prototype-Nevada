@@ -101,6 +101,11 @@ cells joined through their 8 neighbors) and the size of the largest one. Links c
 
 On phones, one finger scrolls the page and two fingers move or zoom the map.
 
+**Economics** (Off, On) colors the top 5% cells of the final GAT model by their break-even gold grade, from the
+team's economic model, on a gold scale: **High** (5.0 g/t or less), **Moderate** (5.0 to 5.4 g/t), **Low** (above
+5.4 g/t) and **No host rock** (top 5% cells without carbonate or clastic host rock, not evaluated). High tier: 2,034 km²
+holding 53.5 Moz of known gold.
+
 **Land & claims** (Off, Land status, Claims, Both) adds two official layers:
 
 - **Land status** from PAD-US 4.1 (USGS, Fee layer): protected land (GAP 1 or 2), BLM, National Forest, other public

@@ -19,6 +19,10 @@ Clases de tierra: 1 protegida (GAP 1 o 2), 2 BLM, 3 Servicio Forestal (USFS), 4 
 de PAD-US. Se rasterizan en una malla Mercator de unos 300 m para el mapa y a 150 m en la malla del modelo para las
 cifras (parte de cada celda en cada clase y parte denunciada).
 
+Viabilidad económica (capa opcional del visor): datos/RIT_Economic_Tier.tif, en la misma malla de 1500 m del modelo.
+Clasifica las celdas del 5 % superior de GAT por su ley de equilibrio (break-even): 1 alta (5,0 g/t o menos),
+2 moderada (5,0 a 5,4 g/t), 3 baja (más de 5,4 g/t), 4 celda del 5 % sin roca huésped carbonatada o clástica; 0 sin dato.
+
 La pestaña de comparación lee analisis/ablacion_ideas/web_ablacion.json (ablacion_ideas_v14.py).
 
 Semáforo de accesibilidad y ambiente (datos/03_MapaSemaforo_COLOR.tif, RGBA de 30 m en NAD83 UTM 11N): sus tres
@@ -266,6 +270,28 @@ def main():
 
     tierras = construir_tierras(g, modelos, a, (izq, arriba, res, W3, H3))
 
+    economia = None
+    fe = RAIZ / "datos" / "RIT_Economic_Tier.tif"
+    if fe.exists():
+        import rasterio
+        with rasterio.open(fe) as d:
+            assert d.transform == tr_utm and d.shape == (h, w), "RIT_Economic_Tier.tif no está en la malla del modelo"
+            e = d.read(1)[g["rows"], g["cols"]].astype(np.uint8)
+            clases_txt = d.tags(1).get("CLASSES", "") or d.tags().get("CLASSES", "")
+        rasters["economia"] = a_mercator(raster_celdas(e))
+        km2 = (tr_utm.a * -tr_utm.e) / 1e6
+        # oro de cada depósito en la clase de la celda de su mina principal (celda: índice de nodo de cada mina)
+        cm = np.array(json.loads((RAIZ / a.productos / next(iter(modelos)) / "web.json").read_text(encoding="utf8"))["celda_mina"])
+        clase_mina = np.where(cm >= 0, e[np.clip(cm, 0, None)], 0)
+        princ = minas.principal.values
+        economia = dict(clases={}, fuente=clases_txt)
+        for k in (1, 2, 3, 4):
+            sel = e == k
+            economia["clases"][str(k)] = dict(celdas=int(sel.sum()), km2=round(float(sel.sum() * km2)),
+                                              celdas_mina=int(g["y"][sel].sum()),
+                                              moz=round(float(minas.moz[princ & (clase_mina == k)].sum()), 1))
+        print(f"economía: {int((e > 0).sum())} celdas | " + ", ".join(f"clase {k}: {v['celdas']}" for k, v in economia["clases"].items()))
+
     fa = RAIZ / a.ablacion / "web_ablacion.json"
     ablacion = json.loads(fa.read_text(encoding="utf8")) if fa.exists() else {}
     datos = dict(
@@ -273,7 +299,7 @@ def main():
         capas={k: b64(v) for k, v in rasters.items()},
         area=simpl(area[["geometry"]]), trends=simpl(trends[["Name", "geometry"]]),
         minas=json.loads(minas.drop(columns=["x", "y"], errors="ignore").to_json(orient="records")),
-        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos}, semaforo=semaforo, tierras=tierras,
+        modelos=modelos, ablacion={k: v for k, v in ablacion.items() if k in modelos}, semaforo=semaforo, tierras=tierras, economia=economia,
         oro=dict(moz=round(float(minas[minas.principal].moz.sum()), 1), depositos=int(minas.principal.sum())),
     )
     html = (AQUI / "plantilla.html").read_text(encoding="utf8")
